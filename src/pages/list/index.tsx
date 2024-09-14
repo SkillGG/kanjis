@@ -6,7 +6,7 @@ import {
 } from "@/components/list/defaultKanji";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
-import kanjiCSS from "./list.module.css";
+import kanjiCSS from "@/components/list/list.module.css";
 import { useKanjiStorage } from "@/components/list/kanjiStorage";
 import { getShareLink, doesKanjiFitFilter } from "@/components/list/kanjiUtils";
 import Head from "next/head";
