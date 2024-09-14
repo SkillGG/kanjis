@@ -10,7 +10,7 @@ import {
 } from "./defaultKanji";
 import { type Kanji, type KanjiStatus, useKanjiStore } from "./kanjiStore";
 import { eq, gt, valid } from "semver";
-import { useRouter } from "next/router";
+import Router from "next/router";
 
 const getLocationKanjis = (search: string): Kanji[] => {
   const locKanjis = [] as Kanji[];
@@ -59,8 +59,6 @@ const getLocationKanjis = (search: string): Kanji[] => {
 };
 
 export const useKanjiStorage = (LS: LSStore) => {
-  const router = useRouter();
-
   const { mutateKanjis, setShouldUpdate } = useKanjiStore();
 
   useEffect(() => {
@@ -79,7 +77,7 @@ export const useKanjiStorage = (LS: LSStore) => {
       currURL.searchParams.delete("n");
       currURL.searchParams.delete("l");
       currURL.searchParams.delete("t");
-      void router.replace(currURL);
+      void Router.replace(currURL);
     }
 
     const strategies = {
@@ -153,5 +151,5 @@ export const useKanjiStorage = (LS: LSStore) => {
         });
       }
     }
-  }, [LS, mutateKanjis, router, setShouldUpdate]);
+  }, [LS, mutateKanjis, setShouldUpdate]);
 };
