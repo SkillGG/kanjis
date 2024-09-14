@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --main-bg: #333;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: monospace;
+  background-color: var(--main-bg);
+  color: white;
+}
+
+input {
+  font-size: 2rem;
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
+
+input::placeholder {
+  @apply text-center;
+}
+
+button {
+  border: 1px solid #dcd;
+  border-radius: 0.5rem;
+  @apply my-0 self-center rounded-lg border-[1px] border-solid border-[#dcd] px-2;
+}

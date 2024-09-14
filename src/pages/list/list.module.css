@@ -1,0 +1,110 @@
+.kanjiBtn {
+  border: none;
+  background-color: var(--bgColor);
+  cursor: pointer;
+  width: 100%;
+  border: 2px solid var(--border);
+  line-height: normal;
+  font-size: 1.625rem;
+  padding: 0.65rem;
+  position: relative;
+}
+
+.kanjiBtn:not([data-disabled]):hover {
+  background-color: var(--hoverColor);
+  transform: translateY(-10px);
+  transition-duration: 100ms;
+}
+
+.kanjiBtn:focus {
+  background-color: var(--bgColor);
+  transform: none;
+  transition-duration: 100ms;
+}
+
+#settings button {
+  margin: 5px;
+  cursor: pointer;
+  @apply h-[80%];
+}
+#settings button:hover {
+  background-color: #dcd;
+  color: black;
+}
+
+.popup {
+  position: fixed;
+  background-color: transparent;
+  top: -5%;
+  left: 0;
+  width: 100vw;
+  user-select: none;
+}
+
+.setting-menu {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  min-height: 45px;
+}
+
+.popup > div {
+  margin: 0 auto;
+  width: fit-content;
+  color: var(--textColor);
+  margin: 0 auto;
+  left: 0;
+  padding: 1em;
+  border: 1px solid var(--borderColor);
+  border-radius: 0.5em;
+}
+
+.popup[data-open="open"] {
+  top: 2%;
+  transition-duration: 200ms;
+}
+
+.popup[data-open="closed"] {
+  transition-duration: 200ms;
+}
+
+@media screen and (max-width: 800px) {
+  .setting-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+    justify-items: center;
+  }
+}
+
+.updateBTN {
+  border: none;
+  padding: none;
+  margin: none;
+  display: inline-block;
+  text-decoration: underline wavy pink;
+  color: aqua;
+  cursor: pointer;
+}
+
+.updateBTN:hover {
+  text-decoration: underline wavy red;
+  color: blue;
+}
+
+.kanjiBtn[data-extra]::after {
+  position: absolute;
+  top: -1px;
+  font-size: 1rem;
+  right: 2px;
+  content: attr(data-extra);
+  color: var(--extraSign);
+}
+
+.kanjiBtn[data-lvl]::before {
+  position: absolute;
+  top: -1px;
+  left: 2px;
+  font-size: 0.9rem;
+  content: attr(data-lvl);
+  color: var(--extraSign);
+}
