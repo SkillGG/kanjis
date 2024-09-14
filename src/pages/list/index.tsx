@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { type Kanji, useKanjiStore } from "./kanjiStore";
-import { DEFAULT_KANJI_VERSION, DEFAULT_KANJIS } from "./defaultKanji";
-import { LS_KEYS, useLocalStorage } from "../localStorageProvider";
+import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
+import {
+  DEFAULT_KANJI_VERSION,
+  DEFAULT_KANJIS,
+} from "@/components/list/defaultKanji";
+import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
 import kanjiCSS from "./list.module.css";
-import { useKanjiStorage } from "./kanjiStorage";
-import { getShareLink, doesKanjiFitFilter } from "./kanjiUtils";
+import { useKanjiStorage } from "@/components/list/kanjiStorage";
+import { getShareLink, doesKanjiFitFilter } from "@/components/list/kanjiUtils";
 import Head from "next/head";
-import { textColors } from "./theme";
-import { KanjiTile } from "./kanjiTile";
+import { textColors } from "@/components/list/theme";
+import { KanjiTile } from "@/components/list/kanjiTile";
 
 const POPUP_SHOW_TIME = 2000;
 

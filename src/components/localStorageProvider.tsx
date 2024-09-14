@@ -1,10 +1,7 @@
 import React, {
   createContext,
-  type Dispatch,
   type PropsWithChildren,
-  type SetStateAction,
   useContext,
-  useEffect,
   useState,
 } from "react";
 

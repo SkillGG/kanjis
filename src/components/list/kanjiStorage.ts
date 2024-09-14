@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { LS_KEYS, type LSStore } from "../localStorageProvider";
+import { LS_KEYS, type LSStore } from "@/components/localStorageProvider";
 import {
   NO_OVERRIDE,
   OVERRIDE_ALL,
@@ -153,5 +153,5 @@ export const useKanjiStorage = (LS: LSStore) => {
         });
       }
     }
-  }, []);
+  }, [LS, mutateKanjis, router, setShouldUpdate]);
 };
