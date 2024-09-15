@@ -48,8 +48,8 @@ function App() {
   const [rowCount, setRowCount] = useState(10);
 
   useEffect(() => {
-    setRowCount(LS.get<number>(LS_KEYS.row_count) ?? 10);
-    setShowbadges(LS.get<0 | 1 | 2 | 3>(LS_KEYS.badges) ?? 0);
+    setRowCount(LS.getNum(LS_KEYS.row_count) ?? 10);
+    setShowbadges(LS.getNum<0 | 1 | 2 | 3>(LS_KEYS.badges) ?? 0);
   }, [LS]);
 
   const [popup, setPopup] = useState<{
@@ -120,7 +120,7 @@ function App() {
           >
             <div>
               There was an update to the kanji list!
-              <br />({LS.get<string>(LS_KEYS.kanji_ver) ?? "0.0.1"} =&gt;{" "}
+              <br />({LS.getString(LS_KEYS.kanji_ver) ?? "0.0.1"} =&gt;{" "}
               {DEFAULT_KANJI_VERSION})
               <br />
               <button

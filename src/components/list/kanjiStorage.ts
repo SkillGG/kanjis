@@ -73,10 +73,12 @@ export const useKanjiStorage = (LS: LSStore) => {
 
     if (overrideType != "p") {
       const currURL = new URL(location.href);
+      const prevhref = currURL.href;
       currURL.searchParams.delete("c");
       currURL.searchParams.delete("n");
       currURL.searchParams.delete("l");
       currURL.searchParams.delete("t");
+      console.log(prevhref, " => ", currURL.toString());
       void Router.replace(currURL);
     }
 
@@ -88,11 +90,11 @@ export const useKanjiStorage = (LS: LSStore) => {
       x: NO_OVERRIDE,
     } as const;
 
-    const LSkanjis = LS.get<Kanji[]>(LS_KEYS.kanjis);
+    const LSkanjis = LS.getObject<Kanji[]>(LS_KEYS.kanjis);
 
-    const lastVersion = LS.get<string>(LS_KEYS.kanji_ver);
+    const lastVersion = LS.getString<string>(LS_KEYS.kanji_ver);
 
-    const omitVersion = LS.get<string>(LS_KEYS.omit_version);
+    const omitVersion = LS.getString<string>(LS_KEYS.omit_version);
 
     let shouldUpdate = false;
 
@@ -124,7 +126,7 @@ export const useKanjiStorage = (LS: LSStore) => {
     } else {
       // merge states
       try {
-        const oldKanjis = LS.get<Kanji[]>(LS_KEYS.kanjis);
+        const oldKanjis = LS.getObject<Kanji[]>(LS_KEYS.kanjis);
         if (Array.isArray(oldKanjis))
           mutateKanjis(() => {
             if (overrideType === "r") {
