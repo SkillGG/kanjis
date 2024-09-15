@@ -20,10 +20,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         ? transaction.store
         : db.createObjectStore("kanji", { keyPath: "kanji" });
       if (oS) {
-        oS.createIndex("type", "type", { unique: false });
-        oS.createIndex("status", "status", { unique: false });
-        oS.createIndex("lvl", "lvl", { unique: false });
-        oS.createIndex("index", "index", { unique: true });
+        if (!oS.indexNames.contains("type"))
+          oS.createIndex("type", "type", { unique: false });
+        if (!oS.indexNames.contains("status"))
+          oS.createIndex("status", "status", { unique: false });
+        if (!oS.indexNames.contains("lvl"))
+          oS.createIndex("lvl", "lvl", { unique: false });
+        if (!oS.indexNames.contains("index"))
+          oS.createIndex("index", "index", { unique: true });
       }
     },
   });
