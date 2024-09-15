@@ -5,7 +5,7 @@ import { api } from "@/utils/api";
 
 import "@/styles/globals.css";
 import {
-  DBSchema,
+  type DBSchema,
   LocalStorageProvider,
 } from "@/components/localStorageProvider";
 import { useState } from "react";
