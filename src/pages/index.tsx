@@ -21,6 +21,12 @@ export default function Home() {
         >
           Kanji progress tracking list
         </Link>
+        <Link
+          href={"/draw"}
+          className="mt-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] underline hover:bg-slate-500"
+        >
+          Kanji drawing app
+        </Link>
       </div>
     </>
   );

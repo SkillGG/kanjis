@@ -6,10 +6,28 @@ import { api } from "@/utils/api";
 import "@/styles/globals.css";
 import {
   type DBInit,
-  type KanjiDB,
   LocalStorageProvider,
 } from "@/components/localStorageProvider";
 import { useState } from "react";
+import { type DBSchema } from "idb";
+import {
+  type Kanji,
+  type KanjiStatus,
+  type KanjiType,
+} from "@/components/list/kanjiStore";
+
+export type KanjiDB = DBSchema & {
+  kanji: {
+    key: string;
+    value: Kanji;
+    indexes: {
+      status: KanjiStatus;
+      type: KanjiType;
+      lvl: number;
+      index: number;
+    };
+  };
+};
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [dbSchema] = useState<DBInit<KanjiDB>>({

@@ -7,8 +7,12 @@ export const KanjiTile = ({
   badges,
   update,
   disabled,
+  className,
+  style,
 }: {
   kanji: Kanji;
+  className?: React.ComponentProps<"button">["className"];
+  style?: React.ComponentProps<"button">["style"];
   badges: 0 | 1 | 2 | 3;
   disabled?: boolean;
   update: (kanji: string, data: Partial<Omit<Kanji, "kanji">>) => void;
@@ -29,13 +33,16 @@ export const KanjiTile = ({
       }}
       key={kanji}
       id={kanji}
-      className={kanjiCSS.kanjiBtn + ` p-[0.4rem] text-[2rem]`}
+      className={
+        (className ?? "") + " " + kanjiCSS.kanjiBtn + ` p-[0.4rem] text-[2rem]`
+      }
       data-disabled={disabled}
       style={{
         "--hoverColor": hoverColors[status],
         "--bgColor": bgColors[status],
         "--border": borderColors[status],
         "--extraSign": extraSignColor,
+        ...style,
       }}
       data-extra={badges < 2 && type === "extra" ? "*" : undefined}
       data-lvl={badges % 2 == 0 ? (disabled ? "L" : lvl) : undefined}

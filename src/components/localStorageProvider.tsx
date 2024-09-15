@@ -11,26 +11,10 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import {
-  type Kanji,
-  type KanjiStatus,
-  type KanjiType,
-} from "./list/kanjiStore";
+import { type Kanji } from "./list/kanjiStore";
+import { type KanjiDB } from "@/pages/_app";
 
 type LSData = string | number | object;
-
-export type KanjiDB = DBSchema & {
-  kanji: {
-    key: string;
-    value: Kanji;
-    indexes: {
-      status: KanjiStatus;
-      type: KanjiType;
-      lvl: number;
-      index: number;
-    };
-  };
-};
 
 export type LSStore<T extends DBSchema> = {
   set<T extends LSData>(key: string, val: T | null): void;
