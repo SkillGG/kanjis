@@ -13,6 +13,7 @@ export type Kanji = {
   type: KanjiType;
   kanji: string;
   lvl: number;
+  index: number;
 };
 
 export type Store = {

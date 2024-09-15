@@ -35,17 +35,11 @@
 .popup {
   position: fixed;
   background-color: transparent;
-  top: -5%;
+  top: -15%;
   left: 0;
   width: 100vw;
   user-select: none;
-}
-
-.setting-menu {
-  display: flex;
-  justify-content: center;
-  margin-top: 5px;
-  min-height: 45px;
+  z-index: 20;
 }
 
 .popup > div {
@@ -66,6 +60,13 @@
 
 .popup[data-open="closed"] {
   transition-duration: 200ms;
+}
+
+.setting-menu {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  min-height: 45px;
 }
 
 @media screen and (max-width: 800px) {

@@ -1,3 +1,9 @@
+import {
+  type DBSchema,
+  type IDBPDatabase,
+  openDB,
+  type OpenDBCallbacks,
+} from "idb";
 import React, {
   createContext,
   type PropsWithChildren,
@@ -5,26 +11,42 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import {
+  type Kanji,
+  type KanjiStatus,
+  type KanjiType,
+} from "./list/kanjiStore";
 
 type LSData = string | number | object;
 
-export type DBSchema = {
-  name: string;
-  init: (db: IDBDatabase) => void;
-  version: number;
+export type KanjiDB = DBSchema & {
+  kanji: {
+    key: string;
+    value: Kanji;
+    indexes: {
+      status: KanjiStatus;
+      type: KanjiType;
+      lvl: number;
+      index: number;
+    };
+  };
 };
 
-export type LSStore = {
+export type LSStore<T extends DBSchema> = {
   set<T extends LSData>(key: string, val: T | null): void;
   get<T extends LSData>(key: string): T | null;
   getNum<T extends number>(key: string): T | null;
   getRaw(key: string): string | null;
   getString<T extends string>(key: string): T | null;
   getObject<T extends object>(key: string): T | null;
-  db: IDBDatabase | null;
+  putMultiple: <Q extends T[string]["value"]>(
+    db: IDBPDatabase<T>,
+    values: Q,
+  ) => Promise<void>;
+  db: IDBPDatabase<T> | null;
 };
 
-const LSContext = createContext<LSStore>({
+const LSContext = createContext<LSStore<KanjiDB>>({
   set() {
     throw new Error("Not in store provider!");
   },
@@ -43,6 +65,9 @@ const LSContext = createContext<LSStore>({
   getString() {
     throw new Error("Not in store provider!");
   },
+  async putMultiple() {
+    throw new Error("Not in store provider");
+  },
   db: null,
 });
 export const LS_KEYS = {
@@ -53,25 +78,33 @@ export const LS_KEYS = {
   row_count: "rowCount",
 } as const;
 
+export type DBInit<T extends DBSchema> = {
+  name: string;
+  version: number;
+  init: OpenDBCallbacks<T>["upgrade"];
+};
+
 export const LocalStorageProvider = ({
   children,
   dbCreator,
+  surpressWarnings,
 }: PropsWithChildren<{
-  dbCreator: DBSchema;
+  surpressWarnings?: boolean;
+  dbCreator: DBInit<KanjiDB>;
 }>) => {
-  const [db, setDB] = useState<IDBDatabase | null>(null);
+  const [db, setDB] = useState<IDBPDatabase<KanjiDB> | null>(null);
+
   useEffect(() => {
-    console.log("DBCREATOR CHANGED");
-    const dbOpenRequest = indexedDB.open(dbCreator.name, dbCreator.version);
-    dbOpenRequest.onsuccess = () => {
-      setDB(dbOpenRequest.result);
-    };
-    dbOpenRequest.onupgradeneeded = () => {
-      dbCreator.init(dbOpenRequest.result);
-    };
+    void openDB<KanjiDB>(dbCreator.name, dbCreator.version, {
+      upgrade(database, oV, nV, transaction, ev) {
+        dbCreator.init?.(database, oV, nV, transaction, ev);
+      },
+    }).then((db) => {
+      setDB(db);
+    });
   }, [dbCreator]);
 
-  const [LStore, setStore] = useState<LSStore>({
+  const [LStore, setStore] = useState<LSStore<KanjiDB>>({
     get<T extends LSData>(key: string) {
       if (typeof window === undefined) return null;
 
@@ -87,7 +120,7 @@ export const LocalStorageProvider = ({
           return value as T;
         return null;
       } catch (e) {
-        console.warn((e as Error).message);
+        if (!surpressWarnings) console.warn((e as Error).message);
         return null;
       }
     },
@@ -107,7 +140,7 @@ export const LocalStorageProvider = ({
         if (raw && !raw.startsWith(`"`)) {
           return String(raw) as T;
         }
-        console.warn((e as Error).message);
+        if (!surpressWarnings) console.warn((e as Error).message);
         return null;
       }
     },
@@ -120,7 +153,7 @@ export const LocalStorageProvider = ({
         if (typeof value === "object") return value as T;
         return null;
       } catch (e) {
-        console.warn((e as Error).message);
+        if (!surpressWarnings) console.warn((e as Error).message);
         return null;
       }
     },
@@ -133,7 +166,7 @@ export const LocalStorageProvider = ({
         if (typeof value === "number") return value as T;
         else return Number(value) as T;
       } catch (e) {
-        console.warn((e as Error).message);
+        if (!surpressWarnings) console.warn((e as Error).message);
         return null;
       }
     },
@@ -146,11 +179,15 @@ export const LocalStorageProvider = ({
         localStorage.setItem(key, JSON.stringify(value));
       }
     },
+    async putMultiple(db: IDBPDatabase<KanjiDB>, values: Kanji[]) {
+      for (const value of values) {
+        await db.put("kanji", value);
+      }
+    },
     db: null,
   });
 
   useEffect(() => {
-    console.log("db changed");
     if (!db) return;
     else setStore((prev) => ({ ...prev, db }));
   }, [db]);

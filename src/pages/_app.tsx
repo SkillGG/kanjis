@@ -5,26 +5,31 @@ import { api } from "@/utils/api";
 
 import "@/styles/globals.css";
 import {
-  type DBSchema,
+  type DBInit,
+  type KanjiDB,
   LocalStorageProvider,
 } from "@/components/localStorageProvider";
 import { useState } from "react";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  const [dbSchema] = useState<DBSchema>({
+  const [dbSchema] = useState<DBInit<KanjiDB>>({
     name: "kanjiDB",
-    version: 1,
-    init(db) {
-      db.createObjectStore("kanji", { keyPath: "kanji" })
-        .createIndex("kanji", "kanji", { unique: true })
-        .objectStore.createIndex("lvl", "lvl", { unique: false })
-        .objectStore.createIndex("sattus", "sattus", { unique: false })
-        .objectStore.createIndex("type", "type", { unique: false });
+    version: 6,
+    init(db, o, n, transaction) {
+      const oS = db.objectStoreNames.contains("kanji")
+        ? transaction.store
+        : db.createObjectStore("kanji", { keyPath: "kanji" });
+      if (oS) {
+        oS.createIndex("type", "type", { unique: false });
+        oS.createIndex("status", "status", { unique: false });
+        oS.createIndex("lvl", "lvl", { unique: false });
+        oS.createIndex("index", "index", { unique: true });
+      }
     },
   });
 
   return (
-    <LocalStorageProvider dbCreator={dbSchema}>
+    <LocalStorageProvider surpressWarnings dbCreator={dbSchema}>
       <div className={GeistSans.className}>
         <Component {...pageProps} />
       </div>

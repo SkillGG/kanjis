@@ -28,17 +28,11 @@ function App() {
     setShouldUpdate,
   } = useKanjiStore();
 
-  useEffect(() => {
-    if (!kanjis) return;
-    LS.set<Kanji[]>(LS_KEYS.kanjis, kanjis);
-  }, [kanjis, LS]);
-
   const [showbadges, setShowbadges] = useState<0 | 1 | 2 | 3 | null>(null);
 
   useEffect(() => {
     if (showbadges === null) return;
     LS.set<0 | 1 | 2 | 3>(LS_KEYS.badges, showbadges);
-    console.log("showbadges change");
   }, [showbadges, LS]);
 
   const [kanjisToSelect, setKanjisToSelect] = useState("");
@@ -52,23 +46,34 @@ function App() {
     setShowbadges(LS.getNum<0 | 1 | 2 | 3>(LS_KEYS.badges) ?? 0);
   }, [LS]);
 
-  const [popup, setPopup] = useState<{
-    text: React.ReactNode;
-    time?: number;
-    borderColor?: string;
-    color?: string;
-  } | null>(null);
+  const [popup, setPopup] = useState<
+    | {
+        text: React.ReactNode;
+        time?: number;
+        borderColor?: string;
+        color?: string;
+      }
+    | {
+        text: (close: () => void) => React.ReactNode;
+        time: "user";
+        borderColor?: string;
+        color?: string;
+      }
+    | null
+  >(null);
   const [popupOpen, setPopupOpen] = useState(false);
 
   useEffect(() => {
     if (popup === null) return;
     setPopupOpen(true);
-    const oT = setTimeout(() => {
-      setPopupOpen(false);
-    }, popup.time ?? POPUP_SHOW_TIME);
-    return () => {
-      clearTimeout(oT);
-    };
+    if (popup.time !== "user") {
+      const oT = setTimeout(() => {
+        setPopupOpen(false);
+      }, popup.time ?? POPUP_SHOW_TIME);
+      return () => {
+        clearTimeout(oT);
+      };
+    }
   }, [popup]);
 
   useEffect(() => {
@@ -89,8 +94,6 @@ function App() {
   const addRef = useRef<HTMLDialogElement>(null);
   const clearAddRef = useRef<HTMLButtonElement>(null);
 
-  console.log("badges", showbadges);
-
   return (
     <>
       <Head>
@@ -106,12 +109,16 @@ function App() {
             }}
             data-open={popupOpen ? "open" : "closed"}
           >
-            <div>{popup.text}</div>
+            <div>
+              {typeof popup.text == "function"
+                ? popup.text(() => setPopupOpen(false))
+                : popup.text}
+            </div>
           </div>
         )}
         {shouldUpdate && (
           <div
-            className={kanjiCSS.popup + " z-10 text-center text-[1.3rem]"}
+            className={kanjiCSS.popup + " z-20 text-center text-[1.3rem]"}
             style={{
               "--borderColor": "red",
               "--textColor": "white",
@@ -169,7 +176,13 @@ function App() {
           <div className={kanjiCSS["setting-menu"] + " items-center"}>
             <KanjiTile
               badges={showbadges ?? 3}
-              kanji={{ kanji: "札", lvl: 3, status: "new", type: "extra" }}
+              kanji={{
+                kanji: "札",
+                lvl: 3,
+                status: "new",
+                type: "extra",
+                index: 0,
+              }}
               update={() => {
                 setShowbadges((p) =>
                   !p ? 1 : ((p > 2 ? 0 : p + 1) as 0 | 1 | 2 | 3),
@@ -247,13 +260,14 @@ function App() {
                       status !== "completed"
                     )
                       return;
-
+                    let i = 0;
                     for (const kanji of kanjis) {
                       addKanji({
                         kanji,
                         lvl,
                         type,
                         status,
+                        index: kanjis.length + ++i,
                       });
                     }
 
@@ -357,10 +371,33 @@ function App() {
             <button
               className="border-red-600 text-orange-300"
               onClick={() => {
-                mutateKanjis(() => [...DEFAULT_KANJIS()]);
                 setPopup({
-                  text: <span>Reset successful!</span>,
+                  text: (close) => (
+                    <div className="text-center">
+                      <div>Do you really want to delete all your progress?</div>
+                      <button
+                        className="border-red-500"
+                        onClick={() => {
+                          mutateKanjis(() => {
+                            const kanjis = [...DEFAULT_KANJIS()];
+                            void (async () => {
+                              await LS.db?.clear("kanji");
+                              await Promise.all(
+                                kanjis.map((k) => LS.db?.put("kanji", k)),
+                              );
+                            })();
+                            return kanjis;
+                          });
+                          close();
+                        }}
+                      >
+                        Yes
+                      </button>
+                      <button onClick={close}>No</button>
+                    </div>
+                  ),
                   borderColor: "red",
+                  time: "user",
                 });
               }}
             >
@@ -402,7 +439,14 @@ function App() {
               <KanjiTile
                 badges={showbadges ?? 3}
                 kanji={kanji}
-                update={updateKanji}
+                update={async (kanji, data) => {
+                  updateKanji(kanji, data);
+                  const prev = await LS.db?.get("kanji", kanji);
+                  if (prev) {
+                    console.log("Changing data for: ", kanji);
+                    void LS.db?.put("kanji", { ...prev, ...data });
+                  }
+                }}
                 key={kanji.kanji}
               />
             );

@@ -75,10 +75,10 @@ const l2Kanji = dedupe(`
 比反対賛共直表現初
 全最無非第的性法律制課`);
 
-const toKanji = (s: string, d: Omit<Kanji, "kanji">) => {
+const toKanji = (s: string, d: Omit<Kanji, "kanji" | "index">) => {
   return [...new Set(s)]
     .filter((f) => f !== "\n")
-    .map<Kanji>((kanji) => ({ ...d, kanji }));
+    .map<Kanji>((kanji) => ({ ...d, kanji, index: 0 }));
 };
 
 type KanjiOverrideStrategy = (p: Kanji, n: Kanji) => Kanji;
@@ -95,6 +95,7 @@ export const removeDuplicates = (
       obj.lvl = nObj.lvl;
       obj.status = nObj.status;
       obj.type = nObj.type;
+      obj.index = nObj.index;
     } else {
       retArr.push(kanji);
     }
@@ -102,8 +103,23 @@ export const removeDuplicates = (
   return retArr;
 };
 
+export const chainStrategies = (
+  ...strategies: KanjiOverrideStrategy[]
+): KanjiOverrideStrategy => {
+  return (a, b) => {
+    for (const strategy of strategies) {
+      a = strategy(a, b);
+    }
+    return a;
+  };
+};
+
 export const OVERRIDE_ALL: KanjiOverrideStrategy = (_, n) => n;
-export const MERGE_STATUSES: KanjiOverrideStrategy = (p, n) => ({
+export const OVERRIDE_INDEXES: KanjiOverrideStrategy = (p, n) => ({
+  ...p,
+  index: n.index,
+});
+export const OVERRIDE_STATUS: KanjiOverrideStrategy = (p, n) => ({
   ...p,
   status: n.status,
 });
@@ -118,29 +134,31 @@ export const DEFAULT_KANJIS = () =>
   removeDuplicates(
     l1Base.concat(l2Base).concat(l1Extra.concat(l2Extra)),
     NO_OVERRIDE,
-  ).sort((p, n) => p.lvl - n.lvl); // prioritize bases over extras
+  )
+    .sort((p, n) => p.lvl - n.lvl)
+    .map((k, index) => ({ ...k, index })); // prioritize bases over extras
 
-console.log(
-  "lv1,base: ",
-  DEFAULT_KANJIS()
-    .filter((f) => f.type == "base" && f.lvl === 1)
-    .map((k) => k.kanji),
-);
-console.log(
-  "lv1,extra: ",
-  DEFAULT_KANJIS()
-    .filter((f) => f.type == "extra" && f.lvl === 1)
-    .map((k) => k.kanji),
-);
-console.log(
-  "lv2,base: ",
-  DEFAULT_KANJIS()
-    .filter((f) => f.type == "base" && f.lvl === 2)
-    .map((k) => k.kanji),
-);
-console.log(
-  "lv2,extra: ",
-  DEFAULT_KANJIS()
-    .filter((f) => f.type == "extra" && f.lvl === 2)
-    .map((k) => k.kanji),
-);
+// console.log(
+//   "lv1,base: ",
+//   DEFAULT_KANJIS()
+//     .filter((f) => f.type == "base" && f.lvl === 1)
+//     .map((k) => k.kanji),
+// );
+// console.log(
+//   "lv1,extra: ",
+//   DEFAULT_KANJIS()
+//     .filter((f) => f.type == "extra" && f.lvl === 1)
+//     .map((k) => k.kanji),
+// );
+// console.log(
+//   "lv2,base: ",
+//   DEFAULT_KANJIS()
+//     .filter((f) => f.type == "base" && f.lvl === 2)
+//     .map((k) => k.kanji),
+// );
+// console.log(
+//   "lv2,extra: ",
+//   DEFAULT_KANJIS()
+//     .filter((f) => f.type == "extra" && f.lvl === 2)
+//     .map((k) => k.kanji),
+// );
