@@ -86,16 +86,16 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
     if (overrideType != "p") {
       const currURL = new URL(location.href);
       const prevhref = currURL.href;
-      currURL.searchParams.delete("c");
-      currURL.searchParams.delete("n");
-      currURL.searchParams.delete("l");
-      currURL.searchParams.delete("t");
       if (
         currURL.searchParams.has("c") ||
         currURL.searchParams.has("n") ||
         currURL.searchParams.has("l") ||
         currURL.searchParams.has("t")
       ) {
+        currURL.searchParams.delete("c");
+        currURL.searchParams.delete("n");
+        currURL.searchParams.delete("l");
+        currURL.searchParams.delete("t");
         console.log(prevhref, " => ", currURL.toString());
         void Router.replace(currURL, currURL, { shallow: true });
       }
