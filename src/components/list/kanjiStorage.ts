@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import {
-  type KanjiDB,
   LS_KEYS,
   type LSStore as LSStore,
 } from "@/components/localStorageProvider";
@@ -17,6 +16,7 @@ import { type Kanji, type KanjiStatus, useKanjiStore } from "./kanjiStore";
 import { eq, gt, valid } from "semver";
 import Router from "next/router";
 import { type IDBPDatabase } from "idb";
+import { KanjiDB } from "@/pages/_app";
 
 const getLocationKanjis = (search: string): Kanji[] => {
   const locKanjis = [] as Kanji[];
