@@ -12,6 +12,7 @@ import { getShareLink, doesKanjiFitFilter } from "@/components/list/kanjiUtils";
 import Head from "next/head";
 import { textColors } from "@/components/list/theme";
 import { KanjiTile } from "@/components/list/kanjiTile";
+import Link from "next/link";
 
 const POPUP_SHOW_TIME = 2000;
 
@@ -165,9 +166,18 @@ function App() {
             </div>
           </div>
         )}
+        <Link
+          className={
+            "absolute block items-center justify-start p-2 text-left underline"
+          }
+          href={"/"}
+        >
+          Go back
+        </Link>
         <div
           id="settings"
-          className={`mb-[3px] flex w-full flex-wrap justify-around`}
+          style={{ "--maxw": `calc(100vw - 130px)` }}
+          className={`mx-[auto] mb-[3px] flex w-[--maxw] flex-wrap justify-around`}
         >
           <div className={kanjiCSS["setting-menu"] + " flex-col"}>
             <div style={{ color: textColors.learning }}>Learning</div>

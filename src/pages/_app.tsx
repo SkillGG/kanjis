@@ -15,6 +15,8 @@ import {
   type KanjiStatus,
   type KanjiType,
 } from "@/components/list/kanjiStore";
+import { type DrawSessionData } from "@/components/draw/drawSession";
+import Link from "next/link";
 
 export type KanjiDB = DBSchema & {
   kanji: {
@@ -27,25 +29,39 @@ export type KanjiDB = DBSchema & {
       index: number;
     };
   };
+  draw: {
+    key: string;
+    value: DrawSessionData;
+  };
 };
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [dbSchema] = useState<DBInit<KanjiDB>>({
     name: "kanjiDB",
-    version: 6,
+    version: 9,
     init(db, o, n, transaction) {
-      const oS = db.objectStoreNames.contains("kanji")
-        ? transaction.store
-        : db.createObjectStore("kanji", { keyPath: "kanji" });
-      if (oS) {
-        if (!oS.indexNames.contains("type"))
-          oS.createIndex("type", "type", { unique: false });
-        if (!oS.indexNames.contains("status"))
-          oS.createIndex("status", "status", { unique: false });
-        if (!oS.indexNames.contains("lvl"))
-          oS.createIndex("lvl", "lvl", { unique: false });
-        if (!oS.indexNames.contains("index"))
-          oS.createIndex("index", "index", { unique: true });
+      if (o < 6) {
+        if (db.objectStoreNames.contains("kanji"))
+          db.deleteObjectStore("kanji");
+        const kanjiStore = db.objectStoreNames.contains("kanji")
+          ? transaction.objectStore("kanji")
+          : db.createObjectStore("kanji", { keyPath: "kanji" });
+        if (kanjiStore) {
+          if (!kanjiStore.indexNames.contains("type"))
+            kanjiStore.createIndex("type", "type", { unique: false });
+          if (!kanjiStore.indexNames.contains("status"))
+            kanjiStore.createIndex("status", "status", { unique: false });
+          if (!kanjiStore.indexNames.contains("lvl"))
+            kanjiStore.createIndex("lvl", "lvl", { unique: false });
+          if (!kanjiStore.indexNames.contains("index"))
+            kanjiStore.createIndex("index", "index", { unique: true });
+        }
+        o = 6;
+      }
+      if (o > 6 && o < 8) {
+        console.log("upgrading the DB");
+        if (!db.objectStoreNames.contains("draw"))
+          db.createObjectStore("draw", { keyPath: "sessionID" });
       }
     },
   });
