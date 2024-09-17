@@ -91,14 +91,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           if (!kanjiStore.indexNames.contains("index"))
             kanjiStore.createIndex("index", "index", { unique: true });
         }
-        o = 6;
       }
-      if (o >= 6 && o < 8) {
+      if (o < 8) {
         if (!db.objectStoreNames.contains("draw"))
           db.createObjectStore("draw", { keyPath: "sessionID" });
-        o = 8;
       }
-      if (o >= 8 && o <= 13) {
+      if (o <= 13) {
         if (db.objectStoreNames.contains("wordbank"))
           db.deleteObjectStore("wordbank");
         const wordbankStore = db.createObjectStore("wordbank", {

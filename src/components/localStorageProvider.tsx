@@ -85,6 +85,7 @@ export const LocalStorageProvider = ({
         dbCreator.init?.(database, oV, nV, transaction, ev);
       },
     }).then((db) => {
+      console.log("created a db", db);
       setDB(db);
       dbCreator.seed(db);
     });
