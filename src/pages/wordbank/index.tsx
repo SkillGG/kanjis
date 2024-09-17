@@ -119,7 +119,13 @@ export default function KanjiCardCreator() {
   return (
     <>
       <div className="mx-auto w-fit">
-        Word:
+        Word
+        <br />
+        Double click reading / alt + num - toggle this kanji addition
+        <br />
+        Alt + a - toggle every reading
+        <br />
+        alt + q focus next reading field:
         <div className="flex max-w-[50vw] flex-wrap">
           {readings.map((a, i) => (
             <div
@@ -152,18 +158,20 @@ export default function KanjiCardCreator() {
             </div>
           ))}
           {readings.length > 0 && (
-            <button
-              onClick={() => {
-                if (new Set(special).size === readings.length) setSpecial([]);
-                else
-                  setSpecial(
-                    [...Array<number>(readings.length)].map((_, i) => i),
-                  );
-              }}
-              ref={allRef}
-            >
-              ALL
-            </button>
+            <>
+              <button
+                onClick={() => {
+                  if (new Set(special).size === readings.length) setSpecial([]);
+                  else
+                    setSpecial(
+                      [...Array<number>(readings.length)].map((_, i) => i),
+                    );
+                }}
+                ref={allRef}
+              >
+                ALL (alt + w)
+              </button>
+            </>
           )}
         </div>
         <div className="mx-auto mt-1 w-fit">
@@ -174,7 +182,7 @@ export default function KanjiCardCreator() {
               }
             }}
             ref={mainInput}
-            className="w-[60%] text-center outline-none"
+            className="w-[50%] text-center outline-none"
             value={wordVal}
             onChange={(e) => setWordVal(e.target.value)}
           />
@@ -212,7 +220,7 @@ export default function KanjiCardCreator() {
               })();
             }}
           >
-            ADD
+            ADD (alt + return)
           </button>
           <button
             className="ml-2 p-3"
