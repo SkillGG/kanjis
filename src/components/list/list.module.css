@@ -32,6 +32,10 @@
   color: black;
 }
 
+.special-kanji {
+  color: var(--color);
+}
+
 .popup {
   position: fixed;
   background-color: transparent;

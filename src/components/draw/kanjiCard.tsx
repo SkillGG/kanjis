@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { type ReactQuizWord } from "./quizWords";
 import { type SessionResult } from "./drawSession";
+import { myFont } from "@/pages/_app";
 
 export const KanjiCard = ({
   word,
@@ -54,7 +55,7 @@ export const KanjiCard = ({
         <>
           <div
             className={`${classNames.text} text-center text-2xl`}
-            style={styles.text}
+            style={{ ...styles.text, fontFamily: myFont.style.fontFamily }}
           >
             {word.full}
           </div>

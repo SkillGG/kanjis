@@ -8,6 +8,7 @@ import {
 } from "./quizWords";
 import { KanjiCard } from "./kanjiCard";
 import { useLocalStorage } from "../localStorageProvider";
+import { myFont } from "@/pages/_app";
 
 export const Quizlet = ({
   session,
@@ -76,7 +77,20 @@ export const Quizlet = ({
           const newSession = await commitResult(result);
           await nextWord(newSession);
         }}
-        word={toRQW(currentWord)}
+        word={toRQW(currentWord, {
+          full: {
+            ruby: {
+              fontFamily: myFont.style.fontFamily,
+              fontSize: "10rem",
+              "--color": "green",
+            },
+          },
+          hint: {
+            ruby: {
+              fontSize: "10rem",
+            },
+          },
+        })}
       />
     </>
   );

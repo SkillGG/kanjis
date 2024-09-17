@@ -1,10 +1,12 @@
-import React from "react";
+import React, { type CSSProperties } from "react";
 import { type DrawSessionData } from "./drawSession";
 import { type LSStore } from "../localStorageProvider";
 import { type KanjiDB } from "@/pages/_app";
 import { randomStartWeighedInt } from "@/utils/utils";
 import Link from "next/link";
 import Router from "next/router";
+
+import kanjiCSS from "@/components/list/list.module.css";
 
 export type QuizWord = {
   kanji: string;
@@ -24,18 +26,31 @@ export const getReadings = (
   word: string,
   meaning: string,
   readings: string[],
+  style?: RQWStyles,
+  special?: number,
 ): React.ReactNode => {
   if (word.length !== readings.length)
-    throw new Error("The wor dand readings array's lengths do not match!");
+    throw new Error("The word and readings array's lengths do not match!");
   return (
     <>
       <div>{meaning}</div>
-      <ruby style={{ fontSize: "1.5rem" }}>
+      <ruby style={{ ...style?.ruby }}>
         {readings.map((r, i) => {
           return (
             <React.Fragment key={`word_reading_${r}_${i}`}>
-              {word[i]}
-              <rt>{r}</rt>
+              <span
+                className={`${special === i ? kanjiCSS["special-kanji"] : ""}`}
+                style={{ fontFamily: "inherit" }}
+              >
+                {word[i]}
+              </span>
+              <rt
+                style={{
+                  ...style?.rt,
+                }}
+              >
+                {r}
+              </rt>
             </React.Fragment>
           );
         })}
@@ -44,11 +59,14 @@ export const getReadings = (
   );
 };
 
+type RQWStyles = { ruby?: CSSProperties; rt?: CSSProperties };
+
 export const getReadingsWithout = (
   word: string,
   meaning: string,
   readings: string[],
   special: number,
+  style?: RQWStyles,
 ): React.ReactNode => {
   if (word.length !== readings.length)
     throw new Error("The word and readings array's lengths do not match!");
@@ -57,12 +75,18 @@ export const getReadingsWithout = (
   return (
     <>
       <div>{meaning}</div>
-      <ruby style={{ fontSize: "1.3em" }}>
+      <ruby style={{ ...style?.ruby }}>
         {readings.map((r, i) => {
           return (
             <React.Fragment key={`word_special_reading_${r}_${i}`}>
               {i === special ? "〇" : word[i]}
-              <rt>{r}</rt>
+              <rt
+                style={{
+                  ...style?.rt,
+                }}
+              >
+                {r}
+              </rt>
             </React.Fragment>
           );
         })}
@@ -75,11 +99,26 @@ export const getWordWithout = (word: string, special: number): string => {
   return [...word].map((q, i) => (i === special ? "〇" : q)).join("");
 };
 
-export const toRQW = (qw: QuizWord): ReactQuizWord => {
+export const toRQW = (
+  qw: QuizWord,
+  styles?: { full?: RQWStyles; hint?: RQWStyles },
+): ReactQuizWord => {
   return {
     ...qw,
-    full: getReadings(qw.word, qw.meaning, qw.readings),
-    hint: getReadingsWithout(qw.word, qw.meaning, qw.readings, qw.special),
+    full: getReadings(
+      qw.word,
+      qw.meaning,
+      qw.readings,
+      styles?.full,
+      qw.special,
+    ),
+    hint: getReadingsWithout(
+      qw.word,
+      qw.meaning,
+      qw.readings,
+      qw.special,
+      styles?.hint,
+    ),
   };
 };
 
