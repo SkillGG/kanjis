@@ -81,6 +81,12 @@ export const LocalStorageProvider = ({
 
   useEffect(() => {
     void openDB<KanjiDB>(dbCreator.name, dbCreator.version, {
+      blocked(_currentVersion, _blockedVersion, _event) {
+        console.error("DB creation blocked");
+      },
+      blocking(_currentVersion, _blockedVersion, _event) {
+        console.error("DB is blocking creation of other DB");
+      },
       upgrade(database, oV, nV, transaction, ev) {
         dbCreator.init?.(database, oV, nV, transaction, ev);
       },
