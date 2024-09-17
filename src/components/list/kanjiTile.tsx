@@ -9,11 +9,15 @@ export const KanjiTile = ({
   disabled,
   className,
   style,
+  extraBadge,
+  lvlBadge,
 }: {
   kanji: Kanji;
   className?: React.ComponentProps<"button">["className"];
   style?: React.ComponentProps<"button">["style"];
   badges: 0 | 1 | 2 | 3;
+  extraBadge?: string;
+  lvlBadge?: string;
   disabled?: boolean;
   update: (kanji: string, data: Partial<Omit<Kanji, "kanji">>) => void;
 }) => {
@@ -44,8 +48,10 @@ export const KanjiTile = ({
         "--extraSign": extraSignColor,
         ...style,
       }}
-      data-extra={badges < 2 && type === "extra" ? "*" : undefined}
-      data-lvl={badges % 2 == 0 ? (disabled ? "L" : lvl) : undefined}
+      data-extra={
+        badges < 2 && (extraBadge ?? (type === "extra" ? "*" : undefined))
+      }
+      data-lvl={badges % 2 == 0 && (lvlBadge ?? (disabled ? "L" : lvl))}
       title={`${type} kanji lvl ${lvl}`}
     >
       {kanji}

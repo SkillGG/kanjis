@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { type SessionResult, type DrawSessionData } from "./drawSession";
-import { nextWordGenerator, toRQW, type QuizWord } from "./quizWords";
+import {
+  type NextWordGenerator,
+  nextWordGenerator,
+  toRQW,
+  type QuizWord,
+} from "./quizWords";
 import { KanjiCard } from "./kanjiCard";
 import { useLocalStorage } from "../localStorageProvider";
 
@@ -9,42 +14,68 @@ export const Quizlet = ({
   commitResult,
 }: {
   session: DrawSessionData;
-  commitResult: (result: SessionResult) => void;
+  commitResult: (result: SessionResult) => Promise<DrawSessionData>;
 }) => {
   const LS = useLocalStorage();
 
-  const [wordGenerator] = useState(nextWordGenerator(session, LS));
+  const [wordGenerator, setWordGenerator] = useState<NextWordGenerator | null>(
+    null,
+  );
   const [currentWord, setCurrentWord] = useState<QuizWord | null>(null);
 
-  const nextWord = useCallback(async () => {
-    const nextWord = (await wordGenerator.next(session)).value;
-    setCurrentWord(() => {
-      return nextWord;
-    });
-  }, [session, wordGenerator]);
+  const [error, setError] = useState<React.ReactNode | null>(null);
+
+  const nextWord = useCallback(
+    async (sessionData: DrawSessionData) => {
+      if (!wordGenerator) return;
+      const nextWord = (await wordGenerator.next(sessionData)).value;
+      if ("err" in nextWord) {
+        setError(nextWord.err);
+      } else {
+        setCurrentWord(nextWord);
+      }
+    },
+    [wordGenerator],
+  );
 
   useEffect(() => {
     void (async () => {
+      if (!LS.idb || !session) return;
       console.log("getting a new word!");
-      const firstWord = await wordGenerator.next();
-      console.log(firstWord);
+      const newWG = nextWordGenerator(session, LS);
+      setWordGenerator(newWG);
+      const firstWord = await newWG.next();
+      console.log("fw", firstWord);
       if (firstWord.done) {
+        setError(firstWord.value.err);
         return;
       }
-      setCurrentWord(firstWord.value);
+      if ("err" in firstWord.value) {
+        setError(firstWord.value.err);
+      } else {
+        setCurrentWord(firstWord.value);
+      }
     })();
-  }, [wordGenerator]);
+  }, [LS, session]);
 
   if (currentWord === null) {
-    return <>Loading the question</>;
+    return <>{error ? error : "Loading..."}</>;
   }
 
   return (
     <>
+      <span>
+        Cur points:{" "}
+        {session.sessionResults
+          .filter((f) => f.kanji === currentWord.kanji)
+          .reduce((p, n) => p + n.result, 0)}
+      </span>
       <KanjiCard
         classNames={{ text: "text-4xl", border: "text-2xl" }}
-        commit={commitResult}
-        nextWord={nextWord}
+        commit={async (result) => {
+          const newSession = await commitResult(result);
+          await nextWord(newSession);
+        }}
         word={toRQW(currentWord)}
       />
     </>

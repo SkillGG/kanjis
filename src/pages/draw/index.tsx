@@ -1,6 +1,7 @@
 "use client";
 
 import { type DrawSessionData } from "@/components/draw/drawSession";
+import { type QuizWord } from "@/components/draw/quizWords";
 import { useKanjiStorage } from "@/components/list/kanjiStorage";
 import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
 import { KanjiTile } from "@/components/list/kanjiTile";
@@ -9,7 +10,8 @@ import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-const MIN_SESSION_SIZE = 10;
+const MIN_SESSION_SIZE = 5;
+const MIN_WORD_SIZE = 10;
 
 export default function Draw() {
   const LS = useLocalStorage();
@@ -32,13 +34,15 @@ export default function Draw() {
   const [sessionName, setSessionName] = useState<string>("");
 
   const [sessionCreationError, setSessionCreationError] = useState<{
-    reason: "name" | "kanjiNum";
+    reason: "name" | "kanjiNum" | "wordNum";
     el: React.ReactNode;
   } | null>(null);
 
   const [sesssions, setSessions] = useState<DrawSessionData[]>([]);
 
   const [wWidth, setWWidth] = useState<number | null>(null);
+
+  const [words, setWords] = useState<QuizWord[]>([]);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -79,6 +83,8 @@ export default function Draw() {
 
       const openSessions = await LS.idb.getAll("draw");
       setSessions(() => openSessions.filter((s) => s.open));
+
+      setWords(await LS.idb.getAll("wordbank"));
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [LS]);
@@ -238,6 +244,24 @@ export default function Draw() {
                   reason: "kanjiNum",
                   el: `Cannot create a session with less than ${MIN_SESSION_SIZE}
                     kanjis!`,
+                });
+              }
+              if (
+                words.filter((f) => selectedKanjis.includes(f.kanji)).length <
+                MIN_WORD_SIZE
+              ) {
+                return setSessionCreationError({
+                  reason: "wordNum",
+                  el: (
+                    <>
+                      Cannot create a session with less than {MIN_WORD_SIZE}{" "}
+                      words!
+                      <br />
+                      <Link href="/wordbank" className="underline">
+                        Go to wordbank if you need to add more!
+                      </Link>
+                    </>
+                  ),
                 });
               }
               const sessionData = {
@@ -559,14 +583,30 @@ export default function Draw() {
                   />
                   <button onClick={() => setShowFilter("")}>CLEAR</button>
                 </label>
-                <div
-                  style={{
-                    ...(sessionCreationError?.reason === "kanjiNum"
-                      ? { color: "red" }
-                      : {}),
-                  }}
-                >
-                  ({selectedKanjis.length}/{kanjis.length})
+                <div>
+                  <div
+                    style={{
+                      ...(sessionCreationError?.reason === "kanjiNum"
+                        ? { color: "red" }
+                        : {}),
+                    }}
+                  >
+                    kanji: ({selectedKanjis.length}/{kanjis.length})
+                  </div>
+                  <div
+                    style={{
+                      ...(sessionCreationError?.reason === "wordNum"
+                        ? { color: "red" }
+                        : {}),
+                    }}
+                  >
+                    words: (
+                    {
+                      words.filter((f) => selectedKanjis.includes(f.kanji))
+                        .length
+                    }
+                    /{words.length})
+                  </div>
                 </div>
               </div>
               <div
@@ -591,6 +631,7 @@ export default function Draw() {
                         style={{
                           "--border": on ? "green" : "red",
                         }}
+                        extraBadge={`${words.filter((f) => f.kanji === kanji.kanji).length}`}
                         className="hover:z-10"
                         key={kanji.kanji}
                         update={() => {

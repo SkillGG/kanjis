@@ -1,7 +1,9 @@
 import { useKanjiStorage } from "@/components/list/kanjiStorage";
 import { useLocalStorage } from "@/components/localStorageProvider";
+import { randomEndWeighedInt } from "@/utils/utils";
 import Head from "next/head";
 import Link from "next/link";
+import { useEffect } from "react";
 
 // import { api } from "@/utils/api";
 
@@ -9,6 +11,10 @@ export default function Home() {
   // const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
   useKanjiStorage(useLocalStorage());
+
+  useEffect(() => {
+    if (typeof window !== "undefined") window.wrN = randomEndWeighedInt;
+  }, []);
 
   return (
     <>

@@ -32,13 +32,6 @@ export default function DrawSession() {
     })();
   }, [LS, id]);
 
-  useEffect(() => {
-    void (async () => {
-      if (!LS.idb || !sessionData) return;
-      console.log("sessionData changed", sessionData);
-    })();
-  }, [LS, sessionData]);
-
   if (!sessionData && !loadingError) {
     return <>Loading...</>;
   }
@@ -75,15 +68,18 @@ export default function DrawSession() {
         <div className="text-center text-lg">{sessionData.sessionID}</div>
         <Quizlet
           session={sessionData}
-          commitResult={(result) => {
-            setSessionData((prev) =>
-              prev
-                ? {
-                    ...prev,
-                    sessionResults: [...prev?.sessionResults, result],
-                  }
-                : prev,
-            );
+          commitResult={async (result) => {
+            if (!LS?.idb) throw new Error("No database connection!");
+            if (!sessionData) throw new Error("Session Data not found!");
+            const newSD: DrawSessionData = sessionData
+              ? {
+                  ...sessionData,
+                  sessionResults: [...sessionData?.sessionResults, result],
+                }
+              : sessionData;
+            await LS.idb.put("draw", newSD);
+            setSessionData(() => newSD);
+            return newSD;
           }}
         />
       </div>

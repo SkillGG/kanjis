@@ -2,6 +2,9 @@ import React from "react";
 import { type DrawSessionData } from "./drawSession";
 import { type LSStore } from "../localStorageProvider";
 import { type KanjiDB } from "@/pages/_app";
+import { randomStartWeighedInt } from "@/utils/utils";
+import Link from "next/link";
+import Router from "next/router";
 
 export type QuizWord = {
   kanji: string;
@@ -80,37 +83,115 @@ export const toRQW = (qw: QuizWord): ReactQuizWord => {
   };
 };
 
-const randomInt = (min: number, max: number) =>
-  Math.round(Math.random() * Math.trunc(max)) + Math.trunc(min);
+type GeneratorError = { err: React.ReactNode; message: string };
+
+export type NextWordGenerator = AsyncGenerator<
+  QuizWord | GeneratorError,
+  GeneratorError,
+  DrawSessionData
+>;
+
+const getErr = (m: string, ch: React.ReactNode = null): GeneratorError => {
+  return {
+    err: (
+      <div className="text-center text-base text-red-500">
+        <span className="text-xl text-red-500">{m}</span>
+        {ch}
+      </div>
+    ),
+    message: m,
+  };
+};
 
 export async function* nextWordGenerator(
   startingData: DrawSessionData,
   LS: LSStore<KanjiDB>,
-): AsyncGenerator<QuizWord, null, DrawSessionData> {
+): NextWordGenerator {
   if (!LS?.idb) {
     console.error("LocalStorage not provided!");
-    return null;
+    return getErr("Could not connected to IndexedDB");
   }
-  let sesh = startingData;
-  if (!sesh) throw new Error("Sesh is undefined!");
+  let currentSessionData = startingData;
   while (true) {
+    if (!currentSessionData) {
+      return getErr("Session is not defined!");
+    }
+    const getNoWordErr = (m: string): GeneratorError => {
+      return getErr(
+        m,
+        <>
+          <br />
+          <Link href="/wordbank" className="text-orange-500 underline">
+            Go to the wordbank to add some!
+            <br />
+            (this session will remain open)
+          </Link>
+          <br />
+          or
+          <br />
+          <Link
+            onClick={() => {
+              if (!LS?.idb) return;
+              void LS.idb.put("draw", { ...currentSessionData, open: false });
+            }}
+            href="/draw"
+            className="underline"
+          >
+            Create a session with other kanjis!
+            <br />
+            (will close this session)
+          </Link>
+        </>,
+      );
+    };
     const words: QuizWord[] = await LS.idb.getAll("wordbank");
-    const availableKanjiWords = sesh.sessionKanjis.filter(
-      (k) => !!words.find((f) => f.kanji === k),
+    const lastDoneKanji =
+      currentSessionData.sessionResults[
+        currentSessionData.sessionResults.length - 1
+      ];
+    const getKanjiValueFor = (k: string): number => {
+      return currentSessionData.sessionResults
+        .filter((q) => q.kanji === k)
+        .reduce((p, n) => p + n.result, 0);
+    };
+
+    const kanjiWithWords = currentSessionData.sessionKanjis
+      .filter((k) => !!words.find((f) => f.kanji === k)) // has words in wordbank
+      .filter((f) => (!lastDoneKanji ? true : f !== lastDoneKanji.kanji)) // wasn't just used
+      .sort((a, b) => getKanjiValueFor(a) - getKanjiValueFor(b)); // sorted by points acquired
+
+    if (kanjiWithWords.length === 0) {
+      currentSessionData = yield getNoWordErr(
+        "None of the selected kanjis have words in the wordbank!",
+      );
+      continue;
+    }
+    const randomKanjiIndex = randomStartWeighedInt(
+      0,
+      kanjiWithWords.length - 1,
+      10,
     );
-    console.log(sesh.sessionKanjis, words, availableKanjiWords);
-    if (availableKanjiWords.length === 0) {
-      console.error("No words!");
-      return null;
-    }
-    const randomKanji =
-      availableKanjiWords[randomInt(0, availableKanjiWords.length - 1)];
+    const randomKanji = kanjiWithWords[randomKanjiIndex];
     const kanjiWords = words.filter((f) => f.kanji === randomKanji);
-    const randomWord = kanjiWords[randomInt(0, kanjiWords.length - 1)];
-    if (!randomWord) {
-      console.error("No words!");
-      return null;
+    if (kanjiWords.length === 0) {
+      currentSessionData = yield getNoWordErr(
+        `There are no words to show corresponding to the kanji: ${randomKanji}`,
+      );
+      continue;
     }
-    sesh = (yield randomWord) ?? sesh;
+    const randomWordIndex = randomStartWeighedInt(0, kanjiWords.length - 1, 10);
+    const randomWord = kanjiWords[randomWordIndex];
+    if (!randomWord)
+      return getErr(
+        "Error in the code",
+        <button
+          onClick={() => {
+            Router.reload();
+          }}
+        >
+          Refresh the page
+        </button>,
+      );
+    currentSessionData = (yield randomWord) ?? currentSessionData;
   }
 }

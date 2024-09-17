@@ -4,14 +4,12 @@ import { type SessionResult } from "./drawSession";
 
 export const KanjiCard = ({
   word,
-  nextWord,
   commit,
   sideOverride,
   disableButtons,
   classNames = { border: "", text: "" },
 }: {
   word: ReactQuizWord;
-  nextWord: () => void;
   commit: (result: SessionResult) => void;
   sideOverride?: "quiz" | "answer";
   disableButtons?: boolean;
@@ -51,8 +49,7 @@ export const KanjiCard = ({
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => {
-                  commit({ kanji: word.kanji, result: 30 });
-                  nextWord();
+                  commit({ kanji: word.kanji, result: 10 });
                   setSide("quiz");
                 }}
                 className="border-green-500 px-4 hover:bg-green-950 hover:text-green-300"
@@ -61,8 +58,7 @@ export const KanjiCard = ({
               </button>
               <button
                 onClick={() => {
-                  commit({ kanji: word.kanji, result: 20 });
-                  nextWord();
+                  commit({ kanji: word.kanji, result: 0 });
                   setSide("quiz");
                 }}
                 className="border-orange-500 px-4 hover:bg-orange-950 hover:text-orange-300"
@@ -71,8 +67,7 @@ export const KanjiCard = ({
               </button>
               <button
                 onClick={() => {
-                  commit({ kanji: word.kanji, result: 10 });
-                  nextWord();
+                  commit({ kanji: word.kanji, result: -10 });
                   setSide("quiz");
                 }}
                 className="border-red-500 px-4 hover:bg-red-950 hover:text-red-300"

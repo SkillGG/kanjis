@@ -246,7 +246,6 @@ export default function KanjiCardCreator() {
                 classNames={{ border: "w-full", text: "text-xl" }}
                 key={`${q.word}_${q.special}_quiz`}
                 commit={noop}
-                nextWord={noop}
                 word={q}
                 disableButtons
                 sideOverride="quiz"
@@ -255,7 +254,6 @@ export default function KanjiCardCreator() {
                 key={`${q.word}_${q.special}_ans`}
                 classNames={{ border: "w-full", text: "text-xl" }}
                 commit={noop}
-                nextWord={noop}
                 word={q}
                 disableButtons
                 sideOverride="answer"
