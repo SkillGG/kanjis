@@ -1,3 +1,5 @@
+import { useKanjiStorage } from "@/components/list/kanjiStorage";
+import { useLocalStorage } from "@/components/localStorageProvider";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -5,6 +7,8 @@ import Link from "next/link";
 
 export default function Home() {
   // const hello = api.post.hello.useQuery({ text: "from tRPC" });
+
+  useKanjiStorage(useLocalStorage());
 
   return (
     <>
@@ -26,6 +30,12 @@ export default function Home() {
           className="mt-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] underline hover:bg-slate-500"
         >
           Kanji drawing app
+        </Link>
+        <Link
+          href={"/wordbank"}
+          className="mt-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] underline hover:bg-slate-500"
+        >
+          Edit the word bank
         </Link>
       </div>
     </>

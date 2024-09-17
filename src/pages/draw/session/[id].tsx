@@ -1,4 +1,5 @@
 import { type DrawSessionData } from "@/components/draw/drawSession";
+import { Quizlet } from "@/components/draw/Quizlet";
 import { useLocalStorage } from "@/components/localStorageProvider";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,19 +18,26 @@ export default function DrawSession() {
 
   useEffect(() => {
     void (async () => {
-      if (id === undefined) return;
-      console.log("Loading data");
+      if (id === undefined || !LS.db) return;
       if (typeof id !== "string") {
         setLoadingError("Wrong session id!");
         return;
       }
-      const sD = await LS.db?.get("draw", id);
-      console.log("SD", sD);
+      const sD = await LS.db.get("draw", id);
       if (!sD)
-        return setLoadingError(`Could not load session data for session#${id}`);
+        return setLoadingError(
+          `Could not load session data for session "${id}"`,
+        );
       setSessionData(sD);
     })();
   }, [LS, id]);
+
+  useEffect(() => {
+    void (async () => {
+      if (!LS.db || !sessionData) return;
+      console.log("sessionData changed", sessionData);
+    })();
+  }, [LS, sessionData]);
 
   if (!sessionData && !loadingError) {
     return <>Loading...</>;
@@ -57,22 +65,27 @@ export default function DrawSession() {
 
   return (
     <>
-      <div>Cur sesh: {id}</div>
-      <div>
-        {sessionData.sessionKanjis.map((k) => (
-          <span key={k}>{k}</span>
-        ))}
-      </div>
-      <div>
-        <Link
-          className="text-red-500"
-          href="/draw"
-          onClick={async () => {
-            await LS.db?.put("draw", { ...sessionData, open: false });
+      <Link
+        href="/draw"
+        className="block w-fit bg-transparent p-2 underline sm:fixed"
+      >
+        Go back
+      </Link>
+      <div className="mx-[auto] w-[80vw]">
+        <div className="text-center text-lg">{sessionData.sessionID}</div>
+        <Quizlet
+          session={sessionData}
+          commitResult={(result) => {
+            setSessionData((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    sessionResults: [...prev?.sessionResults, result],
+                  }
+                : prev,
+            );
           }}
-        >
-          Close session
-        </Link>
+        />
       </div>
     </>
   );

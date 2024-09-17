@@ -65,6 +65,7 @@ export const LS_KEYS = {
 export type DBInit<T extends DBSchema> = {
   name: string;
   version: number;
+  seed: (db: IDBPDatabase<T>) => void;
   init: OpenDBCallbacks<T>["upgrade"];
 };
 
@@ -85,6 +86,7 @@ export const LocalStorageProvider = ({
       },
     }).then((db) => {
       setDB(db);
+      dbCreator.seed(db);
     });
   }, [dbCreator]);
 

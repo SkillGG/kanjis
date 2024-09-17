@@ -161,6 +161,8 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
       };
 
       if (!DBKanjis || DBKanjis.length === 0) {
+        // no DB kanji
+        console.log("No db kanji");
         setShouldUpdate(false);
         mutateKanjis(() => {
           LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);

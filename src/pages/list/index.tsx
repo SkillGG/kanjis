@@ -137,7 +137,7 @@ function App() {
                   LS.set<string>(LS_KEYS.omit_version, null);
                   LS.set<Kanji[]>(LS_KEYS.kanjis, null);
                   setTimeout(() => {
-                    window.location.href = getShareLink(kanjis);
+                    window.location.href = getShareLink(kanjis, "reset");
                   }, 50);
                 }}
               >
@@ -180,8 +180,16 @@ function App() {
           className={`mx-[auto] mb-[3px] flex w-[--maxw] flex-wrap justify-around`}
         >
           <div className={kanjiCSS["setting-menu"] + " flex-col"}>
-            <div style={{ color: textColors.learning }}>Learning</div>
-            <div style={{ color: textColors.completed }}>Completed</div>
+            <div style={{ color: textColors.learning }}>
+              {" "}
+              Learning (
+              {kanjis?.filter((f) => f.status === "learning").length ?? 0})
+            </div>
+            <div style={{ color: textColors.completed }}>
+              Completed (
+              {kanjis?.filter((f) => f.status === "completed").length ?? 0})
+            </div>
+            <div style={{ color: "white" }}> All ({kanjis?.length ?? 0})</div>
           </div>
           <div className={kanjiCSS["setting-menu"] + " items-center"}>
             <KanjiTile
@@ -390,6 +398,7 @@ function App() {
                         onClick={() => {
                           mutateKanjis(() => {
                             const kanjis = [...DEFAULT_KANJIS()];
+                            LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
                             void (async () => {
                               await LS.db?.clear("kanji");
                               await Promise.all(

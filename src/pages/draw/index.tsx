@@ -75,7 +75,7 @@ export default function Draw() {
       setNewKanjis(newKs);
 
       const prevSessionIndex = await LS.db.count("draw");
-      if (!sessionName) setSessionName(`Session #${prevSessionIndex + 1}`);
+      if (!sessionName) setSessionName(`Session ${prevSessionIndex + 1}`);
 
       const openSessions = await LS.db.getAll("draw");
       setSessions(() => openSessions.filter((s) => s.open));
@@ -109,11 +109,11 @@ export default function Draw() {
       <Link
         href="/"
         ref={dashboardLinkRef}
-        className="block w-full bg-transparent p-2 underline sm:fixed"
+        className="block w-fit bg-transparent p-2 underline sm:fixed"
       >
         Go back
       </Link>
-      <div className="mx-[auto] flex w-fit flex-col items-center gap-2 text-center">
+      <div className="mx-[auto] flex flex-col items-center gap-2 text-center">
         <div className="pt-2 text-xl" ref={headerDiv}>
           {sesssions.length > 0 && (
             <>
@@ -147,21 +147,40 @@ export default function Draw() {
                   {sesssions.map((s) => (
                     <div
                       key={s.sessionID}
-                      className="border-y-2 border-slate-600"
+                      className="grid grid-cols-[5fr_1fr] border-y-2 border-slate-600"
+                      style={{ gridTemplateAreas: `"p a""p b"` }}
                     >
-                      <button
+                      <div
                         title={"Kanji:\n" + s.sessionKanjis.join("")}
-                        onClick={() => {
-                          void router.replace(`/draw/session/${s.sessionID}`);
-                        }}
-                        className="w-full rounded-none border-none hover:bg-slate-300 hover:text-black"
+                        className="w-full cursor-default select-none rounded-none border-none hover:bg-slate-300 hover:text-black"
+                        style={{ gridArea: "p" }}
                       >
-                        Session #{s.sessionID}
+                        {s.sessionID}
                         <br />
                         {s.sessionKanjis.length === 0
                           ? "No kanji selected"
                           : s.sessionKanjis.join("").substring(0, 20)}
                         ...
+                      </div>
+                      <button
+                        style={{ gridArea: "a" }}
+                        className="rounded-none border-x-0 border-b-2 border-t-0 border-slate-600 hover:bg-slate-300"
+                        onClick={() => {
+                          void router.replace(`/draw/session/${s.sessionID}`);
+                        }}
+                      >
+                        LOAD
+                      </button>
+                      <button
+                        style={{ gridArea: "b" }}
+                        className="rounded-none border-none hover:bg-slate-300"
+                        onClick={() => {
+                          dialogRef.current?.close();
+                          setSelectedKanjis(s.sessionKanjis);
+                          setSessionName(`${s.sessionID} (1)`);
+                        }}
+                      >
+                        COPY
                       </button>
                     </div>
                   ))}
@@ -195,17 +214,25 @@ export default function Draw() {
                   el: "Cannot create a session without a name!",
                 });
               }
-              if (!/^[a-z0-9#_\- ]+$/i.exec(sessionName))
+              if (!/^[a-z0-9_\- ]+$/i.exec(sessionName))
                 return setSessionCreationError({
                   reason: "name",
                   el: (
                     <>
-                      You can only use &quot;<code>A-Z0-9#_- </code>&quot; in
+                      You can only use &quot;<code>A-Z0-9_- </code>&quot; in
                       your session name!
                     </>
                   ),
                 });
               if (!LS.db) return;
+
+              if ((await LS.db.count("draw", sessionName)) > 0) {
+                return setSessionCreationError({
+                  reason: "name",
+                  el: `Session with that name already exists!`,
+                });
+              }
+
               if (selectedKanjis.length <= MIN_SESSION_SIZE) {
                 return setSessionCreationError({
                   reason: "kanjiNum",
@@ -214,7 +241,7 @@ export default function Draw() {
                 });
               }
               const sessionData = {
-                sessionID: `${(await LS.db.count("draw")) + 1}`,
+                sessionID: sessionName,
                 sessionKanjis: selectedKanjis,
                 sessionResults: [],
                 open: true,
@@ -252,7 +279,7 @@ export default function Draw() {
               className={`grid h-full max-h-full grid-flow-row overflow-y-auto`}
             >
               <div
-                className="mb-2 flex max-h-20 max-w-[--maxw] select-none flex-wrap justify-around gap-x-2 gap-y-2 justify-self-center"
+                className="mb-2 flex max-w-[--maxw] select-none flex-wrap justify-around gap-x-2 gap-y-2 justify-self-center"
                 style={{
                   "--maxw": `${Math.min(wWidth ?? Infinity, (rowCount ?? 8) * 55)}px`,
                 }}
