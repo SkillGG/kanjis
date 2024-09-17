@@ -27,7 +27,7 @@ export type LSStore<T extends DBSchema> = {
     db: IDBPDatabase<T>,
     values: Q,
   ) => Promise<void>;
-  db: IDBPDatabase<T> | null;
+  idb: IDBPDatabase<T> | null;
 };
 
 const LSContext = createContext<LSStore<KanjiDB>>({
@@ -52,7 +52,7 @@ const LSContext = createContext<LSStore<KanjiDB>>({
   async putMultiple() {
     throw new Error("Not in store provider");
   },
-  db: null,
+  idb: null,
 });
 export const LS_KEYS = {
   kanjis: "kanjis",
@@ -170,12 +170,12 @@ export const LocalStorageProvider = ({
         await db.put("kanji", value);
       }
     },
-    db: null,
+    idb: null,
   });
 
   useEffect(() => {
     if (!db) return;
-    else setStore((prev) => ({ ...prev, db }));
+    else setStore((prev) => ({ ...prev, idb: db }));
   }, [db]);
 
   return <LSContext.Provider value={LStore}>{children}</LSContext.Provider>;

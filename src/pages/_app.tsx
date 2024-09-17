@@ -17,7 +17,7 @@ import {
   type KanjiType,
 } from "@/components/list/kanjiStore";
 import { type DrawSessionData } from "@/components/draw/drawSession";
-import { QuizWord } from "@/components/draw/quizWords";
+import { type QuizWord } from "@/components/draw/quizWords";
 import {
   DEFAULT_KANJI_VERSION,
   DEFAULT_KANJIS,
@@ -54,7 +54,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     seed(db) {
       console.log("seeding!");
       if (db.objectStoreNames.contains("kanji")) {
-        db.count("kanji").then((q) => {
+        void db.count("kanji").then((q) => {
           console.log(q);
           if (q === 0) {
             console.log("seeding kanjis");
@@ -67,7 +67,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         });
       }
       if (db.objectStoreNames.contains("wordbank")) {
-        db.count("wordbank").then((q) => {
+        void db.count("wordbank").then((q) => {
           if (q === 0) {
             // TODO: seed with default words
           }

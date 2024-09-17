@@ -56,28 +56,28 @@ export default function Draw() {
 
   useEffect(() => {
     void (async () => {
-      if (!LS?.db) return;
-      const learning = await LS.db.getAllFromIndex(
+      if (!LS?.idb) return;
+      const learning = await LS.idb.getAllFromIndex(
         "kanji",
         "status",
         "learning",
       );
       setLearningKanjis(learning);
 
-      const completed = await LS.db.getAllFromIndex(
+      const completed = await LS.idb.getAllFromIndex(
         "kanji",
         "status",
         "completed",
       );
       setCompletedKanjis(completed);
 
-      const newKs = await LS.db.getAllFromIndex("kanji", "status", "new");
+      const newKs = await LS.idb.getAllFromIndex("kanji", "status", "new");
       setNewKanjis(newKs);
 
-      const prevSessionIndex = await LS.db.count("draw");
+      const prevSessionIndex = await LS.idb.count("draw");
       if (!sessionName) setSessionName(`Session ${prevSessionIndex + 1}`);
 
-      const openSessions = await LS.db.getAll("draw");
+      const openSessions = await LS.idb.getAll("draw");
       setSessions(() => openSessions.filter((s) => s.open));
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -224,9 +224,9 @@ export default function Draw() {
                     </>
                   ),
                 });
-              if (!LS.db) return;
+              if (!LS.idb) return;
 
-              if ((await LS.db.count("draw", sessionName)) > 0) {
+              if ((await LS.idb.count("draw", sessionName)) > 0) {
                 return setSessionCreationError({
                   reason: "name",
                   el: `Session with that name already exists!`,
@@ -246,7 +246,7 @@ export default function Draw() {
                 sessionResults: [],
                 open: true,
               };
-              await LS.db.put("draw", sessionData);
+              await LS.idb.put("draw", sessionData);
               void router.push(`/draw/session/${sessionData.sessionID}`);
             }}
             className="ml-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] hover:bg-slate-500"

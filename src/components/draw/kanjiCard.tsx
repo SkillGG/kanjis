@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { QuizWord, ReactQuizWord } from "./quizWords";
-import { SessionResult } from "./drawSession";
+import { useState } from "react";
+import { type ReactQuizWord } from "./quizWords";
+import { type SessionResult } from "./drawSession";
 
 export const KanjiCard = ({
   word,

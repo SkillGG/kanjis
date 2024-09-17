@@ -16,7 +16,7 @@ import { type Kanji, type KanjiStatus, useKanjiStore } from "./kanjiStore";
 import { eq, gt, valid } from "semver";
 import Router from "next/router";
 import { type IDBPDatabase } from "idb";
-import { KanjiDB } from "@/pages/_app";
+import { type KanjiDB } from "@/pages/_app";
 
 const getLocationKanjis = (search: string): Kanji[] => {
   const locKanjis = [] as Kanji[];
@@ -112,14 +112,14 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
     void (async () => {
       const LSkanjis = LS.getObject<Kanji[]>(LS_KEYS.kanjis);
 
-      if (LSkanjis?.length && LS.db) {
+      if (LSkanjis?.length && LS.idb) {
         // migrate from LS to DB
-        await migrateToDB(LS.db, LSkanjis);
+        await migrateToDB(LS.idb, LSkanjis);
         LS.set(LS_KEYS.kanjis, null);
       }
-      if (!LS.db) return;
+      if (!LS.idb) return;
 
-      const transaction = LS.db?.transaction("kanji");
+      const transaction = LS.idb?.transaction("kanji");
 
       const DBKanjiStore = transaction?.store;
 
@@ -156,8 +156,8 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
       }
 
       const saveToIDB = async (kanji: Kanji[]) => {
-        await LS.db?.clear("kanji");
-        void kanji.map((k) => LS.db?.put("kanji", k));
+        await LS.idb?.clear("kanji");
+        void kanji.map((k) => LS.idb?.put("kanji", k));
       };
 
       if (!DBKanjis || DBKanjis.length === 0) {

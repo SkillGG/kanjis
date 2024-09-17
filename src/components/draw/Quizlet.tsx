@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { type SessionResult, type DrawSessionData } from "./drawSession";
 import { nextWordGenerator, toRQW, type QuizWord } from "./quizWords";
 import { KanjiCard } from "./kanjiCard";
@@ -21,10 +21,10 @@ export const Quizlet = ({
     setCurrentWord(() => {
       return nextWord;
     });
-  }, [session]);
+  }, [session, wordGenerator]);
 
   useEffect(() => {
-    (async () => {
+    void (async () => {
       console.log("getting a new word!");
       const firstWord = await wordGenerator.next();
       console.log(firstWord);
@@ -33,7 +33,7 @@ export const Quizlet = ({
       }
       setCurrentWord(firstWord.value);
     })();
-  }, []);
+  }, [wordGenerator]);
 
   if (currentWord === null) {
     return <>Loading the question</>;

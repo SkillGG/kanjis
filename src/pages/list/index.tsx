@@ -400,9 +400,9 @@ function App() {
                             const kanjis = [...DEFAULT_KANJIS()];
                             LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
                             void (async () => {
-                              await LS.db?.clear("kanji");
+                              await LS.idb?.clear("kanji");
                               await Promise.all(
-                                kanjis.map((k) => LS.db?.put("kanji", k)),
+                                kanjis.map((k) => LS.idb?.put("kanji", k)),
                               );
                             })();
                             return kanjis;
@@ -460,10 +460,10 @@ function App() {
                 kanji={kanji}
                 update={async (kanji, data) => {
                   updateKanji(kanji, data);
-                  const prev = await LS.db?.get("kanji", kanji);
+                  const prev = await LS.idb?.get("kanji", kanji);
                   if (prev) {
                     console.log("Changing data for: ", kanji);
-                    void LS.db?.put("kanji", { ...prev, ...data });
+                    void LS.idb?.put("kanji", { ...prev, ...data });
                   }
                 }}
                 key={kanji.kanji}

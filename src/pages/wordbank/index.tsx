@@ -3,8 +3,8 @@ import {
   getReadings,
   getReadingsWithout,
   getWordWithout,
-  QuizWord,
-  ReactQuizWord,
+  type QuizWord,
+  type ReactQuizWord,
   toRQW,
 } from "@/components/draw/quizWords";
 import { noop } from "@/utils/utils";
@@ -13,7 +13,7 @@ import React, { useEffect, useRef, useState } from "react";
 import creatorCSS from "./creator.module.css";
 import { useLocalStorage } from "@/components/localStorageProvider";
 
-export default function kanjiCardCreator() {
+export default function KanjiCardCreator() {
   const LS = useLocalStorage();
 
   const [words, setWords] = useState<ReactQuizWord[] | null>(null);
@@ -34,9 +34,9 @@ export default function kanjiCardCreator() {
   const meaningInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    (async () => {
-      if (!LS || !LS.db) return;
-      const object = await LS.db.getAll("wordbank");
+    void (async () => {
+      if (!LS?.idb) return;
+      const object = await LS.idb.getAll("wordbank");
 
       if (!object) return;
 
@@ -50,7 +50,7 @@ export default function kanjiCardCreator() {
         })),
       );
     })();
-  }, [LS]);
+  }, [LS, words]);
 
   useEffect(() => {
     function handleKeydown(e: KeyboardEvent) {
@@ -65,7 +65,7 @@ export default function kanjiCardCreator() {
           ".reading-input:not(:focus)",
         );
         console.log(nextToFocused, first);
-        (nextToFocused || first)?.focus();
+        (nextToFocused ?? first)?.focus();
       }
       if (e.code === "KeyA" && e.altKey) {
         mainInput.current?.focus();
@@ -105,7 +105,10 @@ export default function kanjiCardCreator() {
   useEffect(() => {
     setReadings((q) => {
       if (q.length < wordVal.length)
-        return [...q, ...[...Array(wordVal.length - q.length)].map((_) => "")];
+        return [
+          ...q,
+          ...[...Array<string>(wordVal.length - q.length)].map((_) => ""),
+        ];
       return [...q.slice(0, wordVal.length)];
     });
     setSpecial((q) => {
@@ -152,7 +155,10 @@ export default function kanjiCardCreator() {
             <button
               onClick={() => {
                 if (new Set(special).size === readings.length) setSpecial([]);
-                else setSpecial([...Array(readings.length)].map((_, i) => i));
+                else
+                  setSpecial(
+                    [...Array<number>(readings.length)].map((_, i) => i),
+                  );
               }}
               ref={allRef}
             >
@@ -183,7 +189,7 @@ export default function kanjiCardCreator() {
             className="ml-2 p-3"
             ref={addRef}
             onClick={() => {
-              (async () => {
+              void (async () => {
                 for (const sp of special) {
                   const kanji = wordVal[sp];
                   if (kanji) {
@@ -197,7 +203,7 @@ export default function kanjiCardCreator() {
                     };
                     console.log("puttin in", newW);
                     setWords((p) => (!p ? [toRQW(newW)] : [...p, toRQW(newW)]));
-                    await LS.db?.put("wordbank", newW);
+                    await LS.idb?.put("wordbank", newW);
                   }
                 }
                 setMeaning("");
@@ -212,7 +218,7 @@ export default function kanjiCardCreator() {
             className="ml-2 p-3"
             onClick={() => {
               if (words) {
-                navigator.clipboard.writeText(JSON.stringify(words));
+                void navigator.clipboard.writeText(JSON.stringify(words));
                 setCopied(true);
               }
             }}
@@ -229,11 +235,11 @@ export default function kanjiCardCreator() {
               key={`kc_${q.word}_${q.special}`}
               className="w-fit flex-grow"
               onDoubleClick={() => {
-                setWords((p) => {
+                setWords(() => {
                   return words.filter((_, ix) => ix !== i);
                 });
                 console.log("Removing ", q.blanked, "from the store!");
-                void LS.db?.delete("wordbank", [q.word, q.special]);
+                void LS.idb?.delete("wordbank", [q.word, q.special]);
               }}
             >
               <KanjiCard

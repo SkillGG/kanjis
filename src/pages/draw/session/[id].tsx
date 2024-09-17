@@ -18,12 +18,12 @@ export default function DrawSession() {
 
   useEffect(() => {
     void (async () => {
-      if (id === undefined || !LS.db) return;
+      if (id === undefined || !LS.idb) return;
       if (typeof id !== "string") {
         setLoadingError("Wrong session id!");
         return;
       }
-      const sD = await LS.db.get("draw", id);
+      const sD = await LS.idb.get("draw", id);
       if (!sD)
         return setLoadingError(
           `Could not load session data for session "${id}"`,
@@ -34,7 +34,7 @@ export default function DrawSession() {
 
   useEffect(() => {
     void (async () => {
-      if (!LS.db || !sessionData) return;
+      if (!LS.idb || !sessionData) return;
       console.log("sessionData changed", sessionData);
     })();
   }, [LS, sessionData]);

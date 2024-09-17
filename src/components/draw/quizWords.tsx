@@ -1,8 +1,7 @@
 import React from "react";
 import { type DrawSessionData } from "./drawSession";
-import RDS from "react-dom/server";
-import { LSStore } from "../localStorageProvider";
-import { KanjiDB } from "@/pages/_app";
+import { type LSStore } from "../localStorageProvider";
+import { type KanjiDB } from "@/pages/_app";
 
 export type QuizWord = {
   kanji: string;
@@ -88,14 +87,14 @@ export async function* nextWordGenerator(
   startingData: DrawSessionData,
   LS: LSStore<KanjiDB>,
 ): AsyncGenerator<QuizWord, null, DrawSessionData> {
-  if (!LS || !LS.db) {
+  if (!LS?.idb) {
     console.error("LocalStorage not provided!");
     return null;
   }
   let sesh = startingData;
   if (!sesh) throw new Error("Sesh is undefined!");
   while (true) {
-    const words: QuizWord[] = await LS.db.getAll("wordbank");
+    const words: QuizWord[] = await LS.idb.getAll("wordbank");
     const availableKanjiWords = sesh.sessionKanjis.filter(
       (k) => !!words.find((f) => f.kanji === k),
     );
