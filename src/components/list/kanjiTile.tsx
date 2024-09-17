@@ -49,9 +49,13 @@ export const KanjiTile = ({
         ...style,
       }}
       data-extra={
-        badges < 2 && (extraBadge ?? (type === "extra" ? "*" : undefined))
+        badges < 2
+          ? (extraBadge ?? (type === "extra" ? "*" : undefined))
+          : undefined
       }
-      data-lvl={badges % 2 == 0 && (lvlBadge ?? (disabled ? "L" : lvl))}
+      data-lvl={
+        badges % 2 == 0 ? (lvlBadge ?? (disabled ? "L" : lvl)) : undefined
+      }
       title={`${type} kanji lvl ${lvl}`}
     >
       {kanji}

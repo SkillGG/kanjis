@@ -118,14 +118,16 @@ export default function KanjiCardCreator() {
 
   return (
     <>
-      <div className="mx-auto w-fit">
-        Word
-        <br />
-        Double click reading / alt + num - toggle this kanji addition
-        <br />
-        Alt + a - toggle every reading
-        <br />
-        alt + q focus next reading field:
+      <div className="mx-auto w-fit max-w-[50vw] text-center">
+        <div className="text-xl">Wordbank</div>
+        <div className="text-[1.2rem]">
+          A place to add all your words you want to use to learn with. Write a
+          word into the main field, select which kanjis do you want to make
+          &quot;guessable&quot; and click ADD
+        </div>
+        <div>Double click reading / alt + num - toggle this kanji addition</div>
+        <div>Alt + a - toggle every reading</div>
+        <div>alt + q focus next reading field:</div>
         <div className="flex max-w-[50vw] flex-wrap">
           {readings.map((a, i) => (
             <div
@@ -235,6 +237,7 @@ export default function KanjiCardCreator() {
           </button>
         </div>
       </div>
+      <div className="text-center text-xl">Kanjis currently in wordbank:</div>
       <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
         {words
           ?.filter((q) => q.word.includes(wordVal))
