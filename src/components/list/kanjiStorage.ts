@@ -83,24 +83,6 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
       | "m"
       | "x";
 
-    if (overrideType != "p") {
-      const currURL = new URL(location.href);
-      const prevhref = currURL.href;
-      if (
-        currURL.searchParams.has("c") ||
-        currURL.searchParams.has("n") ||
-        currURL.searchParams.has("l") ||
-        currURL.searchParams.has("t")
-      ) {
-        currURL.searchParams.delete("c");
-        currURL.searchParams.delete("n");
-        currURL.searchParams.delete("l");
-        currURL.searchParams.delete("t");
-        console.log(prevhref, " => ", currURL.toString());
-        void Router.replace(currURL, currURL, { shallow: true });
-      }
-    }
-
     const strategies = {
       a: NO_OVERRIDE,
       r: OVERRIDE_ALL,
@@ -157,7 +139,25 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
 
       const saveToIDB = async (kanji: Kanji[]) => {
         await LS.idb?.clear("kanji");
-        void kanji.map((k) => LS.idb?.put("kanji", k));
+        await Promise.all(kanji.map((k) => LS.idb?.put("kanji", k)));
+
+        if (overrideType != "p") {
+          const currURL = new URL(location.href);
+          const prevhref = currURL.href;
+          if (
+            currURL.searchParams.has("c") ||
+            currURL.searchParams.has("n") ||
+            currURL.searchParams.has("l") ||
+            currURL.searchParams.has("t")
+          ) {
+            currURL.searchParams.delete("c");
+            currURL.searchParams.delete("n");
+            currURL.searchParams.delete("l");
+            currURL.searchParams.delete("t");
+            console.log(prevhref, " => ", currURL.toString(), locationKanjis);
+            void Router.replace(currURL, currURL, { shallow: true });
+          }
+        }
       };
 
       if (!DBKanjis || DBKanjis.length === 0) {
@@ -178,6 +178,7 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
         try {
           if (Array.isArray(DBKanjis))
             mutateKanjis(() => {
+              console.log("merging kanjis");
               if (overrideType === "r") {
                 setShouldUpdate(false);
                 LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
@@ -191,6 +192,8 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
                 ).concat(DEFAULT_KANJIS()),
                 OVERRIDE_INDEXES,
               ).sort((a, b) => a.index - b.index);
+              console.log("kanjis", kanji);
+
               void saveToIDB(kanji);
               return kanji;
             });
