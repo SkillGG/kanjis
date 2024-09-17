@@ -76,10 +76,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
             for (const word of defaultWords) {
               void db.put("wordbank", word);
             }
-            localStorage.setItem(
-              LS_KEYS.wordbank_ver,
-              wordBankWords.version as string,
-            );
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            localStorage.setItem(LS_KEYS.wordbank_ver, wordBankWords.version);
           }
         });
       }

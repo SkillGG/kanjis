@@ -24,7 +24,7 @@ import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 const POPUP_SHOW_TIME = 1000;
 
 import defaultWordBank from "./wordbank.json";
-import { gt, inc, SemVer } from "semver";
+import { gt, inc } from "semver";
 import Link from "next/link";
 
 export default function KanjiCardCreator() {
@@ -78,7 +78,8 @@ export default function KanjiCardCreator() {
     })();
 
     const wordver = LS.getString(LS_KEYS.wordbank_ver);
-    if (!wordver || gt(defaultWordBank.version as string, wordver)) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    if (!wordver || gt(defaultWordBank.version, wordver)) {
       setCanUpdateBank(true);
     }
   }, [LS, words]);
@@ -449,11 +450,8 @@ export default function KanjiCardCreator() {
               className="ml-2 p-3"
               onClick={() => {
                 if (words) {
-                  const newVer = inc(
-                    defaultWordBank.version as string,
-                    "patch",
-                    true,
-                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                  const newVer = inc(defaultWordBank.version, "patch", true);
                   if (!newVer) return;
                   void navigator.clipboard.writeText(
                     JSON.stringify({
@@ -504,7 +502,7 @@ export default function KanjiCardCreator() {
         {new Set(words?.map((w) => w.word) ?? []).size}):
       </div>
       <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
-        {shownWords?.map((q, i) => (
+        {shownWords?.map((q) => (
           <div
             key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
             className="w-fit flex-grow"
