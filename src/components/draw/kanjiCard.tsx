@@ -8,14 +8,20 @@ export const KanjiCard = ({
   sideOverride,
   disableButtons,
   classNames = { border: "", text: "" },
+  styles = { border: {}, text: {} },
 }: {
   word: ReactQuizWord;
   commit: (result: SessionResult) => void;
   sideOverride?: "quiz" | "answer";
   disableButtons?: boolean;
+  points?: number;
   classNames?: {
     border?: React.HTMLAttributes<"div">["className"];
     text?: React.HTMLAttributes<"div">["className"];
+  };
+  styles?: {
+    border?: React.HTMLAttributes<"div">["style"];
+    text?: React.HTMLAttributes<"div">["style"];
   };
 }) => {
   const [side, setSide] = useState<"quiz" | "answer">("quiz");
@@ -23,10 +29,14 @@ export const KanjiCard = ({
   return (
     <div
       className={`${classNames.border ?? ""} mx-auto flex w-fit flex-col justify-center border-2 p-4`}
+      style={styles.border}
     >
       {(sideOverride ?? side) === "quiz" && (
         <>
-          <div className={`${classNames.text ?? ""} text-center`}>
+          <div
+            className={`${classNames.text ?? ""} text-center`}
+            style={styles.text}
+          >
             {word.hint}
           </div>
           {!disableButtons && (
@@ -42,7 +52,10 @@ export const KanjiCard = ({
       )}
       {(sideOverride ?? side) === "answer" && (
         <>
-          <div className={`${classNames.text} text-center text-2xl`}>
+          <div
+            className={`${classNames.text} text-center text-2xl`}
+            style={styles.text}
+          >
             {word.full}
           </div>
           {!disableButtons && (

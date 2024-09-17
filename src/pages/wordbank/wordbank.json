@@ -1,0 +1,4917 @@
+{
+  "version": "0.2.4",
+  "words": [
+    {
+      "blanked": "お〇",
+      "kanji": "茶",
+      "meaning": "tea",
+      "readings": ["", "ちゃ"],
+      "special": 1,
+      "word": "お茶"
+    },
+    {
+      "blanked": "お〇",
+      "kanji": "金",
+      "meaning": "money",
+      "readings": ["", "かね"],
+      "special": 1,
+      "word": "お金"
+    },
+    {
+      "blanked": "ローマ〇",
+      "kanji": "字",
+      "meaning": "Roman letters",
+      "readings": ["", "", "", "じ"],
+      "special": 3,
+      "word": "ローマ字"
+    },
+    {
+      "blanked": "〇か月",
+      "kanji": "一",
+      "meaning": "one month",
+      "readings": ["いっ", "", "げつ"],
+      "special": 0,
+      "word": "一か月"
+    },
+    {
+      "blanked": "一か〇",
+      "kanji": "月",
+      "meaning": "one month",
+      "readings": ["いっ", "", "げつ"],
+      "special": 2,
+      "word": "一か月"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "一",
+      "meaning": "one (thing)",
+      "readings": ["ひと", ""],
+      "special": 0,
+      "word": "一つ"
+    },
+    {
+      "blanked": "〇万円",
+      "kanji": "一",
+      "meaning": "10k yen",
+      "readings": ["いち", "まん", "えん"],
+      "special": 0,
+      "word": "一万円"
+    },
+    {
+      "blanked": "一〇円",
+      "kanji": "万",
+      "meaning": "10k yen",
+      "readings": ["いち", "まん", "えん"],
+      "special": 1,
+      "word": "一万円"
+    },
+    {
+      "blanked": "一万〇",
+      "kanji": "円",
+      "meaning": "10k yen",
+      "readings": ["いち", "まん", "えん"],
+      "special": 2,
+      "word": "一万円"
+    },
+    {
+      "blanked": "〇人",
+      "kanji": "一",
+      "meaning": "one person",
+      "readings": ["ひと", "り"],
+      "special": 0,
+      "word": "一人"
+    },
+    {
+      "blanked": "一〇",
+      "kanji": "人",
+      "meaning": "one person",
+      "readings": ["ひと", "り"],
+      "special": 1,
+      "word": "一人"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "一",
+      "meaning": "one tenth, one percent",
+      "readings": ["いち", "ぶ"],
+      "special": 0,
+      "word": "一分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "一",
+      "meaning": "one minute",
+      "readings": ["いっ", "ぷん"],
+      "special": 0,
+      "word": "一分"
+    },
+    {
+      "blanked": "一〇",
+      "kanji": "分",
+      "meaning": "one tenth, one percent",
+      "readings": ["いち", "ぶ"],
+      "special": 1,
+      "word": "一分"
+    },
+    {
+      "blanked": "一〇",
+      "kanji": "分",
+      "meaning": "one minute",
+      "readings": ["いっ", "ぷん"],
+      "special": 1,
+      "word": "一分"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "一",
+      "meaning": "one year",
+      "readings": ["いち", "ねん"],
+      "special": 0,
+      "word": "一年"
+    },
+    {
+      "blanked": "一〇",
+      "kanji": "年",
+      "meaning": "one year",
+      "readings": ["いち", "ねん"],
+      "special": 1,
+      "word": "一年"
+    },
+    {
+      "blanked": "〇日中",
+      "kanji": "一",
+      "meaning": "all day long",
+      "readings": ["いち", "にち", "じゅう"],
+      "special": 0,
+      "word": "一日中"
+    },
+    {
+      "blanked": "一〇中",
+      "kanji": "日",
+      "meaning": "all day long",
+      "readings": ["いち", "にち", "じゅう"],
+      "special": 1,
+      "word": "一日中"
+    },
+    {
+      "blanked": "一日〇",
+      "kanji": "中",
+      "meaning": "all day long",
+      "readings": ["いち", "にち", "じゅう"],
+      "special": 2,
+      "word": "一日中"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "一",
+      "meaning": "January",
+      "readings": ["いち", "がつ"],
+      "special": 0,
+      "word": "一月"
+    },
+    {
+      "blanked": "一〇",
+      "kanji": "月",
+      "meaning": "January",
+      "readings": ["いち", "がつ"],
+      "special": 1,
+      "word": "一月"
+    },
+    {
+      "blanked": "〇足",
+      "kanji": "一",
+      "meaning": "a pair",
+      "readings": ["いち", "そく"],
+      "special": 0,
+      "word": "一足"
+    },
+    {
+      "blanked": "〇足",
+      "kanji": "一",
+      "meaning": "a step",
+      "readings": ["ひと", "あし"],
+      "special": 0,
+      "word": "一足"
+    },
+    {
+      "blanked": "一〇",
+      "kanji": "足",
+      "meaning": "a pair",
+      "readings": ["いち", "そく"],
+      "special": 1,
+      "word": "一足"
+    },
+    {
+      "blanked": "一〇",
+      "kanji": "足",
+      "meaning": "a step",
+      "readings": ["ひと", "あし"],
+      "special": 1,
+      "word": "一足"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "七",
+      "meaning": "seven (things)",
+      "readings": ["なな", "つ"],
+      "special": 0,
+      "word": "七つ"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "七",
+      "meaning": "a seventh",
+      "readings": ["しち", "ぶ"],
+      "special": 0,
+      "word": "七分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "七",
+      "meaning": "seven minutes",
+      "readings": ["なな", "ふん"],
+      "special": 0,
+      "word": "七分"
+    },
+    {
+      "blanked": "七〇",
+      "kanji": "分",
+      "meaning": "a seventh",
+      "readings": ["しち", "ぶ"],
+      "special": 1,
+      "word": "七分"
+    },
+    {
+      "blanked": "七〇",
+      "kanji": "分",
+      "meaning": "seven minutes",
+      "readings": ["なな", "ふん"],
+      "special": 1,
+      "word": "七分"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "七",
+      "meaning": "7th day",
+      "readings": ["なの", "か"],
+      "special": 0,
+      "word": "七日"
+    },
+    {
+      "blanked": "七〇",
+      "kanji": "日",
+      "meaning": "7th day",
+      "readings": ["なの", "か"],
+      "special": 1,
+      "word": "七日"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "七",
+      "meaning": "July",
+      "readings": ["しち", "がつ"],
+      "special": 0,
+      "word": "七月"
+    },
+    {
+      "blanked": "七〇",
+      "kanji": "月",
+      "meaning": "July",
+      "readings": ["しち", "がつ"],
+      "special": 1,
+      "word": "七月"
+    },
+    {
+      "blanked": "〇国",
+      "kanji": "万",
+      "meaning": "all countries",
+      "readings": ["ばん", "こく"],
+      "special": 0,
+      "word": "万国"
+    },
+    {
+      "blanked": "万〇",
+      "kanji": "国",
+      "meaning": "all countries",
+      "readings": ["ばん", "こく"],
+      "special": 1,
+      "word": "万国"
+    },
+    {
+      "blanked": "〇歳",
+      "kanji": "万",
+      "meaning": "banzai, eternal life",
+      "readings": ["ばん", "ざい"],
+      "special": 0,
+      "word": "万歳"
+    },
+    {
+      "blanked": "万〇",
+      "kanji": "歳",
+      "meaning": "banzai, eternal life",
+      "readings": ["ばん", "ざい"],
+      "special": 1,
+      "word": "万歳"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "三",
+      "meaning": "three (things)",
+      "readings": ["みっ", ""],
+      "special": 0,
+      "word": "三つ"
+    },
+    {
+      "blanked": "〇人",
+      "kanji": "三",
+      "meaning": "3 people",
+      "readings": ["さん", "にん"],
+      "special": 0,
+      "word": "三人"
+    },
+    {
+      "blanked": "三〇",
+      "kanji": "人",
+      "meaning": "3 people",
+      "readings": ["さん", "にん"],
+      "special": 1,
+      "word": "三人"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "三",
+      "meaning": "three divisions",
+      "readings": ["さん", "ぶん"],
+      "special": 0,
+      "word": "三分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "三",
+      "meaning": "three minutes",
+      "readings": ["さん", "ぷん"],
+      "special": 0,
+      "word": "三分"
+    },
+    {
+      "blanked": "三〇",
+      "kanji": "分",
+      "meaning": "three divisions",
+      "readings": ["さん", "ぶん"],
+      "special": 1,
+      "word": "三分"
+    },
+    {
+      "blanked": "三〇",
+      "kanji": "分",
+      "meaning": "three minutes",
+      "readings": ["さん", "ぷん"],
+      "special": 1,
+      "word": "三分"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "三",
+      "meaning": "3rd day",
+      "readings": ["みっ", "か"],
+      "special": 0,
+      "word": "三日"
+    },
+    {
+      "blanked": "三〇",
+      "kanji": "日",
+      "meaning": "3rd day",
+      "readings": ["みっ", "か"],
+      "special": 1,
+      "word": "三日"
+    },
+    {
+      "blanked": "〇時半",
+      "kanji": "三",
+      "meaning": "3:30",
+      "readings": ["さん", "じ", "はん"],
+      "special": 0,
+      "word": "三時半"
+    },
+    {
+      "blanked": "三〇半",
+      "kanji": "時",
+      "meaning": "3:30",
+      "readings": ["さん", "じ", "はん"],
+      "special": 1,
+      "word": "三時半"
+    },
+    {
+      "blanked": "三時〇",
+      "kanji": "半",
+      "meaning": "3:30",
+      "readings": ["さん", "じ", "はん"],
+      "special": 2,
+      "word": "三時半"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "三",
+      "meaning": "March",
+      "readings": ["さん", "がつ"],
+      "special": 0,
+      "word": "三月"
+    },
+    {
+      "blanked": "三〇",
+      "kanji": "月",
+      "meaning": "March",
+      "readings": ["さん", "がつ"],
+      "special": 1,
+      "word": "三月"
+    },
+    {
+      "blanked": "〇百",
+      "kanji": "三",
+      "meaning": "300",
+      "readings": ["さん", "びゃく"],
+      "special": 0,
+      "word": "三百"
+    },
+    {
+      "blanked": "三〇",
+      "kanji": "百",
+      "meaning": "300",
+      "readings": ["さん", "びゃく"],
+      "special": 1,
+      "word": "三百"
+    },
+    {
+      "blanked": "〇週間",
+      "kanji": "三",
+      "meaning": "period of three weeks",
+      "readings": ["さん", "しゅう", "かん"],
+      "special": 0,
+      "word": "三週間"
+    },
+    {
+      "blanked": "三〇間",
+      "kanji": "週",
+      "meaning": "period of three weeks",
+      "readings": ["さん", "しゅう", "かん"],
+      "special": 1,
+      "word": "三週間"
+    },
+    {
+      "blanked": "三週〇",
+      "kanji": "間",
+      "meaning": "period of three weeks",
+      "readings": ["さん", "しゅう", "かん"],
+      "special": 2,
+      "word": "三週間"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "上",
+      "meaning": "above, on, up",
+      "readings": ["うえ"],
+      "special": 0,
+      "word": "上"
+    },
+    {
+      "blanked": "〇がる",
+      "kanji": "上",
+      "meaning": "to go up, to rise",
+      "readings": ["あ", "", ""],
+      "special": 0,
+      "word": "上がる"
+    },
+    {
+      "blanked": "〇る",
+      "kanji": "上",
+      "meaning": "to go up, to climb",
+      "readings": ["のぼ", ""],
+      "special": 0,
+      "word": "上る"
+    },
+    {
+      "blanked": "〇手",
+      "kanji": "上",
+      "meaning": "skillful",
+      "readings": ["じょう", "ず"],
+      "special": 0,
+      "word": "上手"
+    },
+    {
+      "blanked": "上〇",
+      "kanji": "手",
+      "meaning": "skillful",
+      "readings": ["じょう", "ず"],
+      "special": 1,
+      "word": "上手"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "下",
+      "meaning": "under",
+      "readings": ["した"],
+      "special": 0,
+      "word": "下"
+    },
+    {
+      "blanked": "〇がる",
+      "kanji": "下",
+      "meaning": "to go down",
+      "readings": ["さ", "", ""],
+      "special": 0,
+      "word": "下がる"
+    },
+    {
+      "blanked": "〇手",
+      "kanji": "下",
+      "meaning": "unskillful",
+      "readings": ["へ", "た"],
+      "special": 0,
+      "word": "下手"
+    },
+    {
+      "blanked": "下〇",
+      "kanji": "手",
+      "meaning": "unskillful",
+      "readings": ["へ", "た"],
+      "special": 1,
+      "word": "下手"
+    },
+    {
+      "blanked": "〇車する",
+      "kanji": "下",
+      "meaning": "to get off",
+      "readings": ["げ", "しゃ", "", ""],
+      "special": 0,
+      "word": "下車する"
+    },
+    {
+      "blanked": "下〇する",
+      "kanji": "車",
+      "meaning": "to get off",
+      "readings": ["げ", "しゃ", "", ""],
+      "special": 1,
+      "word": "下車する"
+    },
+    {
+      "blanked": "〇足",
+      "kanji": "不",
+      "meaning": "shortage",
+      "readings": ["ふ", "そく"],
+      "special": 0,
+      "word": "不足"
+    },
+    {
+      "blanked": "不〇",
+      "kanji": "足",
+      "meaning": "shortage",
+      "readings": ["ふ", "そく"],
+      "special": 1,
+      "word": "不足"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "中",
+      "meaning": "inside",
+      "readings": ["なか"],
+      "special": 0,
+      "word": "中"
+    },
+    {
+      "blanked": "〇古",
+      "kanji": "中",
+      "meaning": "second-hand",
+      "readings": ["ちゅう", "こ"],
+      "special": 0,
+      "word": "中古"
+    },
+    {
+      "blanked": "中〇",
+      "kanji": "古",
+      "meaning": "second-hand",
+      "readings": ["ちゅう", "こ"],
+      "special": 1,
+      "word": "中古"
+    },
+    {
+      "blanked": "〇心",
+      "kanji": "中",
+      "meaning": "the center",
+      "readings": ["ちゅう", "しん"],
+      "special": 0,
+      "word": "中心"
+    },
+    {
+      "blanked": "中〇",
+      "kanji": "心",
+      "meaning": "the center",
+      "readings": ["ちゅう", "しん"],
+      "special": 1,
+      "word": "中心"
+    },
+    {
+      "blanked": "〇米",
+      "kanji": "中",
+      "meaning": "Central America",
+      "readings": ["ちゅう", "べい"],
+      "special": 0,
+      "word": "中米"
+    },
+    {
+      "blanked": "中〇",
+      "kanji": "米",
+      "meaning": "Central America",
+      "readings": ["ちゅう", "べい"],
+      "special": 1,
+      "word": "中米"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "九",
+      "meaning": "nine (things)",
+      "readings": ["ここの", ""],
+      "special": 0,
+      "word": "九つ"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "九",
+      "meaning": "nine minutes",
+      "readings": ["きゅう", "ふん"],
+      "special": 0,
+      "word": "九分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "九",
+      "meaning": "nineth",
+      "readings": ["く", "ぶ"],
+      "special": 0,
+      "word": "九分"
+    },
+    {
+      "blanked": "九〇",
+      "kanji": "分",
+      "meaning": "nine minutes",
+      "readings": ["きゅう", "ふん"],
+      "special": 1,
+      "word": "九分"
+    },
+    {
+      "blanked": "九〇",
+      "kanji": "分",
+      "meaning": "nineth",
+      "readings": ["く", "ぶ"],
+      "special": 1,
+      "word": "九分"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "九",
+      "meaning": "9th day",
+      "readings": ["ここの", "か"],
+      "special": 0,
+      "word": "九日"
+    },
+    {
+      "blanked": "九〇",
+      "kanji": "日",
+      "meaning": "9th day",
+      "readings": ["ここの", "か"],
+      "special": 1,
+      "word": "九日"
+    },
+    {
+      "blanked": "〇時",
+      "kanji": "九",
+      "meaning": "9 o'clock",
+      "readings": ["く", "じ"],
+      "special": 0,
+      "word": "九時"
+    },
+    {
+      "blanked": "九〇",
+      "kanji": "時",
+      "meaning": "9 o'clock",
+      "readings": ["く", "じ"],
+      "special": 1,
+      "word": "九時"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "九",
+      "meaning": "September",
+      "readings": ["く", "がつ"],
+      "special": 0,
+      "word": "九月"
+    },
+    {
+      "blanked": "九〇",
+      "kanji": "月",
+      "meaning": "September",
+      "readings": ["く", "がつ"],
+      "special": 1,
+      "word": "九月"
+    },
+    {
+      "blanked": "〇百",
+      "kanji": "九",
+      "meaning": "900",
+      "readings": ["きゅう", "ひゃく"],
+      "special": 0,
+      "word": "九百"
+    },
+    {
+      "blanked": "九〇",
+      "kanji": "百",
+      "meaning": "900",
+      "readings": ["きゅう", "ひゃく"],
+      "special": 1,
+      "word": "九百"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "二",
+      "meaning": "two (things)",
+      "readings": ["ふた", ""],
+      "special": 0,
+      "word": "二つ"
+    },
+    {
+      "blanked": "〇人",
+      "kanji": "二",
+      "meaning": "two (people)",
+      "readings": ["ふた", "り"],
+      "special": 0,
+      "word": "二人"
+    },
+    {
+      "blanked": "二〇",
+      "kanji": "人",
+      "meaning": "two (people)",
+      "readings": ["ふた", "り"],
+      "special": 1,
+      "word": "二人"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "二",
+      "meaning": "two minutes",
+      "readings": ["に", "ふん"],
+      "special": 0,
+      "word": "二分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "二",
+      "meaning": "halving, half",
+      "readings": ["に", "ぶん"],
+      "special": 0,
+      "word": "二分"
+    },
+    {
+      "blanked": "二〇",
+      "kanji": "分",
+      "meaning": "two minutes",
+      "readings": ["に", "ふん"],
+      "special": 1,
+      "word": "二分"
+    },
+    {
+      "blanked": "二〇",
+      "kanji": "分",
+      "meaning": "halving, half",
+      "readings": ["に", "ぶん"],
+      "special": 1,
+      "word": "二分"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "二",
+      "meaning": "two years",
+      "readings": ["に", "ねん"],
+      "special": 0,
+      "word": "二年"
+    },
+    {
+      "blanked": "二〇",
+      "kanji": "年",
+      "meaning": "two years",
+      "readings": ["に", "ねん"],
+      "special": 1,
+      "word": "二年"
+    },
+    {
+      "blanked": "〇年間",
+      "kanji": "二",
+      "meaning": "(span of) two years",
+      "readings": ["に", "ねん", "かん"],
+      "special": 0,
+      "word": "二年間"
+    },
+    {
+      "blanked": "二〇間",
+      "kanji": "年",
+      "meaning": "(span of) two years",
+      "readings": ["に", "ねん", "かん"],
+      "special": 1,
+      "word": "二年間"
+    },
+    {
+      "blanked": "二年〇",
+      "kanji": "間",
+      "meaning": "(span of) two years",
+      "readings": ["に", "ねん", "かん"],
+      "special": 2,
+      "word": "二年間"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "二",
+      "meaning": "February",
+      "readings": ["に", "がつ"],
+      "special": 0,
+      "word": "二月"
+    },
+    {
+      "blanked": "二〇",
+      "kanji": "月",
+      "meaning": "February",
+      "readings": ["に", "がつ"],
+      "special": 1,
+      "word": "二月"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "五",
+      "meaning": "May",
+      "readings": ["いつ", "つ"],
+      "special": 0,
+      "word": "五つ"
+    },
+    {
+      "blanked": "五〇",
+      "kanji": "つ",
+      "meaning": "May",
+      "readings": ["いつ", "つ"],
+      "special": 1,
+      "word": "五つ"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "五",
+      "meaning": "five minutes",
+      "readings": ["ご", "ふん"],
+      "special": 0,
+      "word": "五分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "五",
+      "meaning": "fifth",
+      "readings": ["ご", "ぶん"],
+      "special": 0,
+      "word": "五分"
+    },
+    {
+      "blanked": "五〇",
+      "kanji": "分",
+      "meaning": "five minutes",
+      "readings": ["ご", "ふん"],
+      "special": 1,
+      "word": "五分"
+    },
+    {
+      "blanked": "五〇",
+      "kanji": "分",
+      "meaning": "fifth",
+      "readings": ["ご", "ぶん"],
+      "special": 1,
+      "word": "五分"
+    },
+    {
+      "blanked": "〇千円",
+      "kanji": "五",
+      "meaning": "5000 yen",
+      "readings": ["ご", "せん", "えん"],
+      "special": 0,
+      "word": "五千円"
+    },
+    {
+      "blanked": "五〇円",
+      "kanji": "千",
+      "meaning": "5000 yen",
+      "readings": ["ご", "せん", "えん"],
+      "special": 1,
+      "word": "五千円"
+    },
+    {
+      "blanked": "五千〇",
+      "kanji": "円",
+      "meaning": "5000 yen",
+      "readings": ["ご", "せん", "えん"],
+      "special": 2,
+      "word": "五千円"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "五",
+      "meaning": "5th day",
+      "readings": ["いつ", "か"],
+      "special": 0,
+      "word": "五日"
+    },
+    {
+      "blanked": "五〇",
+      "kanji": "日",
+      "meaning": "5th day",
+      "readings": ["いつ", "か"],
+      "special": 1,
+      "word": "五日"
+    },
+    {
+      "blanked": "〇上",
+      "kanji": "井",
+      "meaning": "Inoue (name)",
+      "readings": ["いの", "うえ"],
+      "special": 0,
+      "word": "井上"
+    },
+    {
+      "blanked": "井〇",
+      "kanji": "上",
+      "meaning": "Inoue (name)",
+      "readings": ["いの", "うえ"],
+      "special": 1,
+      "word": "井上"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "人",
+      "meaning": "person",
+      "readings": ["ひと"],
+      "special": 0,
+      "word": "人"
+    },
+    {
+      "blanked": "〇口",
+      "kanji": "人",
+      "meaning": "population",
+      "readings": ["じん", "こう"],
+      "special": 0,
+      "word": "人口"
+    },
+    {
+      "blanked": "人〇",
+      "kanji": "口",
+      "meaning": "population",
+      "readings": ["じん", "こう"],
+      "special": 1,
+      "word": "人口"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "今",
+      "meaning": "this year",
+      "readings": ["こ", "とし"],
+      "special": 0,
+      "word": "今年"
+    },
+    {
+      "blanked": "今〇",
+      "kanji": "年",
+      "meaning": "this year",
+      "readings": ["こ", "とし"],
+      "special": 1,
+      "word": "今年"
+    },
+    {
+      "blanked": "〇藤",
+      "kanji": "伊",
+      "meaning": "Itou (name)",
+      "readings": ["い", "とう"],
+      "special": 0,
+      "word": "伊藤"
+    },
+    {
+      "blanked": "伊〇",
+      "kanji": "藤",
+      "meaning": "Itou (name)",
+      "readings": ["い", "とう"],
+      "special": 1,
+      "word": "伊藤"
+    },
+    {
+      "blanked": "〇む",
+      "kanji": "休",
+      "meaning": "to rest",
+      "readings": ["やす", ""],
+      "special": 0,
+      "word": "休む"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "休",
+      "meaning": "a holiday, day off",
+      "readings": ["きゅう", "じつ"],
+      "special": 0,
+      "word": "休日"
+    },
+    {
+      "blanked": "休〇",
+      "kanji": "日",
+      "meaning": "a holiday, day off",
+      "readings": ["きゅう", "じつ"],
+      "special": 1,
+      "word": "休日"
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "低",
+      "meaning": "low",
+      "readings": ["ひく", ""],
+      "special": 0,
+      "word": "低い"
+    },
+    {
+      "blanked": "〇下",
+      "kanji": "低",
+      "meaning": "to fall, to go down",
+      "readings": ["てい", "か"],
+      "special": 0,
+      "word": "低下"
+    },
+    {
+      "blanked": "低〇",
+      "kanji": "下",
+      "meaning": "to fall, to go down",
+      "readings": ["てい", "か"],
+      "special": 1,
+      "word": "低下"
+    },
+    {
+      "blanked": "〇温",
+      "kanji": "低",
+      "meaning": "a low temperature",
+      "readings": ["てい", "おん"],
+      "special": 0,
+      "word": "低温"
+    },
+    {
+      "blanked": "低〇",
+      "kanji": "温",
+      "meaning": "a low temperature",
+      "readings": ["てい", "おん"],
+      "special": 1,
+      "word": "低温"
+    },
+    {
+      "blanked": "〇々木",
+      "kanji": "佐",
+      "meaning": "Sasaki (name)",
+      "readings": ["さ", "さ", "き"],
+      "special": 0,
+      "word": "佐々木"
+    },
+    {
+      "blanked": "佐〇木",
+      "kanji": "々",
+      "meaning": "Sasaki (name)",
+      "readings": ["さ", "さ", "き"],
+      "special": 1,
+      "word": "佐々木"
+    },
+    {
+      "blanked": "佐々〇",
+      "kanji": "木",
+      "meaning": "Sasaki (name)",
+      "readings": ["さ", "さ", "き"],
+      "special": 2,
+      "word": "佐々木"
+    },
+    {
+      "blanked": "〇藤",
+      "kanji": "佐",
+      "meaning": "Satou (name)",
+      "readings": ["さ", "とう"],
+      "special": 0,
+      "word": "佐藤"
+    },
+    {
+      "blanked": "佐〇",
+      "kanji": "藤",
+      "meaning": "Satou (name)",
+      "readings": ["さ", "とう"],
+      "special": 1,
+      "word": "佐藤"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "体",
+      "meaning": "body",
+      "readings": ["からだ"],
+      "special": 0,
+      "word": "体"
+    },
+    {
+      "blanked": "〇力",
+      "kanji": "体",
+      "meaning": "physical strength",
+      "readings": ["たい", "りょく"],
+      "special": 0,
+      "word": "体力"
+    },
+    {
+      "blanked": "体〇",
+      "kanji": "力",
+      "meaning": "physical strength",
+      "readings": ["たい", "りょく"],
+      "special": 1,
+      "word": "体力"
+    },
+    {
+      "blanked": "〇育",
+      "kanji": "体",
+      "meaning": "P.E.",
+      "readings": ["たい", "いく"],
+      "special": 0,
+      "word": "体育"
+    },
+    {
+      "blanked": "体〇",
+      "kanji": "育",
+      "meaning": "P.E.",
+      "readings": ["たい", "いく"],
+      "special": 1,
+      "word": "体育"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "何",
+      "meaning": "what",
+      "readings": ["なに"],
+      "special": 0,
+      "word": "何"
+    },
+    {
+      "blanked": "〇人",
+      "kanji": "何",
+      "meaning": "how many people",
+      "readings": ["なん", "にん"],
+      "special": 0,
+      "word": "何人"
+    },
+    {
+      "blanked": "何〇",
+      "kanji": "人",
+      "meaning": "how many people",
+      "readings": ["なん", "にん"],
+      "special": 1,
+      "word": "何人"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "何",
+      "meaning": "what year",
+      "readings": ["なん", "ねん"],
+      "special": 0,
+      "word": "何年"
+    },
+    {
+      "blanked": "何〇",
+      "kanji": "年",
+      "meaning": "what year",
+      "readings": ["なん", "ねん"],
+      "special": 1,
+      "word": "何年"
+    },
+    {
+      "blanked": "〇時",
+      "kanji": "何",
+      "meaning": "what hour",
+      "readings": ["なん", "じ"],
+      "special": 0,
+      "word": "何時"
+    },
+    {
+      "blanked": "何〇",
+      "kanji": "時",
+      "meaning": "what hour",
+      "readings": ["なん", "じ"],
+      "special": 1,
+      "word": "何時"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "像",
+      "meaning": "an elephant",
+      "readings": ["ぞう"],
+      "special": 0,
+      "word": "像"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "先",
+      "meaning": "ahead",
+      "readings": ["さき"],
+      "special": 0,
+      "word": "先"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "先",
+      "meaning": "last month",
+      "readings": ["せん", "げつ"],
+      "special": 0,
+      "word": "先月"
+    },
+    {
+      "blanked": "先〇",
+      "kanji": "月",
+      "meaning": "last month",
+      "readings": ["せん", "げつ"],
+      "special": 1,
+      "word": "先月"
+    },
+    {
+      "blanked": "〇生",
+      "kanji": "先",
+      "meaning": "a teacher",
+      "readings": ["せん", "せい"],
+      "special": 0,
+      "word": "先生"
+    },
+    {
+      "blanked": "先〇",
+      "kanji": "生",
+      "meaning": "a teacher",
+      "readings": ["せん", "せい"],
+      "special": 1,
+      "word": "先生"
+    },
+    {
+      "blanked": "〇口",
+      "kanji": "入",
+      "meaning": "an entrance",
+      "readings": ["いり", "ぐち"],
+      "special": 0,
+      "word": "入口"
+    },
+    {
+      "blanked": "入〇",
+      "kanji": "口",
+      "meaning": "an entrance",
+      "readings": ["いり", "ぐち"],
+      "special": 1,
+      "word": "入口"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "八",
+      "meaning": "eight (things)",
+      "readings": ["やっ", "つ"],
+      "special": 0,
+      "word": "八つ"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "八",
+      "meaning": "eighth",
+      "readings": ["はち", "ぶ"],
+      "special": 0,
+      "word": "八分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "八",
+      "meaning": "eight minutes",
+      "readings": ["はっ", "ぷん"],
+      "special": 0,
+      "word": "八分"
+    },
+    {
+      "blanked": "八〇",
+      "kanji": "分",
+      "meaning": "eighth",
+      "readings": ["はち", "ぶ"],
+      "special": 1,
+      "word": "八分"
+    },
+    {
+      "blanked": "八〇",
+      "kanji": "分",
+      "meaning": "eight minutes",
+      "readings": ["はっ", "ぷん"],
+      "special": 1,
+      "word": "八分"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "八",
+      "meaning": "8th day",
+      "readings": ["よう", "か"],
+      "special": 0,
+      "word": "八日"
+    },
+    {
+      "blanked": "八〇",
+      "kanji": "日",
+      "meaning": "8th day",
+      "readings": ["よう", "か"],
+      "special": 1,
+      "word": "八日"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "八",
+      "meaning": "August",
+      "readings": ["はち", "がつ"],
+      "special": 0,
+      "word": "八月"
+    },
+    {
+      "blanked": "八〇",
+      "kanji": "月",
+      "meaning": "August",
+      "readings": ["はち", "がつ"],
+      "special": 1,
+      "word": "八月"
+    },
+    {
+      "blanked": "〇百",
+      "kanji": "八",
+      "meaning": "800",
+      "readings": ["はっ", "ぴゃく"],
+      "special": 0,
+      "word": "八百"
+    },
+    {
+      "blanked": "八〇",
+      "kanji": "百",
+      "meaning": "800",
+      "readings": ["はっ", "ぴゃく"],
+      "special": 1,
+      "word": "八百"
+    },
+    {
+      "blanked": "〇百屋",
+      "kanji": "八",
+      "meaning": "greengrocer",
+      "readings": ["や", "お", "や"],
+      "special": 0,
+      "word": "八百屋"
+    },
+    {
+      "blanked": "八〇屋",
+      "kanji": "百",
+      "meaning": "greengrocer",
+      "readings": ["や", "お", "や"],
+      "special": 1,
+      "word": "八百屋"
+    },
+    {
+      "blanked": "八百〇",
+      "kanji": "屋",
+      "meaning": "greengrocer",
+      "readings": ["や", "お", "や"],
+      "special": 2,
+      "word": "八百屋"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "六",
+      "meaning": "six (things)",
+      "readings": ["むっ", ""],
+      "special": 0,
+      "word": "六つ"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "六",
+      "meaning": "a sixth",
+      "readings": ["ろく", "ぶん"],
+      "special": 0,
+      "word": "六分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "六",
+      "meaning": "six minutes",
+      "readings": ["ろっ", "ぷん"],
+      "special": 0,
+      "word": "六分"
+    },
+    {
+      "blanked": "六〇",
+      "kanji": "分",
+      "meaning": "a sixth",
+      "readings": ["ろく", "ぶん"],
+      "special": 1,
+      "word": "六分"
+    },
+    {
+      "blanked": "六〇",
+      "kanji": "分",
+      "meaning": "six minutes",
+      "readings": ["ろっ", "ぷん"],
+      "special": 1,
+      "word": "六分"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "六",
+      "meaning": "6th day",
+      "readings": ["むい", "か"],
+      "special": 0,
+      "word": "六日"
+    },
+    {
+      "blanked": "六〇",
+      "kanji": "日",
+      "meaning": "6th day",
+      "readings": ["むい", "か"],
+      "special": 1,
+      "word": "六日"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "六",
+      "meaning": "June",
+      "readings": ["ろく", "がつ"],
+      "special": 0,
+      "word": "六月"
+    },
+    {
+      "blanked": "六〇",
+      "kanji": "月",
+      "meaning": "June",
+      "readings": ["ろく", "がつ"],
+      "special": 1,
+      "word": "六月"
+    },
+    {
+      "blanked": "〇百",
+      "kanji": "六",
+      "meaning": "600",
+      "readings": ["ろっ", "ぴゃく"],
+      "special": 0,
+      "word": "六百"
+    },
+    {
+      "blanked": "六〇",
+      "kanji": "百",
+      "meaning": "600",
+      "readings": ["ろっ", "ぴゃく"],
+      "special": 1,
+      "word": "六百"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "円",
+      "meaning": "a circle, yen",
+      "readings": ["えん"],
+      "special": 0,
+      "word": "円"
+    },
+    {
+      "blanked": "〇口",
+      "kanji": "出",
+      "meaning": "an exit",
+      "readings": ["で", "ぐち"],
+      "special": 0,
+      "word": "出口"
+    },
+    {
+      "blanked": "出〇",
+      "kanji": "口",
+      "meaning": "an exit",
+      "readings": ["で", "ぐち"],
+      "special": 1,
+      "word": "出口"
+    },
+    {
+      "blanked": "〇かる",
+      "kanji": "分",
+      "meaning": "to understand",
+      "readings": ["わ", "", ""],
+      "special": 0,
+      "word": "分かる"
+    },
+    {
+      "blanked": "〇ける",
+      "kanji": "分",
+      "meaning": "to divide",
+      "readings": ["わ", "", ""],
+      "special": 0,
+      "word": "分ける"
+    },
+    {
+      "blanked": "〇手",
+      "kanji": "切",
+      "meaning": "a stamp",
+      "readings": ["きっ", "て"],
+      "special": 0,
+      "word": "切手"
+    },
+    {
+      "blanked": "切〇",
+      "kanji": "手",
+      "meaning": "a stamp",
+      "readings": ["きっ", "て"],
+      "special": 1,
+      "word": "切手"
+    },
+    {
+      "blanked": "利根〇",
+      "kanji": "川",
+      "meaning": "the Tone River",
+      "readings": ["り", "ね", "がわ"],
+      "special": 2,
+      "word": "利根川"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "力",
+      "meaning": "power",
+      "readings": ["ちから"],
+      "special": 0,
+      "word": "力"
+    },
+    {
+      "blanked": "〇学",
+      "kanji": "力",
+      "meaning": "dynamics",
+      "readings": ["りき", "がく"],
+      "special": 0,
+      "word": "力学"
+    },
+    {
+      "blanked": "力〇",
+      "kanji": "学",
+      "meaning": "dynamics",
+      "readings": ["りき", "がく"],
+      "special": 1,
+      "word": "力学"
+    },
+    {
+      "blanked": "〇藤",
+      "kanji": "加",
+      "meaning": "Katou (name)",
+      "readings": ["か", "とう"],
+      "special": 0,
+      "word": "加藤"
+    },
+    {
+      "blanked": "加〇",
+      "kanji": "藤",
+      "meaning": "Katou (name)",
+      "readings": ["か", "とう"],
+      "special": 1,
+      "word": "加藤"
+    },
+    {
+      "blanked": "〇手",
+      "kanji": "助",
+      "meaning": "an assistant",
+      "readings": ["じょ", "しゅ"],
+      "special": 0,
+      "word": "助手"
+    },
+    {
+      "blanked": "助〇",
+      "kanji": "手",
+      "meaning": "an assistant",
+      "readings": ["じょ", "しゅ"],
+      "special": 1,
+      "word": "助手"
+    },
+    {
+      "blanked": "〇石",
+      "kanji": "化",
+      "meaning": "a fossil",
+      "readings": ["か", "せき"],
+      "special": 0,
+      "word": "化石"
+    },
+    {
+      "blanked": "化〇",
+      "kanji": "石",
+      "meaning": "a fossil",
+      "readings": ["か", "せき"],
+      "special": 1,
+      "word": "化石"
+    },
+    {
+      "blanked": "〇口",
+      "kanji": "北",
+      "meaning": "north entrance",
+      "readings": ["きた", "ぐち"],
+      "special": 0,
+      "word": "北口"
+    },
+    {
+      "blanked": "北〇",
+      "kanji": "口",
+      "meaning": "north entrance",
+      "readings": ["きた", "ぐち"],
+      "special": 1,
+      "word": "北口"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "十",
+      "meaning": "ten (things)",
+      "readings": ["とお"],
+      "special": 0,
+      "word": "十"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "十",
+      "meaning": "enough, sufficient, tenth",
+      "readings": ["じゅう", "ぶん"],
+      "special": 0,
+      "word": "十分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "十",
+      "meaning": "ten minutes",
+      "readings": ["じゅっ", "ぷん"],
+      "special": 0,
+      "word": "十分"
+    },
+    {
+      "blanked": "十〇",
+      "kanji": "分",
+      "meaning": "enough, sufficient, tenth",
+      "readings": ["じゅう", "ぶん"],
+      "special": 1,
+      "word": "十分"
+    },
+    {
+      "blanked": "十〇",
+      "kanji": "分",
+      "meaning": "ten minutes",
+      "readings": ["じゅっ", "ぷん"],
+      "special": 1,
+      "word": "十分"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "十",
+      "meaning": "10th day",
+      "readings": ["とお", "か"],
+      "special": 0,
+      "word": "十日"
+    },
+    {
+      "blanked": "十〇",
+      "kanji": "日",
+      "meaning": "10th day",
+      "readings": ["とお", "か"],
+      "special": 1,
+      "word": "十日"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "十",
+      "meaning": "October",
+      "readings": ["じゅう", "がつ"],
+      "special": 0,
+      "word": "十月"
+    },
+    {
+      "blanked": "十〇",
+      "kanji": "月",
+      "meaning": "October",
+      "readings": ["じゅう", "がつ"],
+      "special": 1,
+      "word": "十月"
+    },
+    {
+      "blanked": "〇円",
+      "kanji": "千",
+      "meaning": "1000 yen",
+      "readings": ["せん", "えん"],
+      "special": 0,
+      "word": "千円"
+    },
+    {
+      "blanked": "千〇",
+      "kanji": "円",
+      "meaning": "1000 yen",
+      "readings": ["せん", "えん"],
+      "special": 1,
+      "word": "千円"
+    },
+    {
+      "blanked": "〇葉県",
+      "kanji": "千",
+      "meaning": "Chiba prefecture",
+      "readings": ["ち", "ば", "けん"],
+      "special": 0,
+      "word": "千葉県"
+    },
+    {
+      "blanked": "千〇県",
+      "kanji": "葉",
+      "meaning": "Chiba prefecture",
+      "readings": ["ち", "ば", "けん"],
+      "special": 1,
+      "word": "千葉県"
+    },
+    {
+      "blanked": "千葉〇",
+      "kanji": "県",
+      "meaning": "Chiba prefecture",
+      "readings": ["ち", "ば", "けん"],
+      "special": 2,
+      "word": "千葉県"
+    },
+    {
+      "blanked": "〇ば",
+      "kanji": "半",
+      "meaning": "halfway, middle",
+      "readings": ["なか", ""],
+      "special": 0,
+      "word": "半ば"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "半",
+      "meaning": "half",
+      "readings": ["はん", "ぶん"],
+      "special": 0,
+      "word": "半分"
+    },
+    {
+      "blanked": "半〇",
+      "kanji": "分",
+      "meaning": "half",
+      "readings": ["はん", "ぶん"],
+      "special": 1,
+      "word": "半分"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "半",
+      "meaning": "half a year",
+      "readings": ["はん", "とし"],
+      "special": 0,
+      "word": "半年"
+    },
+    {
+      "blanked": "半〇",
+      "kanji": "年",
+      "meaning": "half a year",
+      "readings": ["はん", "とし"],
+      "special": 1,
+      "word": "半年"
+    },
+    {
+      "blanked": "〇口",
+      "kanji": "南",
+      "meaning": "south entrance",
+      "readings": ["みなみ", "ぐち"],
+      "special": 0,
+      "word": "南口"
+    },
+    {
+      "blanked": "南〇",
+      "kanji": "口",
+      "meaning": "south entrance",
+      "readings": ["みなみ", "ぐち"],
+      "special": 1,
+      "word": "南口"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "去",
+      "meaning": "last year",
+      "readings": ["きょ", "ねん"],
+      "special": 0,
+      "word": "去年"
+    },
+    {
+      "blanked": "去〇",
+      "kanji": "年",
+      "meaning": "last year",
+      "readings": ["きょ", "ねん"],
+      "special": 1,
+      "word": "去年"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "口",
+      "meaning": "mouth",
+      "readings": ["くち"],
+      "special": 0,
+      "word": "口"
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "古",
+      "meaning": "old",
+      "readings": ["ふる", ""],
+      "special": 0,
+      "word": "古い"
+    },
+    {
+      "blanked": "〇本",
+      "kanji": "古",
+      "meaning": "a used book",
+      "readings": ["ふる", "ほん"],
+      "special": 0,
+      "word": "古本"
+    },
+    {
+      "blanked": "古〇",
+      "kanji": "本",
+      "meaning": "a used book",
+      "readings": ["ふる", "ほん"],
+      "special": 1,
+      "word": "古本"
+    },
+    {
+      "blanked": "〇刺",
+      "kanji": "名",
+      "meaning": "a business card",
+      "readings": ["めい", "し"],
+      "special": 0,
+      "word": "名刺"
+    },
+    {
+      "blanked": "名〇",
+      "kanji": "刺",
+      "meaning": "a business card",
+      "readings": ["めい", "し"],
+      "special": 1,
+      "word": "名刺"
+    },
+    {
+      "blanked": "〇茶店",
+      "kanji": "喫",
+      "meaning": "a coffee shop",
+      "readings": ["きっ", "さ", "てん"],
+      "special": 0,
+      "word": "喫茶店"
+    },
+    {
+      "blanked": "喫〇店",
+      "kanji": "茶",
+      "meaning": "a coffee shop",
+      "readings": ["きっ", "さ", "てん"],
+      "special": 1,
+      "word": "喫茶店"
+    },
+    {
+      "blanked": "喫茶〇",
+      "kanji": "店",
+      "meaning": "a coffee shop",
+      "readings": ["きっ", "さ", "てん"],
+      "special": 2,
+      "word": "喫茶店"
+    },
+    {
+      "blanked": "〇つ",
+      "kanji": "四",
+      "meaning": "April",
+      "readings": ["よっ", ""],
+      "special": 0,
+      "word": "四つ"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "四",
+      "meaning": "four minutes",
+      "readings": ["よん", "ふん"],
+      "special": 0,
+      "word": "四分"
+    },
+    {
+      "blanked": "〇分",
+      "kanji": "四",
+      "meaning": "a quarter",
+      "readings": ["よん", "ぶん"],
+      "special": 0,
+      "word": "四分"
+    },
+    {
+      "blanked": "四〇",
+      "kanji": "分",
+      "meaning": "four minutes",
+      "readings": ["よん", "ふん"],
+      "special": 1,
+      "word": "四分"
+    },
+    {
+      "blanked": "四〇",
+      "kanji": "分",
+      "meaning": "a quarter",
+      "readings": ["よん", "ぶん"],
+      "special": 1,
+      "word": "四分"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "四",
+      "meaning": "4th day",
+      "readings": ["とっ", "か"],
+      "special": 0,
+      "word": "四日"
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "四",
+      "meaning": "April",
+      "readings": ["し", "がつ"],
+      "special": 0,
+      "word": "四月"
+    },
+    {
+      "blanked": "四〇",
+      "kanji": "月",
+      "meaning": "April",
+      "readings": ["し", "がつ"],
+      "special": 1,
+      "word": "四月"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "土",
+      "meaning": "the ground",
+      "readings": ["つち"],
+      "special": 0,
+      "word": "土"
+    },
+    {
+      "blanked": "〇曜日",
+      "kanji": "土",
+      "meaning": "Saturday",
+      "readings": ["ど", "よう", "び"],
+      "special": 0,
+      "word": "土曜日"
+    },
+    {
+      "blanked": "土〇日",
+      "kanji": "曜",
+      "meaning": "Saturday",
+      "readings": ["ど", "よう", "び"],
+      "special": 1,
+      "word": "土曜日"
+    },
+    {
+      "blanked": "土曜〇",
+      "kanji": "日",
+      "meaning": "Saturday",
+      "readings": ["ど", "よう", "び"],
+      "special": 2,
+      "word": "土曜日"
+    },
+    {
+      "blanked": "〇木",
+      "kanji": "土",
+      "meaning": "civil engineering",
+      "readings": ["ど", "ぼく"],
+      "special": 0,
+      "word": "土木"
+    },
+    {
+      "blanked": "土〇",
+      "kanji": "木",
+      "meaning": "civil engineering",
+      "readings": ["ど", "ぼく"],
+      "special": 1,
+      "word": "土木"
+    },
+    {
+      "blanked": "〇田",
+      "kanji": "土",
+      "meaning": "Tsuchida (name)",
+      "readings": ["つち", "だ"],
+      "special": 0,
+      "word": "土田"
+    },
+    {
+      "blanked": "土〇",
+      "kanji": "田",
+      "meaning": "Tsuchida (name)",
+      "readings": ["つち", "だ"],
+      "special": 1,
+      "word": "土田"
+    },
+    {
+      "blanked": "〇下鉄",
+      "kanji": "地",
+      "meaning": "subway, metro",
+      "readings": ["ち", "か", "てつ"],
+      "special": 0,
+      "word": "地下鉄"
+    },
+    {
+      "blanked": "地〇鉄",
+      "kanji": "下",
+      "meaning": "subway, metro",
+      "readings": ["ち", "か", "てつ"],
+      "special": 1,
+      "word": "地下鉄"
+    },
+    {
+      "blanked": "地下〇",
+      "kanji": "鉄",
+      "meaning": "subway, metro",
+      "readings": ["ち", "か", "てつ"],
+      "special": 2,
+      "word": "地下鉄"
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "多",
+      "meaning": "many, much",
+      "readings": ["おお", ""],
+      "special": 0,
+      "word": "多い"
+    },
+    {
+      "blanked": "〇少",
+      "kanji": "多",
+      "meaning": "more or less",
+      "readings": ["た", "しょう"],
+      "special": 0,
+      "word": "多少"
+    },
+    {
+      "blanked": "多〇",
+      "kanji": "少",
+      "meaning": "more or less",
+      "readings": ["た", "しょう"],
+      "special": 1,
+      "word": "多少"
+    },
+    {
+      "blanked": "〇数",
+      "kanji": "多",
+      "meaning": "a large number",
+      "readings": ["た", "すう"],
+      "special": 0,
+      "word": "多数"
+    },
+    {
+      "blanked": "多〇",
+      "kanji": "数",
+      "meaning": "a large number",
+      "readings": ["た", "すう"],
+      "special": 1,
+      "word": "多数"
+    },
+    {
+      "blanked": "〇きい",
+      "kanji": "大",
+      "meaning": "big",
+      "readings": ["おお", "", ""],
+      "special": 0,
+      "word": "大きい"
+    },
+    {
+      "blanked": "〇人",
+      "kanji": "大",
+      "meaning": "an adult",
+      "readings": ["おと", "な"],
+      "special": 0,
+      "word": "大人"
+    },
+    {
+      "blanked": "大〇",
+      "kanji": "人",
+      "meaning": "an adult",
+      "readings": ["おと", "な"],
+      "special": 1,
+      "word": "大人"
+    },
+    {
+      "blanked": "〇切",
+      "kanji": "大",
+      "meaning": "important",
+      "readings": ["たい", "せつ"],
+      "special": 0,
+      "word": "大切"
+    },
+    {
+      "blanked": "大〇",
+      "kanji": "切",
+      "meaning": "important",
+      "readings": ["たい", "せつ"],
+      "special": 1,
+      "word": "大切"
+    },
+    {
+      "blanked": "〇学",
+      "kanji": "大",
+      "meaning": "a university",
+      "readings": ["だい", "がく"],
+      "special": 0,
+      "word": "大学"
+    },
+    {
+      "blanked": "大〇",
+      "kanji": "学",
+      "meaning": "a university",
+      "readings": ["だい", "がく"],
+      "special": 1,
+      "word": "大学"
+    },
+    {
+      "blanked": "〇雨",
+      "kanji": "大",
+      "meaning": "a heavy rain",
+      "readings": ["おお", "あめ"],
+      "special": 0,
+      "word": "大雨"
+    },
+    {
+      "blanked": "大〇",
+      "kanji": "雨",
+      "meaning": "a heavy rain",
+      "readings": ["おお", "あめ"],
+      "special": 1,
+      "word": "大雨"
+    },
+    {
+      "blanked": "〇ぷら",
+      "kanji": "天",
+      "meaning": "Tempura",
+      "readings": ["てん", "", ""],
+      "special": 0,
+      "word": "天ぷら"
+    },
+    {
+      "blanked": "〇の子",
+      "kanji": "女",
+      "meaning": "a woman",
+      "readings": ["おんな", "", "こ"],
+      "special": 0,
+      "word": "女の子"
+    },
+    {
+      "blanked": "女の〇",
+      "kanji": "子",
+      "meaning": "a woman",
+      "readings": ["おんな", "", "こ"],
+      "special": 2,
+      "word": "女の子"
+    },
+    {
+      "blanked": "〇かれる",
+      "kanji": "好",
+      "meaning": "to be loved",
+      "readings": ["す", "", "", ""],
+      "special": 0,
+      "word": "好かれる"
+    },
+    {
+      "blanked": "〇き",
+      "kanji": "好",
+      "meaning": "favourite",
+      "readings": ["す", ""],
+      "special": 0,
+      "word": "好き"
+    },
+    {
+      "blanked": "〇物",
+      "kanji": "好",
+      "meaning": "favourite food​",
+      "readings": ["こう", "ぶつ"],
+      "special": 0,
+      "word": "好物"
+    },
+    {
+      "blanked": "好〇",
+      "kanji": "物",
+      "meaning": "favourite food​",
+      "readings": ["こう", "ぶつ"],
+      "special": 1,
+      "word": "好物"
+    },
+    {
+      "blanked": "〇供",
+      "kanji": "子",
+      "meaning": "a child",
+      "readings": ["こ", "ども"],
+      "special": 0,
+      "word": "子供"
+    },
+    {
+      "blanked": "子〇",
+      "kanji": "供",
+      "meaning": "a child",
+      "readings": ["こ", "ども"],
+      "special": 1,
+      "word": "子供"
+    },
+    {
+      "blanked": "〇馬",
+      "kanji": "子",
+      "meaning": "a small horse, a pony",
+      "readings": ["こ", "うま"],
+      "special": 0,
+      "word": "子馬"
+    },
+    {
+      "blanked": "子〇",
+      "kanji": "馬",
+      "meaning": "a small horse, a pony",
+      "readings": ["こ", "うま"],
+      "special": 1,
+      "word": "子馬"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "字",
+      "meaning": "a letter",
+      "readings": ["じ"],
+      "special": 0,
+      "word": "字"
+    },
+    {
+      "blanked": "〇校",
+      "kanji": "学",
+      "meaning": "a school",
+      "readings": ["かっ", "こう"],
+      "special": 0,
+      "word": "学校"
+    },
+    {
+      "blanked": "学〇",
+      "kanji": "校",
+      "meaning": "a school",
+      "readings": ["かっ", "こう"],
+      "special": 1,
+      "word": "学校"
+    },
+    {
+      "blanked": "〇生",
+      "kanji": "学",
+      "meaning": "a student",
+      "readings": ["がく", "せい"],
+      "special": 0,
+      "word": "学生"
+    },
+    {
+      "blanked": "学〇",
+      "kanji": "生",
+      "meaning": "a student",
+      "readings": ["がく", "せい"],
+      "special": 1,
+      "word": "学生"
+    },
+    {
+      "blanked": "〇長",
+      "kanji": "学",
+      "meaning": "a (university) president",
+      "readings": ["がく", "ちょう"],
+      "special": 0,
+      "word": "学長"
+    },
+    {
+      "blanked": "学〇",
+      "kanji": "長",
+      "meaning": "a (university) president",
+      "readings": ["がく", "ちょう"],
+      "special": 1,
+      "word": "学長"
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "安",
+      "meaning": "cheap",
+      "readings": ["やす", ""],
+      "special": 0,
+      "word": "安い"
+    },
+    {
+      "blanked": "〇全",
+      "kanji": "安",
+      "meaning": "safe",
+      "readings": ["あん", "ぜん"],
+      "special": 0,
+      "word": "安全"
+    },
+    {
+      "blanked": "安〇",
+      "kanji": "全",
+      "meaning": "safe",
+      "readings": ["あん", "ぜん"],
+      "special": 1,
+      "word": "安全"
+    },
+    {
+      "blanked": "〇売り",
+      "kanji": "安",
+      "meaning": "bargain sale",
+      "readings": ["やす", "う", ""],
+      "special": 0,
+      "word": "安売り"
+    },
+    {
+      "blanked": "安〇り",
+      "kanji": "売",
+      "meaning": "bargain sale",
+      "readings": ["やす", "う", ""],
+      "special": 1,
+      "word": "安売り"
+    },
+    {
+      "blanked": "〇定",
+      "kanji": "安",
+      "meaning": "stable, stability",
+      "readings": ["あん", "てい"],
+      "special": 0,
+      "word": "安定"
+    },
+    {
+      "blanked": "安〇",
+      "kanji": "定",
+      "meaning": "stable, stability",
+      "readings": ["あん", "てい"],
+      "special": 1,
+      "word": "安定"
+    },
+    {
+      "blanked": "〇心",
+      "kanji": "安",
+      "meaning": "to be relieved",
+      "readings": ["あん", "しん"],
+      "special": 0,
+      "word": "安心"
+    },
+    {
+      "blanked": "安〇",
+      "kanji": "心",
+      "meaning": "to be relieved",
+      "readings": ["あん", "しん"],
+      "special": 1,
+      "word": "安心"
+    },
+    {
+      "blanked": "〇食",
+      "kanji": "定",
+      "meaning": "set meal",
+      "readings": ["てい", "しょく"],
+      "special": 0,
+      "word": "定食"
+    },
+    {
+      "blanked": "定〇",
+      "kanji": "食",
+      "meaning": "set meal",
+      "readings": ["てい", "しょく"],
+      "special": 1,
+      "word": "定食"
+    },
+    {
+      "blanked": "〇力",
+      "kanji": "実",
+      "meaning": "one's real ability",
+      "readings": ["じつ", "りょく"],
+      "special": 0,
+      "word": "実力"
+    },
+    {
+      "blanked": "実〇",
+      "kanji": "力",
+      "meaning": "one's real ability",
+      "readings": ["じつ", "りょく"],
+      "special": 1,
+      "word": "実力"
+    },
+    {
+      "blanked": "〇士山",
+      "kanji": "富",
+      "meaning": "Mt. Fuji",
+      "readings": ["ふ", "じ", "さん"],
+      "special": 0,
+      "word": "富士山"
+    },
+    {
+      "blanked": "富〇山",
+      "kanji": "士",
+      "meaning": "Mt. Fuji",
+      "readings": ["ふ", "じ", "さん"],
+      "special": 1,
+      "word": "富士山"
+    },
+    {
+      "blanked": "富士〇",
+      "kanji": "山",
+      "meaning": "Mt. Fuji",
+      "readings": ["ふ", "じ", "さん"],
+      "special": 2,
+      "word": "富士山"
+    },
+    {
+      "blanked": "〇門",
+      "kanji": "専",
+      "meaning": "a speciality",
+      "readings": ["せん", "もん"],
+      "special": 0,
+      "word": "専門"
+    },
+    {
+      "blanked": "専〇",
+      "kanji": "門",
+      "meaning": "a speciality",
+      "readings": ["せん", "もん"],
+      "special": 1,
+      "word": "専門"
+    },
+    {
+      "blanked": "〇さい",
+      "kanji": "小",
+      "meaning": "small",
+      "readings": ["ちい", "", ""],
+      "special": 0,
+      "word": "小さい"
+    },
+    {
+      "blanked": "〇学校",
+      "kanji": "小",
+      "meaning": "primary school",
+      "readings": ["しょう", "がっ", "こう"],
+      "special": 0,
+      "word": "小学校"
+    },
+    {
+      "blanked": "小〇校",
+      "kanji": "学",
+      "meaning": "primary school",
+      "readings": ["しょう", "がっ", "こう"],
+      "special": 1,
+      "word": "小学校"
+    },
+    {
+      "blanked": "小学〇",
+      "kanji": "校",
+      "meaning": "primary school",
+      "readings": ["しょう", "がっ", "こう"],
+      "special": 2,
+      "word": "小学校"
+    },
+    {
+      "blanked": "〇川",
+      "kanji": "小",
+      "meaning": "a stream",
+      "readings": ["お", "がわ"],
+      "special": 0,
+      "word": "小川"
+    },
+    {
+      "blanked": "小〇",
+      "kanji": "川",
+      "meaning": "a stream",
+      "readings": ["お", "がわ"],
+      "special": 1,
+      "word": "小川"
+    },
+    {
+      "blanked": "〇林",
+      "kanji": "小",
+      "meaning": "Kobayashi (name)",
+      "readings": ["こ", "ばやし"],
+      "special": 0,
+      "word": "小林"
+    },
+    {
+      "blanked": "小〇",
+      "kanji": "林",
+      "meaning": "Kobayashi (name)",
+      "readings": ["こ", "ばやし"],
+      "special": 1,
+      "word": "小林"
+    },
+    {
+      "blanked": "〇雨",
+      "kanji": "小",
+      "meaning": "a light rain",
+      "readings": ["こ", "さめ"],
+      "special": 0,
+      "word": "小雨"
+    },
+    {
+      "blanked": "小〇",
+      "kanji": "雨",
+      "meaning": "a light rain",
+      "readings": ["こ", "さめ"],
+      "special": 1,
+      "word": "小雨"
+    },
+    {
+      "blanked": "〇し",
+      "kanji": "少",
+      "meaning": "a little, a few",
+      "readings": ["すこ", ""],
+      "special": 0,
+      "word": "少し"
+    },
+    {
+      "blanked": "〇ない",
+      "kanji": "少",
+      "meaning": "few, little",
+      "readings": ["すく", "", ""],
+      "special": 0,
+      "word": "少ない"
+    },
+    {
+      "blanked": "〇女",
+      "kanji": "少",
+      "meaning": "a girl",
+      "readings": ["しょう", "じょ"],
+      "special": 0,
+      "word": "少女"
+    },
+    {
+      "blanked": "少〇",
+      "kanji": "女",
+      "meaning": "a girl",
+      "readings": ["しょう", "じょ"],
+      "special": 1,
+      "word": "少女"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "少",
+      "meaning": "a boy",
+      "readings": ["しょう", "ねん"],
+      "special": 0,
+      "word": "少年"
+    },
+    {
+      "blanked": "少〇",
+      "kanji": "年",
+      "meaning": "a boy",
+      "readings": ["しょう", "ねん"],
+      "special": 1,
+      "word": "少年"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "山",
+      "meaning": "mountain",
+      "readings": ["やま"],
+      "special": 0,
+      "word": "山"
+    },
+    {
+      "blanked": "〇下",
+      "kanji": "山",
+      "meaning": "Yamashita (name)",
+      "readings": ["やま", "した"],
+      "special": 0,
+      "word": "山下"
+    },
+    {
+      "blanked": "山〇",
+      "kanji": "下",
+      "meaning": "Yamashita (name)",
+      "readings": ["やま", "した"],
+      "special": 1,
+      "word": "山下"
+    },
+    {
+      "blanked": "〇本",
+      "kanji": "山",
+      "meaning": "Yamamoto (name)",
+      "readings": ["やま", "もと"],
+      "special": 0,
+      "word": "山本"
+    },
+    {
+      "blanked": "山〇",
+      "kanji": "本",
+      "meaning": "Yamamoto (name)",
+      "readings": ["やま", "もと"],
+      "special": 1,
+      "word": "山本"
+    },
+    {
+      "blanked": "〇田",
+      "kanji": "山",
+      "meaning": "Yamada (name)",
+      "readings": ["やま", "だ"],
+      "special": 0,
+      "word": "山田"
+    },
+    {
+      "blanked": "山〇",
+      "kanji": "田",
+      "meaning": "Yamada (name)",
+      "readings": ["やま", "だ"],
+      "special": 1,
+      "word": "山田"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "岩",
+      "meaning": "a rock",
+      "readings": ["いわ"],
+      "special": 0,
+      "word": "岩"
+    },
+    {
+      "blanked": "〇山",
+      "kanji": "岩",
+      "meaning": "a rocky mountain",
+      "readings": ["いわ", "やま"],
+      "special": 0,
+      "word": "岩山"
+    },
+    {
+      "blanked": "岩〇",
+      "kanji": "山",
+      "meaning": "a rocky mountain",
+      "readings": ["いわ", "やま"],
+      "special": 1,
+      "word": "岩山"
+    },
+    {
+      "blanked": "〇石",
+      "kanji": "岩",
+      "meaning": "rocks and stones",
+      "readings": ["がん", "せき"],
+      "special": 0,
+      "word": "岩石"
+    },
+    {
+      "blanked": "岩〇",
+      "kanji": "石",
+      "meaning": "rocks and stones",
+      "readings": ["がん", "せき"],
+      "special": 1,
+      "word": "岩石"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "川",
+      "meaning": "river",
+      "readings": ["かわ"],
+      "special": 0,
+      "word": "川"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "年",
+      "meaning": "year",
+      "readings": ["とし"],
+      "special": 0,
+      "word": "年"
+    },
+    {
+      "blanked": "〇上",
+      "kanji": "年",
+      "meaning": "older, senior",
+      "readings": ["とし", "うえ"],
+      "special": 0,
+      "word": "年上"
+    },
+    {
+      "blanked": "年〇",
+      "kanji": "上",
+      "meaning": "older, senior",
+      "readings": ["とし", "うえ"],
+      "special": 1,
+      "word": "年上"
+    },
+    {
+      "blanked": "〇下",
+      "kanji": "年",
+      "meaning": "younger",
+      "readings": ["とし", "した"],
+      "special": 0,
+      "word": "年下"
+    },
+    {
+      "blanked": "年〇",
+      "kanji": "下",
+      "meaning": "younger",
+      "readings": ["とし", "した"],
+      "special": 1,
+      "word": "年下"
+    },
+    {
+      "blanked": "〇女",
+      "kanji": "彼",
+      "meaning": "she, girlfriend",
+      "readings": ["かの", "じょ"],
+      "special": 0,
+      "word": "彼女"
+    },
+    {
+      "blanked": "彼〇",
+      "kanji": "女",
+      "meaning": "she, girlfriend",
+      "readings": ["かの", "じょ"],
+      "special": 1,
+      "word": "彼女"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "手",
+      "meaning": "a hand",
+      "readings": ["て"],
+      "special": 0,
+      "word": "手"
+    },
+    {
+      "blanked": "〇紙",
+      "kanji": "手",
+      "meaning": "a letter",
+      "readings": ["て", "がみ"],
+      "special": 0,
+      "word": "手紙"
+    },
+    {
+      "blanked": "手〇",
+      "kanji": "紙",
+      "meaning": "a letter",
+      "readings": ["て", "がみ"],
+      "special": 1,
+      "word": "手紙"
+    },
+    {
+      "blanked": "〇札",
+      "kanji": "改",
+      "meaning": "ticket gate",
+      "readings": ["かい", "さつ"],
+      "special": 0,
+      "word": "改札"
+    },
+    {
+      "blanked": "改〇",
+      "kanji": "札",
+      "meaning": "ticket gate",
+      "readings": ["かい", "さつ"],
+      "special": 1,
+      "word": "改札"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "文",
+      "meaning": "a sentence",
+      "readings": ["ぶん"],
+      "special": 0,
+      "word": "文"
+    },
+    {
+      "blanked": "〇字",
+      "kanji": "文",
+      "meaning": "a letter",
+      "readings": ["も", "じ"],
+      "special": 0,
+      "word": "文字"
+    },
+    {
+      "blanked": "文〇",
+      "kanji": "字",
+      "meaning": "a letter",
+      "readings": ["も", "じ"],
+      "special": 1,
+      "word": "文字"
+    },
+    {
+      "blanked": "〇学",
+      "kanji": "文",
+      "meaning": "literature",
+      "readings": ["ぶん", "がく"],
+      "special": 0,
+      "word": "文学"
+    },
+    {
+      "blanked": "文〇",
+      "kanji": "学",
+      "meaning": "literature",
+      "readings": ["ぶん", "がく"],
+      "special": 1,
+      "word": "文学"
+    },
+    {
+      "blanked": "〇部省",
+      "kanji": "文",
+      "meaning": "Ministry of Education",
+      "readings": ["もん", "ぶ", "しょう"],
+      "special": 0,
+      "word": "文部省"
+    },
+    {
+      "blanked": "文〇省",
+      "kanji": "部",
+      "meaning": "Ministry of Education",
+      "readings": ["もん", "ぶ", "しょう"],
+      "special": 1,
+      "word": "文部省"
+    },
+    {
+      "blanked": "文部〇",
+      "kanji": "省",
+      "meaning": "Ministry of Education",
+      "readings": ["もん", "ぶ", "しょう"],
+      "special": 2,
+      "word": "文部省"
+    },
+    {
+      "blanked": "〇しい",
+      "kanji": "新",
+      "meaning": "new",
+      "readings": ["あたら", "", ""],
+      "special": 0,
+      "word": "新しい"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "新",
+      "meaning": "a new year",
+      "readings": ["しん", "ねん"],
+      "special": 0,
+      "word": "新年"
+    },
+    {
+      "blanked": "新〇",
+      "kanji": "年",
+      "meaning": "a new year",
+      "readings": ["しん", "ねん"],
+      "special": 1,
+      "word": "新年"
+    },
+    {
+      "blanked": "〇聞",
+      "kanji": "新",
+      "meaning": "a newspaper",
+      "readings": ["しん", "ぶん"],
+      "special": 0,
+      "word": "新聞"
+    },
+    {
+      "blanked": "新〇",
+      "kanji": "聞",
+      "meaning": "a newspaper",
+      "readings": ["しん", "ぶん"],
+      "special": 1,
+      "word": "新聞"
+    },
+    {
+      "blanked": "〇車",
+      "kanji": "新",
+      "meaning": "a new car",
+      "readings": ["しん", "しゃ"],
+      "special": 0,
+      "word": "新車"
+    },
+    {
+      "blanked": "新〇",
+      "kanji": "車",
+      "meaning": "a new car",
+      "readings": ["しん", "しゃ"],
+      "special": 1,
+      "word": "新車"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "日",
+      "meaning": "sun, day",
+      "readings": ["ひ"],
+      "special": 0,
+      "word": "日"
+    },
+    {
+      "blanked": "〇曜日",
+      "kanji": "日",
+      "meaning": "Sunday",
+      "readings": ["にち", "よう", "び"],
+      "special": 0,
+      "word": "日曜日"
+    },
+    {
+      "blanked": "日〇日",
+      "kanji": "曜",
+      "meaning": "Sunday",
+      "readings": ["にち", "よう", "び"],
+      "special": 1,
+      "word": "日曜日"
+    },
+    {
+      "blanked": "日曜〇",
+      "kanji": "日",
+      "meaning": "Sunday",
+      "readings": ["にち", "よう", "び"],
+      "special": 2,
+      "word": "日曜日"
+    },
+    {
+      "blanked": "〇本",
+      "kanji": "日",
+      "meaning": "Japan",
+      "readings": ["に", "ほん"],
+      "special": 0,
+      "word": "日本"
+    },
+    {
+      "blanked": "日〇",
+      "kanji": "本",
+      "meaning": "Japan",
+      "readings": ["に", "ほん"],
+      "special": 1,
+      "word": "日本"
+    },
+    {
+      "blanked": "〇本人",
+      "kanji": "日",
+      "meaning": "Japanese person",
+      "readings": ["に", "ほん", "じん"],
+      "special": 0,
+      "word": "日本人"
+    },
+    {
+      "blanked": "日〇人",
+      "kanji": "本",
+      "meaning": "Japanese person",
+      "readings": ["に", "ほん", "じん"],
+      "special": 1,
+      "word": "日本人"
+    },
+    {
+      "blanked": "日本〇",
+      "kanji": "人",
+      "meaning": "Japanese person",
+      "readings": ["に", "ほん", "じん"],
+      "special": 2,
+      "word": "日本人"
+    },
+    {
+      "blanked": "〇本茶",
+      "kanji": "日",
+      "meaning": "green tea",
+      "readings": ["に", "ほん", "ちゃ"],
+      "special": 0,
+      "word": "日本茶"
+    },
+    {
+      "blanked": "日〇茶",
+      "kanji": "本",
+      "meaning": "green tea",
+      "readings": ["に", "ほん", "ちゃ"],
+      "special": 1,
+      "word": "日本茶"
+    },
+    {
+      "blanked": "日本〇",
+      "kanji": "茶",
+      "meaning": "green tea",
+      "readings": ["に", "ほん", "ちゃ"],
+      "special": 2,
+      "word": "日本茶"
+    },
+    {
+      "blanked": "〇ける",
+      "kanji": "明",
+      "meaning": "(dawn) to break",
+      "readings": ["あ", "", ""],
+      "special": 0,
+      "word": "明ける"
+    },
+    {
+      "blanked": "〇るい",
+      "kanji": "明",
+      "meaning": "bright, cheerful",
+      "readings": ["あか", "", ""],
+      "special": 0,
+      "word": "明るい"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "明",
+      "meaning": "tomorrow",
+      "readings": ["あ", "した"],
+      "special": 0,
+      "word": "明日"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "明",
+      "meaning": "tomorrow",
+      "readings": ["あ", "す"],
+      "special": 0,
+      "word": "明日"
+    },
+    {
+      "blanked": "明〇",
+      "kanji": "日",
+      "meaning": "tomorrow",
+      "readings": ["あ", "した"],
+      "special": 1,
+      "word": "明日"
+    },
+    {
+      "blanked": "明〇",
+      "kanji": "日",
+      "meaning": "tomorrow",
+      "readings": ["あ", "す"],
+      "special": 1,
+      "word": "明日"
+    },
+    {
+      "blanked": "〇間",
+      "kanji": "時",
+      "meaning": "time",
+      "readings": ["じ", "かん"],
+      "special": 0,
+      "word": "時間"
+    },
+    {
+      "blanked": "時〇",
+      "kanji": "間",
+      "meaning": "time",
+      "readings": ["じ", "かん"],
+      "special": 1,
+      "word": "時間"
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "暗",
+      "meaning": "dark",
+      "readings": ["くら", ""],
+      "special": 0,
+      "word": "暗い"
+    },
+    {
+      "blanked": "〇室",
+      "kanji": "暗",
+      "meaning": "a dark room",
+      "readings": ["あん", "しつ"],
+      "special": 0,
+      "word": "暗室"
+    },
+    {
+      "blanked": "暗〇",
+      "kanji": "室",
+      "meaning": "a dark room",
+      "readings": ["あん", "しつ"],
+      "special": 1,
+      "word": "暗室"
+    },
+    {
+      "blanked": "〇黒",
+      "kanji": "暗",
+      "meaning": "darkness",
+      "readings": ["あん", "こく"],
+      "special": 0,
+      "word": "暗黒"
+    },
+    {
+      "blanked": "暗〇",
+      "kanji": "黒",
+      "meaning": "darkness",
+      "readings": ["あん", "こく"],
+      "special": 1,
+      "word": "暗黒"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "月",
+      "meaning": "moon, month",
+      "readings": ["つき"],
+      "special": 0,
+      "word": "月"
+    },
+    {
+      "blanked": "〇曜日",
+      "kanji": "月",
+      "meaning": "Monday",
+      "readings": ["げつ", "よう", "び"],
+      "special": 0,
+      "word": "月曜日"
+    },
+    {
+      "blanked": "月〇日",
+      "kanji": "曜",
+      "meaning": "Monday",
+      "readings": ["げつ", "よう", "び"],
+      "special": 1,
+      "word": "月曜日"
+    },
+    {
+      "blanked": "月曜〇",
+      "kanji": "日",
+      "meaning": "Monday",
+      "readings": ["げつ", "よう", "び"],
+      "special": 2,
+      "word": "月曜日"
+    },
+    {
+      "blanked": "〇見",
+      "kanji": "月",
+      "meaning": "moon viewing",
+      "readings": ["つき", "み"],
+      "special": 0,
+      "word": "月見"
+    },
+    {
+      "blanked": "月〇",
+      "kanji": "見",
+      "meaning": "moon viewing",
+      "readings": ["つき", "み"],
+      "special": 1,
+      "word": "月見"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "木",
+      "meaning": "tree",
+      "readings": ["き"],
+      "special": 0,
+      "word": "木"
+    },
+    {
+      "blanked": "〇曜日",
+      "kanji": "木",
+      "meaning": "Thursday",
+      "readings": ["もく", "よう", "び"],
+      "special": 0,
+      "word": "木曜日"
+    },
+    {
+      "blanked": "木〇日",
+      "kanji": "曜",
+      "meaning": "Thursday",
+      "readings": ["もく", "よう", "び"],
+      "special": 1,
+      "word": "木曜日"
+    },
+    {
+      "blanked": "木曜〇",
+      "kanji": "日",
+      "meaning": "Thursday",
+      "readings": ["もく", "よう", "び"],
+      "special": 2,
+      "word": "木曜日"
+    },
+    {
+      "blanked": "〇村",
+      "kanji": "木",
+      "meaning": "Kimura (name)",
+      "readings": ["き", "むら"],
+      "special": 0,
+      "word": "木村"
+    },
+    {
+      "blanked": "木〇",
+      "kanji": "村",
+      "meaning": "Kimura (name)",
+      "readings": ["き", "むら"],
+      "special": 1,
+      "word": "木村"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "本",
+      "meaning": "a book",
+      "readings": ["ほん"],
+      "special": 0,
+      "word": "本"
+    },
+    {
+      "blanked": "〇店",
+      "kanji": "本",
+      "meaning": "the main office",
+      "readings": ["ほん", "てん"],
+      "special": 0,
+      "word": "本店"
+    },
+    {
+      "blanked": "本〇",
+      "kanji": "店",
+      "meaning": "the main office",
+      "readings": ["ほん", "てん"],
+      "special": 1,
+      "word": "本店"
+    },
+    {
+      "blanked": "〇日",
+      "kanji": "本",
+      "meaning": "this day",
+      "readings": ["ほん", "じつ"],
+      "special": 0,
+      "word": "本日"
+    },
+    {
+      "blanked": "本〇",
+      "kanji": "日",
+      "meaning": "this day",
+      "readings": ["ほん", "じつ"],
+      "special": 1,
+      "word": "本日"
+    },
+    {
+      "blanked": "〇物",
+      "kanji": "本",
+      "meaning": "a real thing",
+      "readings": ["ほん", "もの"],
+      "special": 0,
+      "word": "本物"
+    },
+    {
+      "blanked": "本〇",
+      "kanji": "物",
+      "meaning": "a real thing",
+      "readings": ["ほん", "もの"],
+      "special": 1,
+      "word": "本物"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "村",
+      "meaning": "a village",
+      "readings": ["むら"],
+      "special": 0,
+      "word": "村"
+    },
+    {
+      "blanked": "〇年",
+      "kanji": "来",
+      "meaning": "next year",
+      "readings": ["らい", "ねん"],
+      "special": 0,
+      "word": "来年"
+    },
+    {
+      "blanked": "来〇",
+      "kanji": "年",
+      "meaning": "next year",
+      "readings": ["らい", "ねん"],
+      "special": 1,
+      "word": "来年"
+    },
+    {
+      "blanked": "〇口",
+      "kanji": "東",
+      "meaning": "east entrance",
+      "readings": ["ひがし", "ぐち"],
+      "special": 0,
+      "word": "東口"
+    },
+    {
+      "blanked": "東〇",
+      "kanji": "口",
+      "meaning": "east entrance",
+      "readings": ["ひがし", "ぐち"],
+      "special": 1,
+      "word": "東口"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "林",
+      "meaning": "a wood",
+      "readings": ["林"],
+      "special": 0,
+      "word": "林"
+    },
+    {
+      "blanked": "〇業",
+      "kanji": "林",
+      "meaning": "forestry",
+      "readings": ["りん", "ぎょう"],
+      "special": 0,
+      "word": "林業"
+    },
+    {
+      "blanked": "林〇",
+      "kanji": "業",
+      "meaning": "forestry",
+      "readings": ["りん", "ぎょう"],
+      "special": 1,
+      "word": "林業"
+    },
+    {
+      "blanked": "〇間学校",
+      "kanji": "林",
+      "meaning": "school camp",
+      "readings": ["りん", "かん", "がっ", "こう"],
+      "special": 0,
+      "word": "林間学校"
+    },
+    {
+      "blanked": "林〇学校",
+      "kanji": "間",
+      "meaning": "school camp",
+      "readings": ["りん", "かん", "がっ", "こう"],
+      "special": 1,
+      "word": "林間学校"
+    },
+    {
+      "blanked": "林間〇校",
+      "kanji": "学",
+      "meaning": "school camp",
+      "readings": ["りん", "かん", "がっ", "こう"],
+      "special": 2,
+      "word": "林間学校"
+    },
+    {
+      "blanked": "林間学〇",
+      "kanji": "校",
+      "meaning": "school camp",
+      "readings": ["りん", "かん", "がっ", "こう"],
+      "special": 3,
+      "word": "林間学校"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "森",
+      "meaning": "a forest",
+      "readings": ["もり"],
+      "special": 0,
+      "word": "森"
+    },
+    {
+      "blanked": "〇林",
+      "kanji": "森",
+      "meaning": "woods and forests",
+      "readings": ["しん", "りん"],
+      "special": 0,
+      "word": "森林"
+    },
+    {
+      "blanked": "森〇",
+      "kanji": "林",
+      "meaning": "woods and forests",
+      "readings": ["しん", "りん"],
+      "special": 1,
+      "word": "森林"
+    },
+    {
+      "blanked": "〇田",
+      "kanji": "森",
+      "meaning": "Morita (name)",
+      "readings": ["もり", "た"],
+      "special": 0,
+      "word": "森田"
+    },
+    {
+      "blanked": "森〇",
+      "kanji": "田",
+      "meaning": "Morita (name)",
+      "readings": ["もり", "た"],
+      "special": 1,
+      "word": "森田"
+    },
+    {
+      "blanked": "〇糸",
+      "kanji": "毛",
+      "meaning": "wollen yarn",
+      "readings": ["け", "いと"],
+      "special": 0,
+      "word": "毛糸"
+    },
+    {
+      "blanked": "毛〇",
+      "kanji": "糸",
+      "meaning": "wollen yarn",
+      "readings": ["け", "いと"],
+      "special": 1,
+      "word": "毛糸"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "水",
+      "meaning": "water",
+      "readings": ["みず"],
+      "special": 0,
+      "word": "水"
+    },
+    {
+      "blanked": "〇曜日",
+      "kanji": "水",
+      "meaning": "Wednesday",
+      "readings": ["すい", "よう", "び"],
+      "special": 0,
+      "word": "水曜日"
+    },
+    {
+      "blanked": "水〇日",
+      "kanji": "曜",
+      "meaning": "Wednesday",
+      "readings": ["すい", "よう", "び"],
+      "special": 1,
+      "word": "水曜日"
+    },
+    {
+      "blanked": "水曜〇",
+      "kanji": "日",
+      "meaning": "Wednesday",
+      "readings": ["すい", "よう", "び"],
+      "special": 2,
+      "word": "水曜日"
+    },
+    {
+      "blanked": "〇田",
+      "kanji": "水",
+      "meaning": "rice field",
+      "readings": ["すい", "でん"],
+      "special": 0,
+      "word": "水田"
+    },
+    {
+      "blanked": "水〇",
+      "kanji": "田",
+      "meaning": "rice field",
+      "readings": ["すい", "でん"],
+      "special": 1,
+      "word": "水田"
+    },
+    {
+      "blanked": "〇辺",
+      "kanji": "渡",
+      "meaning": "Watanabe (name)",
+      "readings": ["わた", "なべ"],
+      "special": 0,
+      "word": "渡辺"
+    },
+    {
+      "blanked": "渡〇",
+      "kanji": "辺",
+      "meaning": "Watanabe (name)",
+      "readings": ["わた", "なべ"],
+      "special": 1,
+      "word": "渡辺"
+    },
+    {
+      "blanked": "〇字",
+      "kanji": "漢",
+      "meaning": "Kanji",
+      "readings": ["かん", "じ"],
+      "special": 0,
+      "word": "漢字"
+    },
+    {
+      "blanked": "漢〇",
+      "kanji": "字",
+      "meaning": "Kanji",
+      "readings": ["かん", "じ"],
+      "special": 1,
+      "word": "漢字"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "火",
+      "meaning": "fire",
+      "readings": ["ひ"],
+      "special": 0,
+      "word": "火"
+    },
+    {
+      "blanked": "〇事",
+      "kanji": "火",
+      "meaning": "a fire",
+      "readings": ["か", "じ"],
+      "special": 0,
+      "word": "火事"
+    },
+    {
+      "blanked": "火〇",
+      "kanji": "事",
+      "meaning": "a fire",
+      "readings": ["か", "じ"],
+      "special": 1,
+      "word": "火事"
+    },
+    {
+      "blanked": "〇山",
+      "kanji": "火",
+      "meaning": "a volcano",
+      "readings": ["か", "ざん"],
+      "special": 0,
+      "word": "火山"
+    },
+    {
+      "blanked": "火〇",
+      "kanji": "山",
+      "meaning": "a volcano",
+      "readings": ["か", "ざん"],
+      "special": 1,
+      "word": "火山"
+    },
+    {
+      "blanked": "〇曜日",
+      "kanji": "火",
+      "meaning": "Tuesday",
+      "readings": ["か", "よう", "び"],
+      "special": 0,
+      "word": "火曜日"
+    },
+    {
+      "blanked": "火〇日",
+      "kanji": "曜",
+      "meaning": "Tuesday",
+      "readings": ["か", "よう", "び"],
+      "special": 1,
+      "word": "火曜日"
+    },
+    {
+      "blanked": "火曜〇",
+      "kanji": "日",
+      "meaning": "Tuesday",
+      "readings": ["か", "よう", "び"],
+      "special": 2,
+      "word": "火曜日"
+    },
+    {
+      "blanked": "〇花",
+      "kanji": "火",
+      "meaning": "a spark",
+      "readings": ["ひ", "ばな"],
+      "special": 0,
+      "word": "火花"
+    },
+    {
+      "blanked": "火〇",
+      "kanji": "花",
+      "meaning": "a spark",
+      "readings": ["ひ", "ばな"],
+      "special": 1,
+      "word": "火花"
+    },
+    {
+      "blanked": "〇き肉",
+      "kanji": "焼",
+      "meaning": "roast meat",
+      "readings": ["やき", "き", "にく"],
+      "special": 0,
+      "word": "焼き肉"
+    },
+    {
+      "blanked": "焼〇肉",
+      "kanji": "き",
+      "meaning": "roast meat",
+      "readings": ["やき", "き", "にく"],
+      "special": 1,
+      "word": "焼き肉"
+    },
+    {
+      "blanked": "焼き〇",
+      "kanji": "肉",
+      "meaning": "roast meat",
+      "readings": ["やき", "き", "にく"],
+      "special": 2,
+      "word": "焼き肉"
+    },
+    {
+      "blanked": "〇き鳥",
+      "kanji": "焼",
+      "meaning": "roast chicken",
+      "readings": ["や", "", "とり"],
+      "special": 0,
+      "word": "焼き鳥"
+    },
+    {
+      "blanked": "焼き〇",
+      "kanji": "鳥",
+      "meaning": "roast chicken",
+      "readings": ["や", "", "とり"],
+      "special": 2,
+      "word": "焼き鳥"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "牛",
+      "meaning": "cattle, cow",
+      "readings": ["うし"],
+      "special": 0,
+      "word": "牛"
+    },
+    {
+      "blanked": "〇乳",
+      "kanji": "牛",
+      "meaning": "cow's milk",
+      "readings": ["ぎゅう", "にゅう"],
+      "special": 0,
+      "word": "牛乳"
+    },
+    {
+      "blanked": "牛〇",
+      "kanji": "乳",
+      "meaning": "cow's milk",
+      "readings": ["ぎゅう", "にゅう"],
+      "special": 1,
+      "word": "牛乳"
+    },
+    {
+      "blanked": "〇肉",
+      "kanji": "牛",
+      "meaning": "beef",
+      "readings": ["ぎゅう", "にく"],
+      "special": 0,
+      "word": "牛肉"
+    },
+    {
+      "blanked": "牛〇",
+      "kanji": "肉",
+      "meaning": "beef",
+      "readings": ["ぎゅう", "にく"],
+      "special": 1,
+      "word": "牛肉"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "物",
+      "meaning": "thing",
+      "readings": ["もの"],
+      "special": 0,
+      "word": "物"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "犬",
+      "meaning": "a dog",
+      "readings": ["いぬ"],
+      "special": 0,
+      "word": "犬"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "猫",
+      "meaning": "a cat",
+      "readings": ["ねこ"],
+      "special": 0,
+      "word": "猫"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "猿",
+      "meaning": "a monkey",
+      "readings": ["さる"],
+      "special": 0,
+      "word": "猿"
+    },
+    {
+      "blanked": "〇きる",
+      "kanji": "生",
+      "meaning": "to live",
+      "readings": ["い", "", ""],
+      "special": 0,
+      "word": "生きる"
+    },
+    {
+      "blanked": "〇まれる",
+      "kanji": "生",
+      "meaning": "to be born",
+      "readings": ["う", "", "", ""],
+      "special": 0,
+      "word": "生まれる"
+    },
+    {
+      "blanked": "〇年月日",
+      "kanji": "生",
+      "meaning": "date of birth",
+      "readings": ["せい", "ねん", "がっ", "ぴ"],
+      "special": 0,
+      "word": "生年月日"
+    },
+    {
+      "blanked": "生〇月日",
+      "kanji": "年",
+      "meaning": "date of birth",
+      "readings": ["せい", "ねん", "がっ", "ぴ"],
+      "special": 1,
+      "word": "生年月日"
+    },
+    {
+      "blanked": "生年〇日",
+      "kanji": "月",
+      "meaning": "date of birth",
+      "readings": ["せい", "ねん", "がっ", "ぴ"],
+      "special": 2,
+      "word": "生年月日"
+    },
+    {
+      "blanked": "生年月〇",
+      "kanji": "日",
+      "meaning": "date of birth",
+      "readings": ["せい", "ねん", "がっ", "ぴ"],
+      "special": 3,
+      "word": "生年月日"
+    },
+    {
+      "blanked": "〇んぼ",
+      "kanji": "田",
+      "meaning": "rice field",
+      "readings": ["た", "", ""],
+      "special": 0,
+      "word": "田んぼ"
+    },
+    {
+      "blanked": "〇中",
+      "kanji": "田",
+      "meaning": "Tanaka (name)",
+      "readings": ["た", "なか"],
+      "special": 0,
+      "word": "田中"
+    },
+    {
+      "blanked": "田〇",
+      "kanji": "中",
+      "meaning": "Tanaka (name)",
+      "readings": ["た", "なか"],
+      "special": 1,
+      "word": "田中"
+    },
+    {
+      "blanked": "〇畑",
+      "kanji": "田",
+      "meaning": "fields of rice and crops",
+      "readings": ["た", "はた"],
+      "special": 0,
+      "word": "田畑"
+    },
+    {
+      "blanked": "田〇",
+      "kanji": "畑",
+      "meaning": "fields of rice and crops",
+      "readings": ["た", "はた"],
+      "special": 1,
+      "word": "田畑"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "男",
+      "meaning": "a man",
+      "readings": ["おとこ"],
+      "special": 0,
+      "word": "男"
+    },
+    {
+      "blanked": "〇の子",
+      "kanji": "男",
+      "meaning": "a boy",
+      "readings": ["おとこ", "", "こ"],
+      "special": 0,
+      "word": "男の子"
+    },
+    {
+      "blanked": "男の〇",
+      "kanji": "子",
+      "meaning": "a boy",
+      "readings": ["おとこ", "", "こ"],
+      "special": 2,
+      "word": "男の子"
+    },
+    {
+      "blanked": "〇子学生",
+      "kanji": "男",
+      "meaning": "a male student",
+      "readings": ["だん", "し", "がく", "せい"],
+      "special": 0,
+      "word": "男子学生"
+    },
+    {
+      "blanked": "男〇学生",
+      "kanji": "子",
+      "meaning": "a male student",
+      "readings": ["だん", "し", "がく", "せい"],
+      "special": 1,
+      "word": "男子学生"
+    },
+    {
+      "blanked": "男子〇生",
+      "kanji": "学",
+      "meaning": "a male student",
+      "readings": ["だん", "し", "がく", "せい"],
+      "special": 2,
+      "word": "男子学生"
+    },
+    {
+      "blanked": "男子学〇",
+      "kanji": "生",
+      "meaning": "a male student",
+      "readings": ["だん", "し", "がく", "せい"],
+      "special": 3,
+      "word": "男子学生"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "畑",
+      "meaning": "cultivated field",
+      "readings": ["はたけ"],
+      "special": 0,
+      "word": "畑"
+    },
+    {
+      "blanked": "〇鳥",
+      "kanji": "白",
+      "meaning": "a swan",
+      "readings": ["はく", "ちょう"],
+      "special": 0,
+      "word": "白鳥"
+    },
+    {
+      "blanked": "白〇",
+      "kanji": "鳥",
+      "meaning": "a swan",
+      "readings": ["はく", "ちょう"],
+      "special": 1,
+      "word": "白鳥"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "百",
+      "meaning": "100",
+      "readings": ["ひやく"],
+      "special": 0,
+      "word": "百"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "目",
+      "meaning": "eye",
+      "readings": ["め"],
+      "special": 0,
+      "word": "目"
+    },
+    {
+      "blanked": "〇上",
+      "kanji": "目",
+      "meaning": "one's superiors",
+      "readings": ["め", "うえ"],
+      "special": 0,
+      "word": "目上"
+    },
+    {
+      "blanked": "目〇",
+      "kanji": "上",
+      "meaning": "one's superiors",
+      "readings": ["め", "うえ"],
+      "special": 1,
+      "word": "目上"
+    },
+    {
+      "blanked": "〇次",
+      "kanji": "目",
+      "meaning": "a table of contents",
+      "readings": ["もく", "じ"],
+      "special": 0,
+      "word": "目次"
+    },
+    {
+      "blanked": "目〇",
+      "kanji": "次",
+      "meaning": "a table of contents",
+      "readings": ["もく", "じ"],
+      "special": 1,
+      "word": "目次"
+    },
+    {
+      "blanked": "〇的",
+      "kanji": "目",
+      "meaning": "a purpose",
+      "readings": ["もく", "てき"],
+      "special": 0,
+      "word": "目的"
+    },
+    {
+      "blanked": "目〇",
+      "kanji": "的",
+      "meaning": "a purpose",
+      "readings": ["もく", "てき"],
+      "special": 1,
+      "word": "目的"
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "短",
+      "meaning": "short",
+      "readings": ["みじか", ""],
+      "special": 0,
+      "word": "短い"
+    },
+    {
+      "blanked": "〇大",
+      "kanji": "短",
+      "meaning": "a junior college",
+      "readings": ["たん", "だい"],
+      "special": 0,
+      "word": "短大"
+    },
+    {
+      "blanked": "短〇",
+      "kanji": "大",
+      "meaning": "a junior college",
+      "readings": ["たん", "だい"],
+      "special": 1,
+      "word": "短大"
+    },
+    {
+      "blanked": "〇所",
+      "kanji": "短",
+      "meaning": "defect, weak point",
+      "readings": ["たん", "しょ"],
+      "special": 0,
+      "word": "短所"
+    },
+    {
+      "blanked": "短〇",
+      "kanji": "所",
+      "meaning": "defect, weak point",
+      "readings": ["たん", "しょ"],
+      "special": 1,
+      "word": "短所"
+    },
+    {
+      "blanked": "〇時間",
+      "kanji": "短",
+      "meaning": " a short period time",
+      "readings": ["たん", "じ", "かん"],
+      "special": 0,
+      "word": "短時間"
+    },
+    {
+      "blanked": "短〇間",
+      "kanji": "時",
+      "meaning": " a short period time",
+      "readings": ["たん", "じ", "かん"],
+      "special": 1,
+      "word": "短時間"
+    },
+    {
+      "blanked": "短時〇",
+      "kanji": "間",
+      "meaning": " a short period time",
+      "readings": ["たん", "じ", "かん"],
+      "special": 2,
+      "word": "短時間"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "石",
+      "meaning": "stone",
+      "readings": ["いし"],
+      "special": 0,
+      "word": "石"
+    },
+    {
+      "blanked": "〇川",
+      "kanji": "石",
+      "meaning": "Ishikawa (name)",
+      "readings": ["いし", "かわ"],
+      "special": 0,
+      "word": "石川"
+    },
+    {
+      "blanked": "石〇",
+      "kanji": "川",
+      "meaning": "Ishikawa (name)",
+      "readings": ["いし", "かわ"],
+      "special": 1,
+      "word": "石川"
+    },
+    {
+      "blanked": "〇川県",
+      "kanji": "石",
+      "meaning": "Ishikawa Prefecture",
+      "readings": ["いし", "かわ", "けん"],
+      "special": 0,
+      "word": "石川県"
+    },
+    {
+      "blanked": "石〇県",
+      "kanji": "川",
+      "meaning": "Ishikawa Prefecture",
+      "readings": ["いし", "かわ", "けん"],
+      "special": 1,
+      "word": "石川県"
+    },
+    {
+      "blanked": "石川〇",
+      "kanji": "県",
+      "meaning": "Ishikawa Prefecture",
+      "readings": ["いし", "かわ", "けん"],
+      "special": 2,
+      "word": "石川県"
+    },
+    {
+      "blanked": "〇油",
+      "kanji": "石",
+      "meaning": "pertol, oil",
+      "readings": ["せき", "ゆ"],
+      "special": 0,
+      "word": "石油"
+    },
+    {
+      "blanked": "石〇",
+      "kanji": "油",
+      "meaning": "pertol, oil",
+      "readings": ["せき", "ゆ"],
+      "special": 1,
+      "word": "石油"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "私",
+      "meaning": "I, me",
+      "readings": ["わたし"],
+      "special": 0,
+      "word": "私"
+    },
+    {
+      "blanked": "〇立大学",
+      "kanji": "私",
+      "meaning": "a private university",
+      "readings": ["し", "りつ", "だい", "がく"],
+      "special": 0,
+      "word": "私立大学"
+    },
+    {
+      "blanked": "私〇大学",
+      "kanji": "立",
+      "meaning": "a private university",
+      "readings": ["し", "りつ", "だい", "がく"],
+      "special": 1,
+      "word": "私立大学"
+    },
+    {
+      "blanked": "私立〇学",
+      "kanji": "大",
+      "meaning": "a private university",
+      "readings": ["し", "りつ", "だい", "がく"],
+      "special": 2,
+      "word": "私立大学"
+    },
+    {
+      "blanked": "私立大〇",
+      "kanji": "学",
+      "meaning": "a private university",
+      "readings": ["し", "りつ", "だい", "がく"],
+      "special": 3,
+      "word": "私立大学"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "竹",
+      "meaning": "bamboo",
+      "readings": ["たけ"],
+      "special": 0,
+      "word": "竹"
+    },
+    {
+      "blanked": "〇の子",
+      "kanji": "竹",
+      "meaning": "a bamboo shoot",
+      "readings": ["たけ", "", "こ"],
+      "special": 0,
+      "word": "竹の子"
+    },
+    {
+      "blanked": "竹の〇",
+      "kanji": "子",
+      "meaning": "a bamboo shoot",
+      "readings": ["たけ", "", "こ"],
+      "special": 2,
+      "word": "竹の子"
+    },
+    {
+      "blanked": "〇田",
+      "kanji": "竹",
+      "meaning": "Takeda (name)",
+      "readings": ["たけ", "だ"],
+      "special": 0,
+      "word": "竹田"
+    },
+    {
+      "blanked": "竹〇",
+      "kanji": "田",
+      "meaning": "Takeda (name)",
+      "readings": ["たけ", "だ"],
+      "special": 1,
+      "word": "竹田"
+    },
+    {
+      "blanked": "筑波〇",
+      "kanji": "山",
+      "meaning": "Mt. Tsukuba",
+      "readings": ["つく", "ば", "さん"],
+      "special": 2,
+      "word": "筑波山"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "米",
+      "meaning": "rice",
+      "readings": ["こめ"],
+      "special": 0,
+      "word": "米"
+    },
+    {
+      "blanked": "〇国",
+      "kanji": "米",
+      "meaning": "U.S.A",
+      "readings": ["べい", "こく"],
+      "special": 0,
+      "word": "米国"
+    },
+    {
+      "blanked": "米〇",
+      "kanji": "国",
+      "meaning": "U.S.A",
+      "readings": ["べい", "こく"],
+      "special": 1,
+      "word": "米国"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "糸",
+      "meaning": "thread",
+      "readings": ["いと"],
+      "special": 0,
+      "word": "糸"
+    },
+    {
+      "blanked": "〇茶",
+      "kanji": "紅",
+      "meaning": "blank tea",
+      "readings": ["こう", "ちゃ"],
+      "special": 0,
+      "word": "紅茶"
+    },
+    {
+      "blanked": "紅〇",
+      "kanji": "茶",
+      "meaning": "blank tea",
+      "readings": ["こう", "ちゃ"],
+      "special": 1,
+      "word": "紅茶"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "羊",
+      "meaning": "a sheep",
+      "readings": ["ひつじ"],
+      "special": 0,
+      "word": "羊"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "耳",
+      "meaning": "an ear",
+      "readings": ["みみ"],
+      "special": 0,
+      "word": "耳"
+    },
+    {
+      "blanked": "〇鼻科",
+      "kanji": "耳",
+      "meaning": "otorhinology (study of nose and ears)",
+      "readings": ["じ", "び", "か"],
+      "special": 0,
+      "word": "耳鼻科"
+    },
+    {
+      "blanked": "耳〇科",
+      "kanji": "鼻",
+      "meaning": "otorhinology (study of nose and ears)",
+      "readings": ["じ", "び", "か"],
+      "special": 1,
+      "word": "耳鼻科"
+    },
+    {
+      "blanked": "耳鼻〇",
+      "kanji": "科",
+      "meaning": "otorhinology (study of nose and ears)",
+      "readings": ["じ", "び", "か"],
+      "special": 2,
+      "word": "耳鼻科"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "肉",
+      "meaning": "meat",
+      "readings": ["にく"],
+      "special": 0,
+      "word": "肉"
+    },
+    {
+      "blanked": "〇体",
+      "kanji": "肉",
+      "meaning": "the body",
+      "readings": ["にく", "たい"],
+      "special": 0,
+      "word": "肉体"
+    },
+    {
+      "blanked": "肉〇",
+      "kanji": "体",
+      "meaning": "the body",
+      "readings": ["にく", "たい"],
+      "special": 1,
+      "word": "肉体"
+    },
+    {
+      "blanked": "〇屋",
+      "kanji": "肉",
+      "meaning": "a butcher shop",
+      "readings": ["にく", "や"],
+      "special": 0,
+      "word": "肉屋"
+    },
+    {
+      "blanked": "肉〇",
+      "kanji": "屋",
+      "meaning": "a butcher shop",
+      "readings": ["にく", "や"],
+      "special": 1,
+      "word": "肉屋"
+    },
+    {
+      "blanked": "〇力",
+      "kanji": "自",
+      "meaning": "one's own strength",
+      "readings": ["じ", "りき"],
+      "special": 0,
+      "word": "自力"
+    },
+    {
+      "blanked": "自〇",
+      "kanji": "力",
+      "meaning": "one's own strength",
+      "readings": ["じ", "りき"],
+      "special": 1,
+      "word": "自力"
+    },
+    {
+      "blanked": "〇動車",
+      "kanji": "自",
+      "meaning": "a car, an automobile",
+      "readings": ["じ", "どう", "しゃ"],
+      "special": 0,
+      "word": "自動車"
+    },
+    {
+      "blanked": "自〇車",
+      "kanji": "動",
+      "meaning": "a car, an automobile",
+      "readings": ["じ", "どう", "しゃ"],
+      "special": 1,
+      "word": "自動車"
+    },
+    {
+      "blanked": "自動〇",
+      "kanji": "車",
+      "meaning": "a car, an automobile",
+      "readings": ["じ", "どう", "しゃ"],
+      "special": 2,
+      "word": "自動車"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "花",
+      "meaning": "a flower",
+      "readings": ["はな"],
+      "special": 0,
+      "word": "花"
+    },
+    {
+      "blanked": "〇屋",
+      "kanji": "花",
+      "meaning": "a flower shop",
+      "readings": ["はな", "や"],
+      "special": 0,
+      "word": "花屋"
+    },
+    {
+      "blanked": "花〇",
+      "kanji": "屋",
+      "meaning": "a flower shop",
+      "readings": ["はな", "や"],
+      "special": 1,
+      "word": "花屋"
+    },
+    {
+      "blanked": "〇火",
+      "kanji": "花",
+      "meaning": "fireworks",
+      "readings": ["はな", "び"],
+      "special": 0,
+      "word": "花火"
+    },
+    {
+      "blanked": "花〇",
+      "kanji": "火",
+      "meaning": "fireworks",
+      "readings": ["はな", "び"],
+      "special": 1,
+      "word": "花火"
+    },
+    {
+      "blanked": "〇瓶",
+      "kanji": "花",
+      "meaning": "a vase",
+      "readings": ["か", "びん"],
+      "special": 0,
+      "word": "花瓶"
+    },
+    {
+      "blanked": "花〇",
+      "kanji": "瓶",
+      "meaning": "a vase",
+      "readings": ["か", "びん"],
+      "special": 1,
+      "word": "花瓶"
+    },
+    {
+      "blanked": "〇物",
+      "kanji": "荷",
+      "meaning": "a baggage",
+      "readings": ["に", "もつ"],
+      "special": 0,
+      "word": "荷物"
+    },
+    {
+      "blanked": "荷〇",
+      "kanji": "物",
+      "meaning": "a baggage",
+      "readings": ["に", "もつ"],
+      "special": 1,
+      "word": "荷物"
+    },
+    {
+      "blanked": "蕎〇屋",
+      "kanji": "麦",
+      "meaning": "soba shop, noodle shop",
+      "readings": ["そ", "ば", "や"],
+      "special": 1,
+      "word": "蕎麦屋"
+    },
+    {
+      "blanked": "蕎麦〇",
+      "kanji": "屋",
+      "meaning": "soba shop, noodle shop",
+      "readings": ["そ", "ば", "や"],
+      "special": 2,
+      "word": "蕎麦屋"
+    },
+    {
+      "blanked": "〇口",
+      "kanji": "西",
+      "meaning": "west entrance",
+      "readings": ["にし", "ぐち"],
+      "special": 0,
+      "word": "西口"
+    },
+    {
+      "blanked": "西〇",
+      "kanji": "口",
+      "meaning": "west entrance",
+      "readings": ["にし", "ぐち"],
+      "special": 1,
+      "word": "西口"
+    },
+    {
+      "blanked": "〇号",
+      "kanji": "記",
+      "meaning": "sign, symbol",
+      "readings": ["き", "ごう"],
+      "special": 0,
+      "word": "記号"
+    },
+    {
+      "blanked": "記〇",
+      "kanji": "号",
+      "meaning": "sign, symbol",
+      "readings": ["き", "ごう"],
+      "special": 1,
+      "word": "記号"
+    },
+    {
+      "blanked": "〇み物",
+      "kanji": "読",
+      "meaning": "reading material​",
+      "readings": ["よ", "", "もの"],
+      "special": 0,
+      "word": "読み物"
+    },
+    {
+      "blanked": "読み〇",
+      "kanji": "物",
+      "meaning": "reading material​",
+      "readings": ["よ", "", "もの"],
+      "special": 2,
+      "word": "読み物"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "豚",
+      "meaning": "a pig",
+      "readings": ["ぶた"],
+      "special": 0,
+      "word": "豚"
+    },
+    {
+      "blanked": "〇肉",
+      "kanji": "豚",
+      "meaning": "pork",
+      "readings": ["ぶた", "にく"],
+      "special": 0,
+      "word": "豚肉"
+    },
+    {
+      "blanked": "豚〇",
+      "kanji": "肉",
+      "meaning": "pork",
+      "readings": ["ぶた", "にく"],
+      "special": 1,
+      "word": "豚肉"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "貝",
+      "meaning": "shellfish",
+      "readings": ["かい"],
+      "special": 0,
+      "word": "貝"
+    },
+    {
+      "blanked": "〇殻",
+      "kanji": "貝",
+      "meaning": "a shell",
+      "readings": ["かい", "がら"],
+      "special": 0,
+      "word": "貝殻"
+    },
+    {
+      "blanked": "貝〇",
+      "kanji": "殻",
+      "meaning": "a shell",
+      "readings": ["かい", "がら"],
+      "special": 1,
+      "word": "貝殻"
+    },
+    {
+      "blanked": "〇い物",
+      "kanji": "買",
+      "meaning": "shopping",
+      "readings": ["か", "", "もの"],
+      "special": 0,
+      "word": "買い物"
+    },
+    {
+      "blanked": "買い〇",
+      "kanji": "物",
+      "meaning": "shopping",
+      "readings": ["か", "", "もの"],
+      "special": 2,
+      "word": "買い物"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "足",
+      "meaning": "a leg",
+      "readings": ["あし"],
+      "special": 0,
+      "word": "足"
+    },
+    {
+      "blanked": "〇す",
+      "kanji": "足",
+      "meaning": "to add",
+      "readings": ["た", ""],
+      "special": 0,
+      "word": "足す"
+    },
+    {
+      "blanked": "〇りる",
+      "kanji": "足",
+      "meaning": "to be enough",
+      "readings": ["た", "", ""],
+      "special": 0,
+      "word": "足りる"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "車",
+      "meaning": "car",
+      "readings": ["くるま"],
+      "special": 0,
+      "word": "車"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "野",
+      "meaning": "a field",
+      "readings": ["の"],
+      "special": 0,
+      "word": "野"
+    },
+    {
+      "blanked": "〇鳥",
+      "kanji": "野",
+      "meaning": "a wild bird",
+      "readings": ["や", "ちょう"],
+      "special": 0,
+      "word": "野鳥"
+    },
+    {
+      "blanked": "野〇",
+      "kanji": "鳥",
+      "meaning": "a wild bird",
+      "readings": ["や", "ちょう"],
+      "special": 1,
+      "word": "野鳥"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "金",
+      "meaning": "gold",
+      "readings": ["きん"],
+      "special": 0,
+      "word": "金"
+    },
+    {
+      "blanked": "〇曜日",
+      "kanji": "金",
+      "meaning": "Friday",
+      "readings": ["きん", "よう", "び"],
+      "special": 0,
+      "word": "金曜日"
+    },
+    {
+      "blanked": "金〇日",
+      "kanji": "曜",
+      "meaning": "Friday",
+      "readings": ["きん", "よう", "び"],
+      "special": 1,
+      "word": "金曜日"
+    },
+    {
+      "blanked": "金曜〇",
+      "kanji": "日",
+      "meaning": "Friday",
+      "readings": ["きん", "よう", "び"],
+      "special": 2,
+      "word": "金曜日"
+    },
+    {
+      "blanked": "〇田",
+      "kanji": "金",
+      "meaning": "Kaneda (name)",
+      "readings": ["かね", "だ"],
+      "special": 0,
+      "word": "金田"
+    },
+    {
+      "blanked": "金〇",
+      "kanji": "田",
+      "meaning": "Kaneda (name)",
+      "readings": ["かね", "だ"],
+      "special": 1,
+      "word": "金田"
+    },
+    {
+      "blanked": "〇魚",
+      "kanji": "金",
+      "meaning": "a goldfish",
+      "readings": ["きん", "ぎょ"],
+      "special": 0,
+      "word": "金魚"
+    },
+    {
+      "blanked": "金〇",
+      "kanji": "魚",
+      "meaning": "a goldfish",
+      "readings": ["きん", "ぎょ"],
+      "special": 1,
+      "word": "金魚"
+    },
+    {
+      "blanked": "〇木",
+      "kanji": "鈴",
+      "meaning": "Suzuki (name)",
+      "readings": ["すず", "き"],
+      "special": 0,
+      "word": "鈴木"
+    },
+    {
+      "blanked": "鈴〇",
+      "kanji": "木",
+      "meaning": "Suzuki (name)",
+      "readings": ["すず", "き"],
+      "special": 1,
+      "word": "鈴木"
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "長",
+      "meaning": "long",
+      "readings": ["なが", ""],
+      "special": 0,
+      "word": "長い"
+    },
+    {
+      "blanked": "〇男",
+      "kanji": "長",
+      "meaning": "eldest son",
+      "readings": ["ちょう", "なん"],
+      "special": 0,
+      "word": "長男"
+    },
+    {
+      "blanked": "長〇",
+      "kanji": "男",
+      "meaning": "eldest son",
+      "readings": ["ちょう", "なん"],
+      "special": 1,
+      "word": "長男"
+    },
+    {
+      "blanked": "〇野県",
+      "kanji": "長",
+      "meaning": "Nagano Prefecture",
+      "readings": ["なが", "の", "けん"],
+      "special": 0,
+      "word": "長野県"
+    },
+    {
+      "blanked": "長〇県",
+      "kanji": "野",
+      "meaning": "Nagano Prefecture",
+      "readings": ["なが", "の", "けん"],
+      "special": 1,
+      "word": "長野県"
+    },
+    {
+      "blanked": "長野〇",
+      "kanji": "県",
+      "meaning": "Nagano Prefecture",
+      "readings": ["なが", "の", "けん"],
+      "special": 2,
+      "word": "長野県"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "門",
+      "meaning": "a gate",
+      "readings": ["もん"],
+      "special": 0,
+      "word": "門"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "間",
+      "meaning": "between",
+      "readings": ["あいだ"],
+      "special": 0,
+      "word": "間"
+    },
+    {
+      "blanked": "〇に合う",
+      "kanji": "間",
+      "meaning": "to be on time",
+      "readings": ["ま", "", "あ", ""],
+      "special": 0,
+      "word": "間に合う"
+    },
+    {
+      "blanked": "間に〇う",
+      "kanji": "合",
+      "meaning": "to be on time",
+      "readings": ["ま", "", "あ", ""],
+      "special": 2,
+      "word": "間に合う"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "雨",
+      "meaning": "rain",
+      "readings": ["あめ"],
+      "special": 0,
+      "word": "雨"
+    },
+    {
+      "blanked": "〇天",
+      "kanji": "雨",
+      "meaning": "rainy weather",
+      "readings": ["う", "てん"],
+      "special": 0,
+      "word": "雨天"
+    },
+    {
+      "blanked": "雨〇",
+      "kanji": "天",
+      "meaning": "rainy weather",
+      "readings": ["う", "てん"],
+      "special": 1,
+      "word": "雨天"
+    },
+    {
+      "blanked": "〇水",
+      "kanji": "雨",
+      "meaning": "rain water",
+      "readings": ["あま", "みず"],
+      "special": 0,
+      "word": "雨水"
+    },
+    {
+      "blanked": "雨〇",
+      "kanji": "水",
+      "meaning": "rain water",
+      "readings": ["あま", "みず"],
+      "special": 1,
+      "word": "雨水"
+    },
+    {
+      "blanked": "〇車",
+      "kanji": "電",
+      "meaning": "a train",
+      "readings": ["でん", "しゃ"],
+      "special": 0,
+      "word": "電車"
+    },
+    {
+      "blanked": "電〇",
+      "kanji": "車",
+      "meaning": "a train",
+      "readings": ["でん", "しゃ"],
+      "special": 1,
+      "word": "電車"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "馬",
+      "meaning": "horse",
+      "readings": ["うま"],
+      "special": 0,
+      "word": "馬"
+    },
+    {
+      "blanked": "〇力",
+      "kanji": "馬",
+      "meaning": "horsepower",
+      "readings": ["ば", "りき"],
+      "special": 0,
+      "word": "馬力"
+    },
+    {
+      "blanked": "馬〇",
+      "kanji": "力",
+      "meaning": "horsepower",
+      "readings": ["ば", "りき"],
+      "special": 1,
+      "word": "馬力"
+    },
+    {
+      "blanked": "〇肉",
+      "kanji": "馬",
+      "meaning": "horse meat",
+      "readings": ["ば", "にく"],
+      "special": 0,
+      "word": "馬肉"
+    },
+    {
+      "blanked": "馬〇",
+      "kanji": "肉",
+      "meaning": "horse meat",
+      "readings": ["ば", "にく"],
+      "special": 1,
+      "word": "馬肉"
+    },
+    {
+      "blanked": "〇車",
+      "kanji": "馬",
+      "meaning": "a carriage",
+      "readings": ["ば", "しゃ"],
+      "special": 0,
+      "word": "馬車"
+    },
+    {
+      "blanked": "馬〇",
+      "kanji": "車",
+      "meaning": "a carriage",
+      "readings": ["ば", "しゃ"],
+      "special": 1,
+      "word": "馬車"
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "高",
+      "meaning": "tall, expensive",
+      "readings": ["たか", ""],
+      "special": 0,
+      "word": "高い"
+    },
+    {
+      "blanked": "〇校",
+      "kanji": "高",
+      "meaning": "high school",
+      "readings": ["こう", "こう"],
+      "special": 0,
+      "word": "高校"
+    },
+    {
+      "blanked": "高〇",
+      "kanji": "校",
+      "meaning": "high school",
+      "readings": ["こう", "こう"],
+      "special": 1,
+      "word": "高校"
+    },
+    {
+      "blanked": "〇橋",
+      "kanji": "高",
+      "meaning": "Takahashi (name)",
+      "readings": ["たか", "はし"],
+      "special": 0,
+      "word": "高橋"
+    },
+    {
+      "blanked": "高〇",
+      "kanji": "橋",
+      "meaning": "Takahashi (name)",
+      "readings": ["たか", "はし"],
+      "special": 1,
+      "word": "高橋"
+    },
+    {
+      "blanked": "〇速",
+      "kanji": "高",
+      "meaning": "high-speed",
+      "readings": ["こう", "そく"],
+      "special": 0,
+      "word": "高速"
+    },
+    {
+      "blanked": "高〇",
+      "kanji": "速",
+      "meaning": "high-speed",
+      "readings": ["こう", "そく"],
+      "special": 1,
+      "word": "高速"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "魚",
+      "meaning": "fish",
+      "readings": ["さかな"],
+      "special": 0,
+      "word": "魚"
+    },
+    {
+      "blanked": "〇屋",
+      "kanji": "魚",
+      "meaning": "a fish shop",
+      "readings": ["さかな", "や"],
+      "special": 0,
+      "word": "魚屋"
+    },
+    {
+      "blanked": "魚〇",
+      "kanji": "屋",
+      "meaning": "a fish shop",
+      "readings": ["さかな", "や"],
+      "special": 1,
+      "word": "魚屋"
+    },
+    {
+      "blanked": "〇肉",
+      "kanji": "魚",
+      "meaning": "fish meat",
+      "readings": ["ぎょ", "にく"],
+      "special": 0,
+      "word": "魚肉"
+    },
+    {
+      "blanked": "魚〇",
+      "kanji": "肉",
+      "meaning": "fish meat",
+      "readings": ["ぎょ", "にく"],
+      "special": 1,
+      "word": "魚肉"
+    },
+    {
+      "blanked": "〇",
+      "kanji": "鳥",
+      "meaning": "a bird",
+      "readings": ["とり"],
+      "special": 0,
+      "word": "鳥"
+    },
+    {
+      "blanked": "〇肉",
+      "kanji": "鳥",
+      "meaning": "chicken",
+      "readings": ["とり", "にく"],
+      "special": 0,
+      "word": "鳥肉"
+    },
+    {
+      "blanked": "鳥〇",
+      "kanji": "肉",
+      "meaning": "chicken",
+      "readings": ["とり", "にく"],
+      "special": 1,
+      "word": "鳥肉"
+    }
+  ]
+}

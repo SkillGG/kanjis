@@ -25,7 +25,7 @@ import {
 
 export type KanjiDB = DBSchema & {
   wordbank: {
-    key: [string, number];
+    key: [string, number, string[]];
     value: QuizWord;
     indexes: {
       kanji: string;
@@ -47,10 +47,12 @@ export type KanjiDB = DBSchema & {
   };
 };
 
+import wordBankWords from "@/pages/wordbank/wordbank.json";
+
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [dbSchema] = useState<DBInit<KanjiDB>>({
     name: "kanjiDB",
-    version: 14,
+    version: 16,
     seed(db) {
       console.log("seeding!");
       if (db.objectStoreNames.contains("kanji")) {
@@ -70,6 +72,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         void db.count("wordbank").then((q) => {
           if (q === 0) {
             // TODO: seed with default words
+            const defaultWords = wordBankWords.words as QuizWord[];
+            for (const word of defaultWords) {
+              void db.put("wordbank", word);
+            }
+            localStorage.setItem(
+              LS_KEYS.wordbank_ver,
+              wordBankWords.version as string,
+            );
           }
         });
       }
@@ -96,11 +106,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         if (!db.objectStoreNames.contains("draw"))
           db.createObjectStore("draw", { keyPath: "sessionID" });
       }
-      if (o <= 13) {
+      if (o <= 15) {
         if (db.objectStoreNames.contains("wordbank"))
           db.deleteObjectStore("wordbank");
         const wordbankStore = db.createObjectStore("wordbank", {
-          keyPath: ["word", "special"],
+          keyPath: ["word", "special", "readings"],
         });
         if (wordbankStore) {
           if (!wordbankStore.indexNames.contains("kanji"))

@@ -8,10 +8,24 @@ import {
   toRQW,
 } from "@/components/draw/quizWords";
 import { noop } from "@/utils/utils";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import kanjiCSS from "@/components/list/list.module.css";
 
 import creatorCSS from "./creator.module.css";
-import { useLocalStorage } from "@/components/localStorageProvider";
+import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
+
+const POPUP_SHOW_TIME = 1000;
+
+import defaultWordBank from "./wordbank.json";
+import { gt, inc, SemVer } from "semver";
+import Link from "next/link";
 
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
@@ -28,10 +42,22 @@ export default function KanjiCardCreator() {
 
   const [copied, setCopied] = useState(false);
 
+  const [sureIfAdd, setSureIfAdd] = useState(false);
+
+  const [autoFilter, setAutoFilter] = useState(true);
+
   const allRef = useRef<HTMLButtonElement>(null);
   const addRef = useRef<HTMLButtonElement>(null);
   const mainInput = useRef<HTMLInputElement>(null);
   const meaningInput = useRef<HTMLInputElement>(null);
+
+  const shownWords = useMemo(() => {
+    return words
+      ?.filter((q) => (autoFilter ? q.word.includes(wordVal) : true))
+      .reverse();
+  }, [autoFilter, wordVal, words]);
+
+  const [canUpdateBank, setCanUpdateBank] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -50,39 +76,15 @@ export default function KanjiCardCreator() {
         })),
       );
     })();
+
+    const wordver = LS.getString(LS_KEYS.wordbank_ver);
+    if (!wordver || gt(defaultWordBank.version as string, wordver)) {
+      setCanUpdateBank(true);
+    }
   }, [LS, words]);
 
   useEffect(() => {
     function handlekeydown(e: KeyboardEvent) {
-      if (e.code === "KeyW" && e.altKey) {
-        allRef.current?.click();
-      }
-      if (e.code === "KeyQ" && (e.ctrlKey || e.altKey)) {
-        const nextToFocused = document.querySelector<HTMLInputElement>(
-          "div:has(.reading-input:focus) + div > .reading-input",
-        );
-        const first = document.querySelector<HTMLInputElement>(
-          ".reading-input:not(:focus)",
-        );
-        console.log("keyup event", nextToFocused, first);
-        const focused = document.querySelector<HTMLInputElement>("input:focus");
-
-        if (e.isComposing) {
-          // fix chrome IME bugging out and firing this event twice if triggered while isComposing
-          console.warn("Applied chrome being weird fix!");
-          focused?.blur();
-          setTimeout(() => (nextToFocused ?? first)?.focus(), 20);
-        } else {
-          focused?.blur();
-          (nextToFocused ?? first)?.focus();
-        }
-      }
-      if (e.code === "KeyA" && e.altKey) {
-        mainInput.current?.focus();
-      }
-      if (e.code === "Enter" && (e.ctrlKey || e.altKey)) {
-        addRef.current?.click();
-      }
       const num = /Digit(\d)/.exec(e.code);
       if (num && e.altKey) {
         const special = parseInt(num[1] ?? "a");
@@ -116,6 +118,71 @@ export default function KanjiCardCreator() {
     }
   }, [copied]);
 
+  const [popup, setPopup] = useState<
+    | {
+        text: React.ReactNode;
+        time?: number;
+        borderColor?: string;
+        color?: string;
+      }
+    | {
+        text: (close: () => void) => React.ReactNode;
+        time: "user";
+        borderColor?: string;
+        color?: string;
+      }
+    | null
+  >(null);
+  const [popupOpen, setPopupOpen] = useState(false);
+
+  useEffect(() => {
+    if (popup === null) return;
+    setPopupOpen(true);
+    if (popup.time !== "user") {
+      const oT = setTimeout(() => {
+        setPopupOpen(false);
+      }, popup.time ?? POPUP_SHOW_TIME);
+      return () => {
+        clearTimeout(oT);
+      };
+    }
+  }, [popup]);
+
+  useEffect(() => {
+    if (!popupOpen) {
+      const cT = setTimeout(() => {
+        setPopup(null);
+      }, 200);
+      return () => {
+        clearTimeout(cT);
+      };
+    }
+  }, [popupOpen]);
+
+  const updateBank = useCallback(async () => {
+    if (!LS.idb) return;
+    const words = defaultWordBank.words as QuizWord[];
+    console.log("Updating wordbank!");
+    const skipped = [];
+    const added = [];
+    for (const word of words) {
+      const numberof = await LS.idb.count("wordbank", [
+        word.word,
+        word.special,
+        word.readings,
+      ]);
+      if (numberof >= 1) {
+        skipped.push(word);
+        continue;
+      }
+      await LS.idb.put("wordbank", word);
+      added.push(word);
+    }
+    console.log("Update results: addedd:", added, "skipped: ", skipped);
+    LS.set(LS_KEYS.wordbank_ver, defaultWordBank.version);
+    setCanUpdateBank(false);
+  }, [LS]);
+
   useEffect(() => {
     setReadings((q) => {
       if (q.length < wordVal.length)
@@ -126,23 +193,53 @@ export default function KanjiCardCreator() {
       return [...q.slice(0, wordVal.length)];
     });
     setSpecial((q) => {
-      return q.filter((q) => q < wordVal.length);
+      return [...q.filter((q) => q < wordVal.length), wordVal.length];
     });
   }, [wordVal]);
 
   return (
     <>
-      <div className="mx-auto w-fit max-w-[50vw] text-center">
+      {popup && (
+        <div
+          className={kanjiCSS.popup}
+          style={{
+            "--borderColor": popup.borderColor ?? "green",
+            "--textColor": popup.color ?? "white",
+          }}
+          data-open={popupOpen ? "open" : "closed"}
+        >
+          <div>
+            {typeof popup.text == "function"
+              ? popup.text(() => setPopupOpen(false))
+              : popup.text}
+          </div>
+        </div>
+      )}
+      <Link
+        className={
+          "absolute block items-center justify-start p-2 text-left underline"
+        }
+        href={"/"}
+      >
+        Go back
+      </Link>
+      <div className="mx-auto w-fit max-w-[90vw] text-center sm:max-w-[70vw]">
         <div className="text-xl">Wordbank</div>
         <div className="text-[1.2rem]">
           A place to add all your words you want to use to learn with. Write a
-          word into the main field, select which kanjis do you want to make
-          &quot;guessable&quot; and click ADD
+          word into the main field, the green kanji will be made
+          &quot;guessable&quot;. Click ADD
         </div>
-        <div>Double click reading / alt + num - toggle this kanji addition</div>
-        <div>Alt + a - toggle every reading</div>
-        <div>alt + q focus next reading field:</div>
-        <div className="flex max-w-[50vw] flex-wrap">
+        <div>You can use enter to quickly focus next fields!</div>
+        <label>
+          Filter data on input
+          <input
+            type="checkbox"
+            onChange={() => setAutoFilter((p) => !p)}
+            checked={autoFilter}
+          />
+        </label>
+        <div className="flex w-full max-w-[100%] flex-wrap sm:max-w-[100%]">
           {readings.map((a, i) => (
             <div
               key={`read_${i}`}
@@ -166,9 +263,32 @@ export default function KanjiCardCreator() {
                     p.includes(i) ? p.filter((q) => q !== i) : [...p, i],
                   );
                 }}
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    const next =
+                      e.currentTarget.parentElement?.nextElementSibling?.querySelector(
+                        "input",
+                      ) ?? meaningInput.current;
+                    const prev =
+                      e.currentTarget?.parentElement?.previousElementSibling?.querySelector(
+                        "input",
+                      ) ?? mainInput.current;
+
+                    const toFocus = e.shiftKey ? prev : next;
+
+                    if (e.nativeEvent.isComposing) {
+                      e.currentTarget.blur();
+                      setTimeout(() => toFocus?.focus(), 20);
+                    } else {
+                      e.currentTarget.blur();
+                      toFocus?.focus();
+                    }
+                  }
+                }}
                 className="reading-input m-0 w-[8rem] justify-self-center border-none p-0 text-center text-[1.4rem] outline-none placeholder:text-center"
                 style={{
                   backgroundColor: special.includes(i) ? "green" : "initial",
+                  imeMode: "active",
                 }}
               />
             </div>
@@ -190,108 +310,258 @@ export default function KanjiCardCreator() {
             </>
           )}
         </div>
-        <div className="mx-auto mt-1 w-fit">
-          <input
-            onKeyDown={(e) => {
-              if (e.code === "Enter") {
-                if (e.nativeEvent.isComposing) {
-                  e.currentTarget.blur();
-                  setTimeout(() => meaningInput.current?.focus(), 20);
-                  meaningInput.current?.focus();
-                } else {
-                  e.currentTarget.blur();
-                  meaningInput.current?.focus();
-                }
-              }
-            }}
-            ref={mainInput}
-            className="w-[50%] text-center outline-none"
-            value={wordVal}
-            onChange={(e) => setWordVal(e.target.value)}
-          />
-          <input
-            ref={meaningInput}
-            placeholder="Meaning"
-            className="ml-2 w-[20%] text-center outline-none"
-            value={meaning}
-            onChange={(e) => setMeaning(e.target.value)}
-          />
-          <button
-            className="ml-2 p-3"
-            ref={addRef}
-            onClick={() => {
-              void (async () => {
-                for (const sp of special) {
-                  const kanji = wordVal[sp];
-                  if (kanji) {
-                    const newW: QuizWord = {
-                      kanji: kanji,
-                      readings,
-                      special: sp,
-                      word: wordVal,
-                      meaning,
-                      blanked: getWordWithout(wordVal, sp),
-                    };
-                    console.log("puttin in", newW);
-                    setWords((p) => (!p ? [toRQW(newW)] : [...p, toRQW(newW)]));
-                    await LS.idb?.put("wordbank", newW);
+        <div className="mx-auto mt-1 w-full">
+          <div className="mb-1 grid w-full grid-rows-2 sm:grid-cols-2 sm:grid-rows-1">
+            <input
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  const next =
+                    document.querySelector<HTMLInputElement>(
+                      ".reading-input",
+                    ) ?? meaningInput.current;
+                  if (e.nativeEvent.isComposing) {
+                    e.currentTarget.blur();
+                    setTimeout(() => next?.focus(), 20);
+                  } else {
+                    e.currentTarget.blur();
+                    next?.focus();
                   }
                 }
-                setMeaning("");
-                setWordVal("");
-                mainInput.current?.focus();
-              })();
-            }}
-          >
-            ADD (alt + return)
-          </button>
-          <button
-            className="ml-2 p-3"
-            onClick={() => {
-              if (words) {
-                void navigator.clipboard.writeText(JSON.stringify(words));
-                setCopied(true);
-              }
-            }}
-          >
-            {copied ? "DONE" : "COPY"}
-          </button>
-        </div>
-      </div>
-      <div className="text-center text-xl">Kanjis currently in wordbank:</div>
-      <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
-        {words
-          ?.filter((q) => q.word.includes(wordVal))
-          ?.map((q, i) => (
-            <div
-              key={`kc_${q.word}_${q.special}`}
-              className="w-fit flex-grow"
-              onDoubleClick={() => {
-                setWords(() => {
-                  return words.filter((_, ix) => ix !== i);
-                });
-                console.log("Removing ", q.blanked, "from the store!");
-                void LS.idb?.delete("wordbank", [q.word, q.special]);
+              }}
+              ref={mainInput}
+              style={{
+                imeMode: "active",
+              }}
+              className="w-full text-center outline-none"
+              value={wordVal}
+              placeholder="単語"
+              onChange={(e) => {
+                setSureIfAdd(false);
+                setWordVal(e.target.value);
+              }}
+            />
+            <input
+              ref={meaningInput}
+              placeholder="意味"
+              type="tel"
+              className="w-full text-center outline-none sm:ml-2"
+              value={meaning}
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  if (e.shiftKey) {
+                    // go back
+                    e.currentTarget.blur();
+                    const prev =
+                      document.querySelector<HTMLInputElement>(
+                        "div:has(.reading-input):last-of-type > input",
+                      ) ?? mainInput.current;
+                    setTimeout(() => prev?.focus(), 20);
+                    return;
+                  }
+                  addRef.current?.click();
+                }
+              }}
+              onChange={(e) => {
+                setSureIfAdd(false);
+                setMeaning(e.target.value);
+              }}
+            />
+          </div>
+          <div>
+            <button
+              className="ml-2 p-3"
+              ref={addRef}
+              onClick={() => {
+                if (!meaning && !sureIfAdd) {
+                  return setSureIfAdd(true);
+                }
+                void (async () => {
+                  const couldntAdd = [];
+                  for (const sp of special) {
+                    const kanji = wordVal[sp];
+                    if (kanji) {
+                      const newW: QuizWord = {
+                        kanji: kanji,
+                        readings,
+                        special: sp,
+                        word: wordVal,
+                        meaning,
+                        blanked: getWordWithout(wordVal, sp),
+                      };
+
+                      if (
+                        words?.find(
+                          (w) =>
+                            w.word === wordVal &&
+                            w.special === sp &&
+                            w.readings.reduce(
+                              (p, n, i) => (!p ? p : n === readings[i]),
+                              true,
+                            ),
+                        )
+                      ) {
+                        couldntAdd.push(newW);
+                        continue;
+                      }
+
+                      console.log("puttin in", newW);
+                      setWords((p) =>
+                        !p ? [toRQW(newW)] : [...p, toRQW(newW)],
+                      );
+                      await LS.idb?.put("wordbank", newW);
+                      setSureIfAdd(false);
+                    }
+                  }
+                  if (couldntAdd.length > 0) {
+                    setPopup({
+                      text: (
+                        <div>
+                          Could not create words for:
+                          <div className="text-center">
+                            {couldntAdd.map((p) => (
+                              <div
+                                className="mb-2 border-2 text-xl"
+                                key={`${p.word},${p.special}`}
+                              >
+                                {toRQW(p).hint}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ),
+                      borderColor: "red",
+                      time: 2000,
+                    });
+                  }
+                  setMeaning("");
+                  setWordVal("");
+                  mainInput.current?.focus();
+                })();
               }}
             >
-              <KanjiCard
-                classNames={{ border: "w-full", text: "text-xl" }}
-                key={`${q.word}_${q.special}_quiz`}
-                commit={noop}
-                word={q}
-                disableButtons
-                sideOverride="quiz"
-              />
-              <KanjiCard
-                key={`${q.word}_${q.special}_ans`}
-                classNames={{ border: "w-full", text: "text-xl" }}
-                commit={noop}
-                word={q}
-                disableButtons
-                sideOverride="answer"
-              />
-            </div>
-          ))}
+              {sureIfAdd ? (
+                <b className="text-[red]">No meaning! Are you sure?</b>
+              ) : (
+                "ADD (alt + return)"
+              )}
+            </button>
+            <button
+              className="ml-2 p-3"
+              onClick={() => {
+                if (words) {
+                  const newVer = inc(
+                    defaultWordBank.version as string,
+                    "patch",
+                    true,
+                  );
+                  if (!newVer) return;
+                  void navigator.clipboard.writeText(
+                    JSON.stringify({
+                      version: newVer,
+                      words: words.map((q) => {
+                        const {
+                          blanked,
+                          kanji,
+                          meaning,
+                          readings,
+                          special,
+                          word,
+                        } = q;
+                        return {
+                          blanked,
+                          kanji,
+                          meaning,
+                          readings,
+                          special,
+                          word,
+                        } as QuizWord;
+                      }),
+                    }),
+                  );
+                  setCopied(true);
+                }
+              }}
+            >
+              {copied ? <span className="text-green-500">DONE</span> : "COPY"}
+            </button>
+
+            {canUpdateBank && (
+              <button
+                className="ml-2 p-3"
+                onClick={() => {
+                  void updateBank();
+                }}
+              >
+                Update ({LS.getString(LS_KEYS.wordbank_ver) ?? "0.0.1"} =&gt;{" "}
+                {defaultWordBank.version})
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="text-center text-xl">
+        Kanjis currently in wordbank (
+        {new Set(words?.map((w) => w.word) ?? []).size}):
+      </div>
+      <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
+        {shownWords?.map((q, i) => (
+          <div
+            key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
+            className="w-fit flex-grow"
+            onContextMenu={async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!LS?.idb || !words) return;
+
+              console.log("Removing ", [q.word, q.special], "from the store!");
+              await LS.idb.delete("wordbank", [q.word, q.special, q.readings]);
+              setWords(() => {
+                return (
+                  words.filter(
+                    (w) =>
+                      `${q.kanji}_${q.special}_${q.readings.join("_")}` !==
+                      `${w.kanji}_${w.special}_${w.readings.join("_")}`,
+                  ) ?? null
+                );
+              });
+            }}
+          >
+            <KanjiCard
+              classNames={{
+                border:
+                  "w-full border-t-[blue] border-x-[blue] border-[1px] border-b-[yellow]",
+                text: "text-xl",
+              }}
+              styles={{
+                border: {
+                  borderBottomStyle: "dotted",
+                },
+              }}
+              key={`${q.word}_${q.special}_${q.readings.join("_")}_quiz`}
+              commit={noop}
+              word={q}
+              disableButtons
+              sideOverride="quiz"
+            />
+            <KanjiCard
+              key={`${q.word}_${q.special}_${q.readings.join("_")}_ans`}
+              classNames={{
+                border:
+                  "w-full border-b-[blue] border-x-[blue] border-[1px] border-t-[yellow]",
+                text: "text-xl",
+              }}
+              styles={{
+                border: {
+                  borderTopStyle: "dotted",
+                },
+              }}
+              commit={noop}
+              word={q}
+              disableButtons
+              sideOverride="answer"
+            />
+          </div>
+        ))}
       </div>
     </>
   );

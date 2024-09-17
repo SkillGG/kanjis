@@ -60,6 +60,7 @@ export const LS_KEYS = {
   omit_version: "omit_kanji_version",
   badges: "show_badges",
   row_count: "rowCount",
+  wordbank_ver: "wordbank_version",
 } as const;
 
 export type DBInit<T extends DBSchema> = {
