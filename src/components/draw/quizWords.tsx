@@ -33,7 +33,7 @@ export const getReadings = (
     throw new Error("The word and readings array's lengths do not match!");
   return (
     <>
-      <div>{meaning}</div>
+      <div style={{ lineHeight: "1.5em" }}>{meaning}</div>
       <ruby style={{ ...style?.ruby }}>
         {readings.map((r, i) => {
           return (
@@ -74,7 +74,7 @@ export const getReadingsWithout = (
     throw new Error("The special character is out of bounds!");
   return (
     <>
-      <div>{meaning}</div>
+      <div style={{ lineHeight: "1.5em" }}>{meaning}</div>
       <ruby style={{ ...style?.ruby }}>
         {readings.map((r, i) => {
           return (

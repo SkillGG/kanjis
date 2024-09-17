@@ -82,11 +82,13 @@ export const Quizlet = ({
             ruby: {
               fontFamily: myFont.style.fontFamily,
               fontSize: "10rem",
+              lineHeight: "1.25em",
               "--color": "green",
             },
           },
           hint: {
             ruby: {
+              lineHeight: "1.25em",
               fontSize: "10rem",
             },
           },
