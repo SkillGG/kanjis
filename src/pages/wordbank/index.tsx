@@ -53,7 +53,7 @@ export default function KanjiCardCreator() {
   }, [LS, words]);
 
   useEffect(() => {
-    function handleKeydown(e: KeyboardEvent) {
+    function handlekeydown(e: KeyboardEvent) {
       if (e.code === "KeyW" && e.altKey) {
         allRef.current?.click();
       }
@@ -64,8 +64,18 @@ export default function KanjiCardCreator() {
         const first = document.querySelector<HTMLInputElement>(
           ".reading-input:not(:focus)",
         );
-        console.log(nextToFocused, first);
-        (nextToFocused ?? first)?.focus();
+        console.log("keyup event", nextToFocused, first);
+        const focused = document.querySelector<HTMLInputElement>("input:focus");
+
+        if (e.isComposing) {
+          // fix chrome IME bugging out and firing this event twice if triggered while isComposing
+          console.warn("Applied chrome being weird fix!");
+          focused?.blur();
+          setTimeout(() => (nextToFocused ?? first)?.focus(), 20);
+        } else {
+          focused?.blur();
+          (nextToFocused ?? first)?.focus();
+        }
       }
       if (e.code === "KeyA" && e.altKey) {
         mainInput.current?.focus();
@@ -85,9 +95,13 @@ export default function KanjiCardCreator() {
         }
       }
     }
-    window.addEventListener("keydown", handleKeydown);
+    console.log("removing keyup");
+    window.removeEventListener("keydown", handlekeydown);
+    console.log("adding keydown");
+    window.addEventListener("keydown", handlekeydown);
     return () => {
-      window.removeEventListener("keydown", handleKeydown);
+      console.log("removing keydown(eff)");
+      window.removeEventListener("keydown", handlekeydown);
     };
   }, []);
 
@@ -180,7 +194,14 @@ export default function KanjiCardCreator() {
           <input
             onKeyDown={(e) => {
               if (e.code === "Enter") {
-                meaningInput.current?.focus();
+                if (e.nativeEvent.isComposing) {
+                  e.currentTarget.blur();
+                  setTimeout(() => meaningInput.current?.focus(), 20);
+                  meaningInput.current?.focus();
+                } else {
+                  e.currentTarget.blur();
+                  meaningInput.current?.focus();
+                }
               }
             }}
             ref={mainInput}
