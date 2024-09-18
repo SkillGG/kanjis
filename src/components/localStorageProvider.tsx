@@ -92,7 +92,6 @@ export const LocalStorageProvider = ({
         dbCreator.init?.(database, oV, nV, transaction, ev);
       },
     }).then((db) => {
-      console.log("created a db", db);
       setDB(db);
       dbCreator.seed(db);
     });
@@ -165,7 +164,6 @@ export const LocalStorageProvider = ({
       }
     },
     set<T extends LSData>(key: string, value: T | null) {
-      // console.log("[LS] ", key, ": ", value);
       if (typeof window === undefined) return;
       if (!value) {
         localStorage.removeItem(key);

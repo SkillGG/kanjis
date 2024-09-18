@@ -197,86 +197,98 @@ export default function Draw() {
           )}
           <span>{sesssions.length === 0 ? "C" : "c"}reate a new session</span>
         </div>
-        <div ref={nameDiv}>
-          <input
-            placeholder="sName"
-            className="text-center text-[1rem]"
-            style={{
-              ...(sessionCreationError?.reason === "name"
-                ? { borderColor: "red" }
-                : {}),
-            }}
-            value={sessionName}
-            onChange={(e) => {
-              setSessionCreationError(null);
-              setSessionName(e.target.value);
-            }}
-          />
-          <button
-            onClick={async () => {
-              if (!sessionName) {
-                return setSessionCreationError({
-                  reason: "name",
-                  el: "Cannot create a session without a name!",
-                });
-              }
-              if (!/^[a-z0-9_\- ]+$/i.exec(sessionName))
-                return setSessionCreationError({
-                  reason: "name",
-                  el: (
-                    <>
-                      You can only use &quot;<code>A-Z0-9_- </code>&quot; in
-                      your session name!
-                    </>
-                  ),
-                });
-              if (!LS.idb) return;
+        <div ref={nameDiv} className="flex flex-wrap gap-x-1">
+          <div className="relative flex min-h-[2.5rem] underline after:absolute after:left-[calc(50%_-_21px)] after:top-[-5px] after:content-['Points']">
+            <input
+              className="w-[4rem] border-green-400 text-center text-[1rem] outline-none"
+              type="number"
+              maxLength={4}
+              minLength={1}
+              min={10}
+            />
+          </div>
+          <div className="flex">
+            <input
+              placeholder="sName"
+              className="text-center text-[1rem] outline-none"
+              style={{
+                ...(sessionCreationError?.reason === "name"
+                  ? { borderColor: "red" }
+                  : {}),
+              }}
+              value={sessionName}
+              onChange={(e) => {
+                setSessionCreationError(null);
+                setSessionName(e.target.value);
+              }}
+            />
+            <button
+              onClick={async () => {
+                if (!sessionName) {
+                  return setSessionCreationError({
+                    reason: "name",
+                    el: "Cannot create a session without a name!",
+                  });
+                }
+                if (!/^[a-z0-9_\- ]+$/i.exec(sessionName))
+                  return setSessionCreationError({
+                    reason: "name",
+                    el: (
+                      <>
+                        You can only use &quot;<code>A-Z0-9_- </code>&quot; in
+                        your session name!
+                      </>
+                    ),
+                  });
+                if (!LS.idb) return;
 
-              if ((await LS.idb.count("draw", sessionName)) > 0) {
-                return setSessionCreationError({
-                  reason: "name",
-                  el: `Session with that name already exists!`,
-                });
-              }
+                if ((await LS.idb.count("draw", sessionName)) > 0) {
+                  return setSessionCreationError({
+                    reason: "name",
+                    el: `Session with that name already exists!`,
+                  });
+                }
 
-              if (selectedKanjis.length <= MIN_SESSION_SIZE) {
-                return setSessionCreationError({
-                  reason: "kanjiNum",
-                  el: `Cannot create a session with less than ${MIN_SESSION_SIZE}
+                if (selectedKanjis.length <= MIN_SESSION_SIZE) {
+                  return setSessionCreationError({
+                    reason: "kanjiNum",
+                    el: `Cannot create a session with less than ${MIN_SESSION_SIZE}
                     kanjis!`,
-                });
-              }
-              if (
-                words.filter((f) => selectedKanjis.includes(f.kanji)).length <
-                MIN_WORD_SIZE
-              ) {
-                return setSessionCreationError({
-                  reason: "wordNum",
-                  el: (
-                    <>
-                      Cannot create a session with less than {MIN_WORD_SIZE}{" "}
-                      words!
-                      <br />
-                      <Link href="/wordbank" className="underline">
-                        Go to wordbank if you need to add more!
-                      </Link>
-                    </>
-                  ),
-                });
-              }
-              const sessionData = {
-                sessionID: sessionName,
-                sessionKanjis: selectedKanjis,
-                sessionResults: [],
-                open: true,
-              };
-              await LS.idb.put("draw", sessionData);
-              void router.push(`/draw/session/${sessionData.sessionID}`);
-            }}
-            className="ml-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] hover:bg-slate-500"
-          >
-            Start new session
-          </button>
+                  });
+                }
+                if (
+                  words.filter((f) => selectedKanjis.includes(f.kanji)).length <
+                  MIN_WORD_SIZE
+                ) {
+                  return setSessionCreationError({
+                    reason: "wordNum",
+                    el: (
+                      <>
+                        Cannot create a session with less than {MIN_WORD_SIZE}{" "}
+                        words!
+                        <br />
+                        <Link href="/wordbank" className="underline">
+                          Go to wordbank if you need to add more!
+                        </Link>
+                      </>
+                    ),
+                  });
+                }
+                const sessionData = {
+                  sessionID: sessionName,
+                  sessionKanjis: selectedKanjis,
+                  sessionResults: [],
+                  open: true,
+                };
+                await LS.idb.put("draw", sessionData);
+                void router.push(`/draw/session/${sessionData.sessionID}`);
+              }}
+              className="ml-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] hover:bg-slate-500"
+            >
+              Start new session
+            </button>
+          </div>
+
           <div className="text-[0.9rem] text-[red]">
             {sessionCreationError?.el}
           </div>
@@ -331,6 +343,38 @@ export default function Draw() {
                     </button>
                   </div>
                 </div>
+                <button
+                  onClick={() => {
+                    setSelectedKanjis((prev) => {
+                      if (
+                        kanjis.reduce(
+                          (p, n) => (!p ? p : prev.includes(n.kanji)),
+                          true,
+                        )
+                      ) {
+                        return prev.filter(
+                          (f) => !kanjis.find((k) => k.kanji === f),
+                        );
+                      }
+                      return [
+                        ...new Set([
+                          ...prev,
+                          ...(kanjis.map((k) => k.kanji) ?? []),
+                        ]),
+                      ];
+                    });
+                  }}
+                  className={`block ${
+                    kanjis.reduce(
+                      (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
+                      true,
+                    )
+                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
+                      : ""
+                  }`}
+                >
+                  ALL
+                </button>
                 <button
                   onClick={() => {
                     setSelectedKanjis((prev) => {

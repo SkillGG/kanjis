@@ -48,13 +48,13 @@
 
 .popup > div {
   margin: 0 auto;
-  width: fit-content;
   color: var(--textColor);
   margin: 0 auto;
   left: 0;
   padding: 1em;
   border: 1px solid var(--borderColor);
   border-radius: 0.5em;
+  @apply mx-auto w-fit sm:mx-auto sm:w-fit;
 }
 
 .popup[data-open="open"] {

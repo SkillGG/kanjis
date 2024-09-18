@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect } from "react";
 import {
   LS_KEYS,
@@ -17,6 +19,7 @@ import { eq, gt, valid } from "semver";
 import Router from "next/router";
 import { type IDBPDatabase } from "idb";
 import { type KanjiDB } from "@/pages/_app";
+import { api } from "@/utils/api";
 
 const getLocationKanjis = (search: string): Kanji[] => {
   const locKanjis = [] as Kanji[];
@@ -25,8 +28,6 @@ const getLocationKanjis = (search: string): Kanji[] => {
   // &c = comp
   // &l = learn
   // (勉強,2);(漢字,4);[失態,4]  = base 勉 and 強 lvl2 + base 漢 and 字 lvl 4 + extra 失 and 態 lvl 4
-
-  const newMatch = /(?:\?|&)n=([^\?&]*)/i.exec(search);
 
   const parseLocKanjiList = (l: string | null, s: KanjiStatus) => {
     if (!l) return null;
@@ -51,6 +52,7 @@ const getLocationKanjis = (search: string): Kanji[] => {
     return allKanjis;
   };
 
+  const newMatch = /(?:\?|&)n=([^\?&]*)/i.exec(search);
   const news = parseLocKanjiList(newMatch?.[1] ?? null, "new");
   if (news) locKanjis.push(...news);
 
@@ -73,10 +75,12 @@ const migrateToDB = async (db: IDBPDatabase<KanjiDB>, kanji: Kanji[]) => {
 export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
   const { mutateKanjis, setShouldUpdate } = useKanjiStore();
 
-  useEffect(() => {
-    const locationKanjis = getLocationKanjis(location.search);
+  const utils = api.useUtils();
 
-    const overrideType = (/t=(a|r|p|m)/i.exec(location.search)?.[1] ?? "x") as
+  useEffect(() => {
+    let locationKanjis = getLocationKanjis(location.search);
+
+    let overrideType = (/t=(a|r|p|m)/i.exec(location.search)?.[1] ?? "x") as
       | "a"
       | "r"
       | "p"
@@ -92,6 +96,18 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
     } as const;
 
     void (async () => {
+      const listID = /q=([^&]*)/.exec(location.search)?.[1];
+
+      if (listID) {
+        const linkData = await utils.backup.getList.fetch(listID);
+        if ("link" in linkData) {
+          locationKanjis = getLocationKanjis(linkData.link);
+          overrideType = "r";
+        } else {
+          console.error("link failed", linkData.err);
+        }
+      }
+
       const LSkanjis = LS.getObject<Kanji[]>(LS_KEYS.kanjis);
 
       if (LSkanjis?.length && LS.idb) {
@@ -143,18 +159,18 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
 
         if (overrideType != "p") {
           const currURL = new URL(location.href);
-          const prevhref = currURL.href;
           if (
             currURL.searchParams.has("c") ||
             currURL.searchParams.has("n") ||
             currURL.searchParams.has("l") ||
-            currURL.searchParams.has("t")
+            currURL.searchParams.has("t") ||
+            currURL.searchParams.has("q")
           ) {
             currURL.searchParams.delete("c");
             currURL.searchParams.delete("n");
             currURL.searchParams.delete("l");
             currURL.searchParams.delete("t");
-            console.log(prevhref, " => ", currURL.toString(), locationKanjis);
+            currURL.searchParams.delete("q");
             void Router.replace(currURL, currURL, { shallow: true });
           }
         }
@@ -162,7 +178,6 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
 
       if (!DBKanjis || DBKanjis.length === 0) {
         // no DB kanji
-        console.log("No db kanji");
         setShouldUpdate(false);
         mutateKanjis(() => {
           LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
@@ -178,7 +193,6 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
         try {
           if (Array.isArray(DBKanjis))
             mutateKanjis(() => {
-              console.log("merging kanjis");
               if (overrideType === "r") {
                 setShouldUpdate(false);
                 LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
@@ -192,7 +206,6 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
                 ).concat(DEFAULT_KANJIS()),
                 OVERRIDE_INDEXES,
               ).sort((a, b) => a.index - b.index);
-              console.log("kanjis", kanji);
 
               void saveToIDB(kanji);
               return kanji;
@@ -213,5 +226,5 @@ export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
         }
       }
     })();
-  }, [LS, mutateKanjis, setShouldUpdate]);
+  }, [LS, mutateKanjis, setShouldUpdate, utils]);
 };

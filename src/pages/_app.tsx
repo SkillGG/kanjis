@@ -58,12 +58,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     name: "kanjiDB",
     version: 16,
     seed(db) {
-      console.log("seeding!");
       if (db.objectStoreNames.contains("kanji")) {
         void db.count("kanji").then((q) => {
-          console.log(q);
           if (q === 0) {
-            console.log("seeding kanjis");
             // seed kanji list with default value
             for (const kanji of DEFAULT_KANJIS()) {
               void db.put("kanji", kanji);

@@ -42,11 +42,9 @@ export const Quizlet = ({
   useEffect(() => {
     void (async () => {
       if (!LS.idb || !session) return;
-      console.log("getting a new word!");
       const newWG = nextWordGenerator(session, LS);
       setWordGenerator(newWG);
       const firstWord = await newWG.next();
-      console.log("fw", firstWord);
       if (firstWord.done) {
         setError(firstWord.value.err);
         return;

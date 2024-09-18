@@ -98,12 +98,9 @@ export default function KanjiCardCreator() {
         }
       }
     }
-    console.log("removing keyup");
     window.removeEventListener("keydown", handlekeydown);
-    console.log("adding keydown");
     window.addEventListener("keydown", handlekeydown);
     return () => {
-      console.log("removing keydown(eff)");
       window.removeEventListener("keydown", handlekeydown);
     };
   }, []);
@@ -405,7 +402,6 @@ export default function KanjiCardCreator() {
                         continue;
                       }
 
-                      console.log("puttin in", newW);
                       setWords((p) =>
                         !p ? [toRQW(newW)] : [...p, toRQW(newW)],
                       );
@@ -510,8 +506,6 @@ export default function KanjiCardCreator() {
               e.preventDefault();
               e.stopPropagation();
               if (!LS?.idb || !words) return;
-
-              console.log("Removing ", [q.word, q.special], "from the store!");
               await LS.idb.delete("wordbank", [q.word, q.special, q.readings]);
               setWords(() => {
                 return (

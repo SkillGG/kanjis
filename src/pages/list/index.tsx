@@ -13,12 +13,18 @@ import Head from "next/head";
 import { textColors } from "@/components/list/theme";
 import { KanjiTile } from "@/components/list/kanjiTile";
 import Link from "next/link";
+import { api } from "@/utils/api";
+import shortUUID from "short-uuid";
 
 const POPUP_SHOW_TIME = 2000;
 
 function App() {
   const LS = useLocalStorage();
   useKanjiStorage(LS);
+
+  const mut = api.backup.backupList.useMutation();
+
+  const apiUtils = api.useUtils();
 
   const {
     kanjis,
@@ -41,6 +47,48 @@ function App() {
   const [filter, setFilter] = useState("");
 
   const [rowCount, setRowCount] = useState(10);
+
+  const [customID, setCustomID] = useState("");
+
+  const [customIDPopup, setCustomIDPopup] = useState(false);
+  const [customIDPopupOpen, setCustomIDPopupOpen] = useState(false);
+
+  useEffect(() => {
+    if (customIDPopup) setCustomIDPopupOpen(true);
+  }, [customIDPopup]);
+
+  useEffect(() => {
+    if (!customIDPopupOpen) {
+      const cT = setTimeout(() => {
+        setCustomIDPopup(false);
+      }, 200);
+      return () => {
+        clearTimeout(cT);
+      };
+    }
+  }, [customIDPopupOpen]);
+
+  const [idAvailable, setIDAvailable] = useState<
+    true | { reason: string } | null
+  >(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setIDAvailable(null);
+    void (async () => {
+      const val = await apiUtils.backup.checkKanjiListIDAvailability
+        .fetch(customID, {
+          signal: controller.signal,
+        })
+        .catch(() => ({ reason: "Aborted" }));
+      if (!controller.signal.aborted) setIDAvailable(val);
+    })();
+    return () => {
+      console.error("Aborting call to", customID, "early");
+      controller.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customID]);
 
   useEffect(() => {
     setRowCount(LS.getNum(LS_KEYS.row_count) ?? 10);
@@ -95,12 +143,106 @@ function App() {
   const addRef = useRef<HTMLDialogElement>(null);
   const clearAddRef = useRef<HTMLButtonElement>(null);
 
+  function showCopiedPopup(shortened?: boolean) {
+    setPopup({
+      text: (
+        <div style={{ textAlign: "center" }}>
+          Copied {shortened && "shortened link"} to clipboard!
+          <br />
+          You can share it to your other devices!
+          <br />
+          <span style={{ color: "red" }}>
+            Going into this link will override the
+            <br />
+            data from the importing device!
+          </span>
+        </div>
+      ),
+    });
+  }
+
   return (
     <>
       <Head>
         <title>Kanji list</title>
       </Head>
       <div>
+        {customIDPopup && (
+          <div
+            className={kanjiCSS.popup}
+            style={{
+              "--borderColor": "green",
+              "--textColor": "white",
+            }}
+            data-open={customIDPopupOpen ? "open" : "closed"}
+          >
+            <div className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto">
+              <div className="flex flex-col">
+                <input
+                  value={customID}
+                  onInput={(e) => {
+                    setCustomID(e.currentTarget.value);
+                  }}
+                  className="w-[20rem] border-b-[--bbcolor] text-center text-[1.3rem] outline-none"
+                  style={{
+                    "--bbcolor":
+                      idAvailable === true
+                        ? "green"
+                        : !!idAvailable
+                          ? "red"
+                          : "white",
+                  }}
+                />
+                {typeof idAvailable === "object" ? (
+                  idAvailable ? (
+                    <span className="text-[red]">{idAvailable.reason}</span>
+                  ) : (
+                    <span>Checking...</span>
+                  )
+                ) : (
+                  <span className="text-[lime]">Valid ID!</span>
+                )}
+              </div>
+              <div className="flex gap-x-2">
+                <button
+                  onClick={async () => {
+                    const insert = await mut.mutateAsync({
+                      sharelink: getShareLink(kanjis),
+                      customID,
+                    });
+                    if ("err" in insert) {
+                      return setIDAvailable({ reason: insert.err });
+                    }
+                    setCustomIDPopupOpen(false);
+                    await navigator.clipboard.writeText(insert.link);
+                    setCustomID("");
+                    showCopiedPopup();
+                  }}
+                  disabled={idAvailable === true ? false : true}
+                  className="ml-2 disabled:text-[red]"
+                >
+                  SAVE
+                </button>
+                <button
+                  onClick={() => {
+                    setCustomID(
+                      shortUUID(shortUUID.constants.uuid25Base36).new(),
+                    );
+                  }}
+                >
+                  RANDOM
+                </button>
+                <button
+                  onClick={() => {
+                    setCustomIDPopupOpen(false);
+                  }}
+                >
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {popup && (
           <div
             className={kanjiCSS.popup}
@@ -211,28 +353,121 @@ function App() {
           </div>
           <div className={kanjiCSS["setting-menu"]}>
             <button
+              className="w-min break-words border-red-600 text-orange-300 sm:break-keep"
               onClick={() => {
-                void navigator.clipboard.writeText(getShareLink(kanjis));
                 setPopup({
-                  text: (
-                    <div style={{ textAlign: "center" }}>
-                      Copied to clipboard!
-                      <br />
-                      You can share it to your other devices!
-                      <br />
-                      <span style={{ color: "red" }}>
-                        Going into this link will override the
-                        <br />
-                        data from the importing device!
-                      </span>
+                  text: (close) => (
+                    <div className="text-center">
+                      <div>Do you really want to delete all your progress?</div>
+                      <button
+                        className="border-red-500"
+                        onClick={() => {
+                          mutateKanjis(() => {
+                            const kanjis = [...DEFAULT_KANJIS()];
+                            LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
+                            void (async () => {
+                              await LS.idb?.clear("kanji");
+                              await Promise.all(
+                                kanjis.map((k) => LS.idb?.put("kanji", k)),
+                              );
+                            })();
+                            return kanjis;
+                          });
+                          close();
+                        }}
+                      >
+                        Yes
+                      </button>
+                      <button onClick={close}>No</button>
                     </div>
                   ),
+                  borderColor: "red",
+                  time: "user",
                 });
               }}
             >
-              Get save link
+              Reset List
             </button>
+          </div>
+          <div className={kanjiCSS["setting-menu"]}>
+            <label>
+              <input
+                className="outline-none focus:outline-dotted"
+                value={kanjisToSelect}
+                onChange={(e) => setKanjisToSelect(e.target.value)}
+                placeholder="森 or lvl1 base cpl"
+                onKeyDown={(e) => {
+                  if (e.code === "Enter") {
+                    setFilter(kanjisToSelect);
+                  }
+                }}
+              />
+            </label>
+            <div className="flex min-h-10 items-center">
+              <button
+                onClick={() => {
+                  setFilter(kanjisToSelect);
+                }}
+              >
+                Filter
+              </button>
+              <button
+                onClick={() => {
+                  document
+                    .querySelectorAll(".kanjiBtn")
+                    .forEach((e) => (e as HTMLElement).click());
+                }}
+              >
+                Click
+              </button>
+              <button
+                onClick={() => {
+                  setFilter("");
+                }}
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+          <div className={kanjiCSS["setting-menu"]}>
+            <div className={`mx-2 flex flex-row gap-x-2 gap-y-1 self-center`}>
+              <button
+                className="w-min break-words sm:w-[initial] sm:break-keep"
+                onClick={async () => {
+                  setCustomIDPopup(true);
+                }}
+              >
+                Custom ID backup
+              </button>
+              <button
+                className="w-min break-words sm:w-[initial] sm:break-keep"
+                onClick={async () => {
+                  const sharelink = getShareLink(kanjis);
+                  const dbSharelink = await mut.mutateAsync({ sharelink });
+                  if ("link" in dbSharelink) {
+                    await navigator.clipboard.writeText(dbSharelink.link);
+                  } else {
+                    console.error(dbSharelink.err);
+                    await navigator.clipboard.writeText(sharelink);
+                  }
+                  showCopiedPopup("link" in dbSharelink);
+                }}
+              >
+                Quick backup to DB
+              </button>
+              <button
+                className="w-min break-words sm:w-[initial] sm:break-keep"
+                onClick={async () => {
+                  const sharelink = getShareLink(kanjis);
+                  await navigator.clipboard.writeText(sharelink);
+                  showCopiedPopup();
+                }}
+              >
+                Share long link
+              </button>
+            </div>
             <button
+              className="w-min break-words sm:w-[initial] sm:break-keep"
               onClick={() => {
                 clearAddRef.current?.click();
                 addRef.current?.showModal();
@@ -345,84 +580,7 @@ function App() {
               <br />
             </dialog>
           </div>
-          <div className={kanjiCSS["setting-menu"]}>
-            <label>
-              <input
-                className="outline-none focus:outline-dotted"
-                value={kanjisToSelect}
-                onChange={(e) => setKanjisToSelect(e.target.value)}
-                placeholder="森 or lvl1 base cpl"
-                onKeyDown={(e) => {
-                  if (e.code === "Enter") {
-                    setFilter(kanjisToSelect);
-                  }
-                }}
-              />
-            </label>
-            <div className="flex min-h-10 items-center">
-              <button
-                onClick={() => {
-                  setFilter(kanjisToSelect);
-                }}
-              >
-                Filter
-              </button>
-              <button
-                onClick={() => {
-                  document
-                    .querySelectorAll(".kanjiBtn")
-                    .forEach((e) => (e as HTMLElement).click());
-                }}
-              >
-                Click
-              </button>
-              <button
-                onClick={() => {
-                  setFilter("");
-                }}
-              >
-                Clear
-              </button>
-            </div>
-          </div>
-          <div className={kanjiCSS["setting-menu"]}>
-            <button
-              className="border-red-600 text-orange-300"
-              onClick={() => {
-                setPopup({
-                  text: (close) => (
-                    <div className="text-center">
-                      <div>Do you really want to delete all your progress?</div>
-                      <button
-                        className="border-red-500"
-                        onClick={() => {
-                          mutateKanjis(() => {
-                            const kanjis = [...DEFAULT_KANJIS()];
-                            LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
-                            void (async () => {
-                              await LS.idb?.clear("kanji");
-                              await Promise.all(
-                                kanjis.map((k) => LS.idb?.put("kanji", k)),
-                              );
-                            })();
-                            return kanjis;
-                          });
-                          close();
-                        }}
-                      >
-                        Yes
-                      </button>
-                      <button onClick={close}>No</button>
-                    </div>
-                  ),
-                  borderColor: "red",
-                  time: "user",
-                });
-              }}
-            >
-              Reset to Default
-            </button>
-          </div>
+
           <div className={kanjiCSS["setting-menu"] + ` flex-col`}>
             Kanji per row:
             <div className="flex flex-row items-center justify-center">
@@ -462,7 +620,6 @@ function App() {
                   updateKanji(kanji, data);
                   const prev = await LS.idb?.get("kanji", kanji);
                   if (prev) {
-                    console.log("Changing data for: ", kanji);
                     void LS.idb?.put("kanji", { ...prev, ...data });
                   }
                 }}

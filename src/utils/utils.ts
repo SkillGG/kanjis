@@ -21,7 +21,6 @@ export const randomStartWeighedInt = (
   const weightedNums = allNums.map(
     (_, i) => (i + 1) * weight + i ** weight * weight,
   );
-  console.log(weightedNums);
   const normalizer = 1 / weightedNums.reduce((p, n) => p + n);
   const weighted = weightedNums.map((q) => q * normalizer);
   const rand = Math.random();
@@ -45,7 +44,6 @@ export const randomEndWeighedInt = (
   const weightedNums = allNums.map(
     (_, i) => (i + 1) * weight + i ** weight * weight,
   );
-  console.log(weightedNums);
   const normalizer = 1 / weightedNums.reduce((p, n) => p + n);
   const weighted = weightedNums.map((q) => q * normalizer);
   const rand = Math.random();
