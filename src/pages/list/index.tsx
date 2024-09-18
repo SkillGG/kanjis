@@ -15,6 +15,7 @@ import { KanjiTile } from "@/components/list/kanjiTile";
 import Link from "next/link";
 import { api } from "@/utils/api";
 import shortUUID from "short-uuid";
+import Router from "next/router";
 
 const POPUP_SHOW_TIME = 2000;
 
@@ -48,8 +49,56 @@ function App() {
 
   const [rowCount, setRowCount] = useState(10);
 
-  const [customID, setCustomID] = useState("");
+  const [restoreID, setRestoreID] = useState("");
+  const [restorePopup, setRestorePopup] = useState(false);
+  const [restorePopupOpen, setRestorePopupOpen] = useState(false);
 
+  const [canRestore, setCanRestore] = useState<
+    true | { reason: string } | null
+  >(null);
+
+  useEffect(() => {
+    if (!restoreID) return setCanRestore({ reason: "Empty ID!" });
+    const controller = new AbortController();
+    setCanRestore(null);
+    void (async () => {
+      const val = await apiUtils.backup.checkKanjiListIDAvailability
+        .fetch(restoreID, {
+          signal: controller.signal,
+        })
+        .catch(() => ({ reason: "Aborted" }));
+      if (!controller.signal.aborted)
+        setCanRestore(
+          typeof val === "object" &&
+            val &&
+            val.reason === "ID already occupied!"
+            ? true
+            : val,
+        );
+    })();
+    return () => {
+      console.error("Aborting call to", restoreID, "early");
+      controller.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [restoreID]);
+
+  useEffect(() => {
+    if (restorePopup) setRestorePopupOpen(true);
+  }, [restorePopup]);
+
+  useEffect(() => {
+    if (!restorePopupOpen) {
+      const cT = setTimeout(() => {
+        setRestorePopup(false);
+      }, 200);
+      return () => {
+        clearTimeout(cT);
+      };
+    }
+  }, [restorePopupOpen]);
+
+  const [customID, setCustomID] = useState("");
   const [customIDPopup, setCustomIDPopup] = useState(false);
   const [customIDPopupOpen, setCustomIDPopupOpen] = useState(false);
 
@@ -73,6 +122,7 @@ function App() {
   >(null);
 
   useEffect(() => {
+    if (!customID) return setIDAvailable({ reason: "Empty ID!" });
     const controller = new AbortController();
     setIDAvailable(null);
     void (async () => {
@@ -235,6 +285,74 @@ function App() {
                 <button
                   onClick={() => {
                     setCustomIDPopupOpen(false);
+                  }}
+                >
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {restorePopup && (
+          <div
+            className={kanjiCSS.popup}
+            style={{
+              "--borderColor": "green",
+              "--textColor": "white",
+            }}
+            data-open={restorePopupOpen ? "open" : "closed"}
+          >
+            <div className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto">
+              <div className="flex flex-col">
+                <input
+                  value={restoreID}
+                  onInput={(e) => {
+                    setRestoreID(e.currentTarget.value);
+                  }}
+                  className="w-[20rem] border-b-[--bbcolor] text-center text-[1.3rem] outline-none"
+                  style={{
+                    "--bbcolor":
+                      canRestore === null
+                        ? "white"
+                        : canRestore === true
+                          ? "green"
+                          : "red",
+                  }}
+                />
+                <span
+                  style={{
+                    color:
+                      canRestore === null
+                        ? "white"
+                        : canRestore === true
+                          ? "green"
+                          : "red",
+                  }}
+                >
+                  {canRestore === null
+                    ? "Checking..."
+                    : canRestore === true
+                      ? "Can restore!"
+                      : canRestore.reason}
+                </span>
+              </div>
+              <div className="flex gap-x-2">
+                <button
+                  onClick={async () => {
+                    const url = new URL(location.href);
+                    url.search = "";
+                    url.searchParams.set("q", customID);
+                    await Router.replace(url);
+                    Router.reload();
+                  }}
+                  disabled={canRestore === true ? false : true}
+                  className="ml-2 disabled:text-[red]"
+                >
+                  LOAD
+                </button>
+                <button
+                  onClick={() => {
+                    setRestorePopupOpen(false);
                   }}
                 >
                   CANCEL
@@ -429,7 +547,7 @@ function App() {
               </button>
             </div>
           </div>
-          <div className={kanjiCSS["setting-menu"]}>
+          <div className={kanjiCSS["setting-menu"] + " gap-y-2"}>
             <div className={`mx-2 flex flex-row gap-x-2 gap-y-1 self-center`}>
               <button
                 className="w-min break-words sm:w-[initial] sm:break-keep"
@@ -438,6 +556,14 @@ function App() {
                 }}
               >
                 Custom ID backup
+              </button>
+              <button
+                className="w-min break-words sm:w-[initial] sm:break-keep"
+                onClick={async () => {
+                  setRestorePopup(true);
+                }}
+              >
+                Restore from DB
               </button>
               <button
                 className="w-min break-words sm:w-[initial] sm:break-keep"
