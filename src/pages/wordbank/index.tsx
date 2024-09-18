@@ -1,5 +1,6 @@
 import { KanjiCard } from "@/components/draw/kanjiCard";
 import {
+  areWordsTheSame,
   getReadings,
   getReadingsWithout,
   getWordWithout,
@@ -387,17 +388,7 @@ export default function KanjiCardCreator() {
                         blanked: getWordWithout(wordVal, sp),
                       };
 
-                      if (
-                        words?.find(
-                          (w) =>
-                            w.word === wordVal &&
-                            w.special === sp &&
-                            w.readings.reduce(
-                              (p, n, i) => (!p ? p : n === readings[i]),
-                              true,
-                            ),
-                        )
-                      ) {
+                      if (words?.find((w) => areWordsTheSame(w, newW))) {
                         couldntAdd.push(newW);
                         continue;
                       }
@@ -452,24 +443,24 @@ export default function KanjiCardCreator() {
                   void navigator.clipboard.writeText(
                     JSON.stringify({
                       version: newVer,
-                      words: words.map((q) => {
-                        const {
+                      words: words.map(
+                        ({
                           blanked,
                           kanji,
                           meaning,
                           readings,
                           special,
                           word,
-                        } = q;
-                        return {
-                          blanked,
-                          kanji,
-                          meaning,
-                          readings,
-                          special,
-                          word,
-                        } as QuizWord;
-                      }),
+                        }) =>
+                          ({
+                            blanked,
+                            kanji,
+                            meaning,
+                            readings,
+                            special,
+                            word,
+                          }) as QuizWord,
+                      ),
                     }),
                   );
                   setCopied(true);
@@ -508,13 +499,7 @@ export default function KanjiCardCreator() {
               if (!LS?.idb || !words) return;
               await LS.idb.delete("wordbank", [q.word, q.special, q.readings]);
               setWords(() => {
-                return (
-                  words.filter(
-                    (w) =>
-                      `${q.kanji}_${q.special}_${q.readings.join("_")}` !==
-                      `${w.kanji}_${w.special}_${w.readings.join("_")}`,
-                  ) ?? null
-                );
+                return words.filter((w) => !areWordsTheSame(w, q)) ?? null;
               });
             }}
           >

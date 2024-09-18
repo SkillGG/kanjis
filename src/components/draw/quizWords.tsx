@@ -22,6 +22,19 @@ export type ReactQuizWord = QuizWord & {
   hint: React.ReactNode;
 };
 
+export const areWordsTheSame = (
+  k1: QuizWord,
+  k2: QuizWord,
+  joinMeanings = true,
+) => {
+  return (
+    k1.word === k2.word &&
+    k1.special === k2.special &&
+    k1.readings.join(joinMeanings ? "" : "_") ===
+      k2.readings.join(joinMeanings ? "" : "_")
+  );
+};
+
 export const getReadings = (
   word: string,
   meaning: string,

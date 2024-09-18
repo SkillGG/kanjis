@@ -7,7 +7,7 @@ import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
 import { KanjiTile } from "@/components/list/kanjiTile";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 import Link from "next/link";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 const MIN_SESSION_SIZE = 5;
@@ -51,10 +51,6 @@ export default function Draw() {
       setRowCount(LS.getNum(LS_KEYS.row_count + "_draw") ?? 8);
     } else {
       LS.set(LS_KEYS.row_count + "_draw", rowCount);
-    }
-
-    if (LS.getString("draw_session")) {
-      void Router.replace("/draw/session/1", "", { shallow: true });
     }
   }, [LS, rowCount]);
 
@@ -281,7 +277,7 @@ export default function Draw() {
                   open: true,
                 };
                 await LS.idb.put("draw", sessionData);
-                void router.push(`/draw/session/${sessionData.sessionID}`);
+                void router.replace(`/draw/session/${sessionData.sessionID}`);
               }}
               className="ml-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] hover:bg-slate-500"
             >

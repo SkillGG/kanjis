@@ -21,6 +21,13 @@ import { type IDBPDatabase } from "idb";
 import { type KanjiDB } from "@/pages/_app";
 import { api } from "@/utils/api";
 
+import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type useLocalStorage,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type LocalStorageProvider,
+} from "./../localStorageProvider";
+
 const getLocationKanjis = (search: string): Kanji[] => {
   const locKanjis = [] as Kanji[];
 
@@ -71,7 +78,11 @@ const migrateToDB = async (db: IDBPDatabase<KanjiDB>, kanji: Kanji[]) => {
   const transaction = db.transaction("kanji", "readwrite");
   await Promise.all(kanji.map((k) => transaction.store.put(k)));
 };
-
+/**
+ * Initial setup, update-management and backup-management of IndexedDB and LocalStorage values
+ * @param LS {@link LSStore} object that has bindings to LocalStore and IndexedDB data.
+ * @see  {@link LocalStorageProvider} and {@link useLocalStorage}
+ */
 export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
   const { mutateKanjis, setShouldUpdate } = useKanjiStore();
 

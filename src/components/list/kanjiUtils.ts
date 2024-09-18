@@ -24,8 +24,7 @@ export const doesKanjiFitFilter = (f: string, k: Kanji) => {
     return true;
 };
 
-// O(7n) <> O(25n)
-// Overall O(n)
+// O(7n) <> O(25n) depending on type
 export const getShareLink = (
   kanjis: Kanji[] | null,
   type: "add" | "reset" | "show" | "merge" = "merge",
@@ -38,14 +37,12 @@ export const getShareLink = (
   const lrnK: Kanji[] = [];
 
   const addToLink = (k: Kanji) => {
-    // O(1)
     if (k.status === "new") newK.push(k);
     if (k.status === "learning") lrnK.push(k);
     if (k.status === "completed") cplK.push(k);
   };
 
   for (const kanji of kanjis) {
-    // O(n)
     const defaultK = DEFAULT_KANJIS().find((k) => k.kanji === kanji.kanji);
     if (!defaultK) {
       addToLink(kanji);
@@ -59,14 +56,12 @@ export const getShareLink = (
     }
   }
 
-  // best case O(2n), worst case O(8n)
   const groupKanjis = (k: Kanji[]): string => {
-    const base = k.filter((f) => f.type === "base"); // O(n)
-    const extra = k.filter((f) => f.type === "extra"); // O(n)
+    const base = k.filter((f) => f.type === "base");
+    const extra = k.filter((f) => f.type === "extra");
 
     const baseLvl = base.reduce(
       (p, n) => {
-        // best case O(0), worst case O(n)
         if (n.lvl in p) {
           p[n.lvl]?.push(n);
           return p;
@@ -79,7 +74,6 @@ export const getShareLink = (
 
     const extraLvl = extra.reduce(
       (p, n) => {
-        // best case O(0), worst case O(n)
         if (n.lvl in p) {
           p[n.lvl]?.push(n);
           return p;
@@ -91,19 +85,17 @@ export const getShareLink = (
     );
 
     return `${Object.entries(baseLvl).reduce((prev, y) => {
-      // worst case O(n), best case O(0)
-      return prev + `(${y[1].map((k) => k.kanji).join("")},${y[0]})`; // worst case O(n), best case O(0)
+      return prev + `(${y[1].map((k) => k.kanji).join("")},${y[0]})`;
     }, "")}${Object.entries(extraLvl).reduce((prev, y) => {
-      // worst case O(n), best case O(0)
-      return prev + `[${y[1].map((k) => k.kanji).join("")},${y[0]}]`; // worst case O(n), best case O(0)
+      return prev + `[${y[1].map((k) => k.kanji).join("")},${y[0]}]`;
     }, "")}`;
   };
 
   const newURL = new URL(sharelink);
 
-  const newSearchParams = groupKanjis(newK); // O(2n) <> O(8n)
-  const cplSearchParams = groupKanjis(cplK); // O(2n) <> O(8n)
-  const lrnSearchParams = groupKanjis(lrnK); // O(2n) <> O(8n)
+  const newSearchParams = groupKanjis(newK);
+  const cplSearchParams = groupKanjis(cplK);
+  const lrnSearchParams = groupKanjis(lrnK);
 
   newURL.searchParams.set("n", newSearchParams);
   newURL.searchParams.set("c", cplSearchParams);
