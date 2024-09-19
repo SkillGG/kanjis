@@ -475,7 +475,50 @@ export default function KanjiCardCreator() {
             >
               {copied ? <span className="text-green-500">DONE</span> : "COPY"}
             </button>
-
+            <button
+              className="ml-2 p-3"
+              onClick={async () => {
+                setPopup({
+                  text: (close) => (
+                    <div className="text-center">
+                      Are yo usure you want to restore the wordbank to default
+                      (v{defaultWordBank.version})?
+                      <br />
+                      <button
+                        className="text-[red]"
+                        onClick={async () => {
+                          if (!LS.idb) return;
+                          log`Restoring...`;
+                          await LS.idb.clear("wordbank");
+                          await LS.dbPutMultiple(
+                            LS.idb,
+                            "wordbank",
+                            defaultWordBank.words,
+                          );
+                          setWords(() =>
+                            defaultWordBank.words.map((w) => toRQW(w)),
+                          );
+                          close();
+                        }}
+                      >
+                        YES
+                      </button>
+                      <button
+                        onClick={() => {
+                          close();
+                        }}
+                      >
+                        NO
+                      </button>
+                    </div>
+                  ),
+                  time: "user",
+                  borderColor: "red",
+                });
+              }}
+            >
+              RESTORE TO DEFAULT
+            </button>
             {canUpdateBank && (
               <button
                 className="ml-2 p-3"
