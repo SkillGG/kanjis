@@ -8,7 +8,7 @@ import {
   type ReactQuizWord,
   toRQW,
 } from "@/components/draw/quizWords";
-import { noop } from "@/utils/utils";
+import { log, noop } from "@/utils/utils";
 import React, {
   useCallback,
   useEffect,
@@ -47,6 +47,8 @@ export default function KanjiCardCreator() {
 
   const [autoFilter, setAutoFilter] = useState(true);
 
+  const [canUpdateBank, setCanUpdateBank] = useState(false);
+
   const allRef = useRef<HTMLButtonElement>(null);
   const addRef = useRef<HTMLButtonElement>(null);
   const mainInput = useRef<HTMLInputElement>(null);
@@ -57,8 +59,6 @@ export default function KanjiCardCreator() {
       ?.filter((q) => (autoFilter ? q.word.includes(wordVal) : true))
       .reverse();
   }, [autoFilter, wordVal, words]);
-
-  const [canUpdateBank, setCanUpdateBank] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -161,7 +161,7 @@ export default function KanjiCardCreator() {
   const updateBank = useCallback(async () => {
     if (!LS.idb) return;
     const words = defaultWordBank.words as QuizWord[];
-    console.log("Updating wordbank!");
+    log`Updating wordbank!`;
     const skipped = [];
     const added = [];
     for (const word of words) {
@@ -177,7 +177,7 @@ export default function KanjiCardCreator() {
       await LS.idb.put("wordbank", word);
       added.push(word);
     }
-    console.log("Update results: addedd:", added, "skipped: ", skipped);
+    log`Update results: addedd: ${added} skipped: ${skipped}`;
     LS.set(LS_KEYS.wordbank_ver, defaultWordBank.version);
     setCanUpdateBank(false);
   }, [LS]);

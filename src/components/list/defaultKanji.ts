@@ -1,3 +1,4 @@
+import { log } from "@/utils/utils";
 import { type Kanji } from "./kanjiStore";
 
 export const DEFAULT_KANJI_VERSION = "0.2.2";
@@ -138,27 +139,18 @@ export const DEFAULT_KANJIS = () =>
     .sort((p, n) => p.lvl - n.lvl)
     .map((k, index) => ({ ...k, index })); // prioritize bases over extras
 
-// console.log(
-//   "lv1,base: ",
-//   DEFAULT_KANJIS()
-//     .filter((f) => f.type == "base" && f.lvl === 1)
-//     .map((k) => k.kanji),
-// );
-// console.log(
-//   "lv1,extra: ",
-//   DEFAULT_KANJIS()
-//     .filter((f) => f.type == "extra" && f.lvl === 1)
-//     .map((k) => k.kanji),
-// );
-// console.log(
-//   "lv2,base: ",
-//   DEFAULT_KANJIS()
-//     .filter((f) => f.type == "base" && f.lvl === 2)
-//     .map((k) => k.kanji),
-// );
-// console.log(
-//   "lv2,extra: ",
-//   DEFAULT_KANJIS()
-//     .filter((f) => f.type == "extra" && f.lvl === 2)
-//     .map((k) => k.kanji),
-// );
+log`lv1,base:${DEFAULT_KANJIS()
+  .filter((f) => f.type == "base" && f.lvl === 1)
+  .map((k) => k.kanji)}`;
+
+log`lv1,extra:${DEFAULT_KANJIS()
+  .filter((f) => f.type == "extra" && f.lvl === 1)
+  .map((k) => k.kanji)}`;
+
+log`lv2,base:${DEFAULT_KANJIS()
+  .filter((f) => f.type == "base" && f.lvl === 2)
+  .map((k) => k.kanji)}`;
+
+log`lv2,extra:${DEFAULT_KANJIS()
+  .filter((f) => f.type == "extra" && f.lvl === 2)
+  .map((k) => k.kanji)}`;

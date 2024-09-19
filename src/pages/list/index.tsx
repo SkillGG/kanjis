@@ -7,7 +7,16 @@ import {
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
 import kanjiCSS from "@/components/list/list.module.css";
-import { useKanjiStorage } from "@/components/list/kanjiStorage";
+import {
+  checkKanjiListUpdate,
+  getMergedKanjis,
+  getOverrideType,
+  migrateFromLS,
+  parseKanjiURI,
+  removeSearchParams,
+  saveToIDB,
+  useKanjiStorage,
+} from "@/components/list/kanjiStorage";
 import { getShareLink, doesKanjiFitFilter } from "@/components/list/kanjiUtils";
 import Head from "next/head";
 import { textColors } from "@/components/list/theme";
@@ -15,13 +24,15 @@ import { KanjiTile } from "@/components/list/kanjiTile";
 import Link from "next/link";
 import { api } from "@/utils/api";
 import shortUUID from "short-uuid";
-import Router from "next/router";
+import { log } from "@/utils/utils";
 
 const POPUP_SHOW_TIME = 2000;
 
+const CHECK_DEDPUE_DELAY = 500;
+
 function App() {
   const LS = useLocalStorage();
-  useKanjiStorage(LS);
+  const { resetDBToDefault, restoreKanjiFromOnlineDB } = useKanjiStorage(LS);
 
   const mut = api.backup.backupList.useMutation();
 
@@ -29,12 +40,19 @@ function App() {
 
   const {
     kanjis,
-    mutateKanjis,
     updateKanji,
     addKanji,
     shouldUpdate,
     setShouldUpdate,
-  } = useKanjiStore();
+    mutateKanjis,
+  } = useKanjiStore((s) => ({
+    kanjis: s.kanjis,
+    updateKanji: s.updateKanji,
+    mutateKanjis: s.mutateKanjis,
+    addKanji: s.addKanji,
+    shouldUpdate: s.shouldUpdateKanjiList,
+    setShouldUpdate: s.setShouldUpdateKanjiList,
+  }));
 
   const [showbadges, setShowbadges] = useState<0 | 1 | 2 | 3 | null>(null);
 
@@ -50,12 +68,29 @@ function App() {
   const [rowCount, setRowCount] = useState(10);
 
   const [restoreID, setRestoreID] = useState("");
+  const [restoreIDText, setRestoreIDText] = useState("");
   const [restorePopup, setRestorePopup] = useState(false);
   const [restorePopupOpen, setRestorePopupOpen] = useState(false);
 
   const [canRestore, setCanRestore] = useState<
     true | { reason: string } | null
   >(null);
+
+  const [checkDelayer, setCheckDelayer] = useState<{
+    timer: number;
+    fn: () => void;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!checkDelayer) return;
+
+    const timer = setTimeout(() => checkDelayer.fn(), checkDelayer.timer);
+
+    return () => {
+      console.log("Clearing checktimer delay");
+      clearTimeout(timer);
+    };
+  }, [checkDelayer]);
 
   useEffect(() => {
     if (!restoreID) return setCanRestore({ reason: "Empty ID!" });
@@ -67,14 +102,13 @@ function App() {
           signal: controller.signal,
         })
         .catch(() => ({ reason: "Aborted" }));
-      if (!controller.signal.aborted)
-        setCanRestore(
-          typeof val === "object" &&
-            val &&
-            val.reason === "ID already occupied!"
-            ? true
-            : val,
-        );
+      const value =
+        typeof val === "object" && val && val.reason === "ID already occupied!"
+          ? true
+          : val === true
+            ? { reason: "No backup with that ID!" }
+            : val;
+      if (!controller.signal.aborted) setCanRestore(value);
     })();
     return () => {
       console.error("Aborting call to", restoreID, "early");
@@ -99,6 +133,7 @@ function App() {
   }, [restorePopupOpen]);
 
   const [customID, setCustomID] = useState("");
+  const [customIDText, setCustomIDText] = useState("");
   const [customIDPopup, setCustomIDPopup] = useState(false);
   const [customIDPopupOpen, setCustomIDPopupOpen] = useState(false);
 
@@ -125,16 +160,19 @@ function App() {
     if (!customID) return setIDAvailable({ reason: "Empty ID!" });
     const controller = new AbortController();
     setIDAvailable(null);
-    void (async () => {
-      const val = await apiUtils.backup.checkKanjiListIDAvailability
-        .fetch(customID, {
-          signal: controller.signal,
-        })
-        .catch(() => ({ reason: "Aborted" }));
-      if (!controller.signal.aborted) setIDAvailable(val);
-    })();
+    const timer = setTimeout(() => {
+      void (async () => {
+        const val = await apiUtils.backup.checkKanjiListIDAvailability
+          .fetch(customID, {
+            signal: controller.signal,
+          })
+          .catch(() => ({ reason: "Aborted" }));
+        if (!controller.signal.aborted) setIDAvailable(val);
+      })();
+    }, 100);
     return () => {
       console.error("Aborting call to", customID, "early");
+      clearTimeout(timer);
       controller.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,7 +181,57 @@ function App() {
   useEffect(() => {
     setRowCount(LS.getNum(LS_KEYS.row_count) ?? 10);
     setShowbadges(LS.getNum<0 | 1 | 2 | 3>(LS_KEYS.badges) ?? 0);
-  }, [LS]);
+
+    void (async () => {
+      if (!LS?.idb) return;
+      const currURL = new URL(location.href);
+
+      if (currURL.searchParams.has("q")) {
+        const success = await restoreKanjiFromOnlineDB(
+          LS,
+          currURL.searchParams.get("q"),
+        );
+        const mergedKanjis = await getMergedKanjis(LS, [], success ? "r" : "m");
+        log`Succeeded? ${success}${mergedKanjis}`;
+
+        if (success) await removeSearchParams("r");
+        else
+          setPopup({
+            text: (
+              <div className="text-center">
+                Could not resotre backup with ID &quot;
+                <span className="text-[red]">
+                  {currURL.searchParams.get("q")}
+                </span>
+                &quot;
+                <br />
+                Are you sure the ID is correct?
+              </div>
+            ),
+            borderColor: "red",
+            time: 3000,
+          });
+
+        mutateKanjis(() => mergedKanjis.kanji);
+
+        await saveToIDB(LS, success ? "r" : "m", mergedKanjis.kanji);
+      } else {
+        const urlKanji = parseKanjiURI(currURL.searchParams);
+        const overrideType = getOverrideType(currURL.searchParams);
+        const mergedKanjis = await getMergedKanjis(LS, urlKanji, overrideType);
+
+        mutateKanjis(() => mergedKanjis.kanji);
+
+        await saveToIDB(LS, overrideType, mergedKanjis.kanji);
+
+        await removeSearchParams(overrideType);
+      }
+
+      await migrateFromLS(LS);
+
+      setShouldUpdate(checkKanjiListUpdate(LS));
+    })();
+  }, [LS, mutateKanjis, restoreKanjiFromOnlineDB, setShouldUpdate]);
 
   const [popup, setPopup] = useState<
     | {
@@ -229,9 +317,17 @@ function App() {
             <div className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto">
               <div className="flex flex-col">
                 <input
-                  value={customID}
-                  onInput={(e) => {
-                    setCustomID(e.currentTarget.value);
+                  value={customIDText}
+                  onChange={(e) => {
+                    const value = e.currentTarget.value;
+                    setCustomIDText(value);
+                    setIDAvailable(null);
+                    setCheckDelayer({
+                      fn: () => {
+                        setCustomID(value);
+                      },
+                      timer: CHECK_DEDPUE_DELAY,
+                    });
                   }}
                   className="w-[20rem] border-b-[--bbcolor] text-center text-[1.3rem] outline-none"
                   style={{
@@ -275,9 +371,11 @@ function App() {
                 </button>
                 <button
                   onClick={() => {
-                    setCustomID(
-                      shortUUID(shortUUID.constants.uuid25Base36).new(),
-                    );
+                    const randomID = shortUUID(
+                      shortUUID.constants.uuid25Base36,
+                    ).new();
+                    setCustomID(randomID);
+                    setCustomIDText(randomID);
                   }}
                 >
                   RANDOM
@@ -305,9 +403,17 @@ function App() {
             <div className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto">
               <div className="flex flex-col">
                 <input
-                  value={restoreID}
+                  value={restoreIDText}
                   onInput={(e) => {
-                    setRestoreID(e.currentTarget.value);
+                    const value = e.currentTarget.value;
+                    setRestoreIDText(value);
+                    setCanRestore(null);
+                    setCheckDelayer({
+                      timer: CHECK_DEDPUE_DELAY,
+                      fn: () => {
+                        setRestoreID(value);
+                      },
+                    });
                   }}
                   className="w-[20rem] border-b-[--bbcolor] text-center text-[1.3rem] outline-none"
                   style={{
@@ -339,11 +445,26 @@ function App() {
               <div className="flex gap-x-2">
                 <button
                   onClick={async () => {
-                    const url = new URL(location.href);
-                    url.search = "";
-                    url.searchParams.set("q", customID);
-                    await Router.replace(url);
-                    Router.reload();
+                    if (canRestore === true) {
+                      const success = await restoreKanjiFromOnlineDB(
+                        LS,
+                        restoreID,
+                      );
+                      if (success) {
+                        setRestorePopupOpen(false);
+                        await removeSearchParams("r");
+                      } else {
+                        setPopup({
+                          text: (
+                            <div className="text-center">
+                              Could not restore backup because of a server
+                              error! Try again later!
+                            </div>
+                          ),
+                          borderColor: "red",
+                        });
+                      }
+                    }
                   }}
                   disabled={canRestore === true ? false : true}
                   className="ml-2 disabled:text-[red]"
@@ -353,6 +474,7 @@ function App() {
                 <button
                   onClick={() => {
                     setRestorePopupOpen(false);
+                    setRestoreID("");
                   }}
                 >
                   CANCEL
@@ -479,19 +601,9 @@ function App() {
                       <div>Do you really want to delete all your progress?</div>
                       <button
                         className="border-red-500"
-                        onClick={() => {
-                          mutateKanjis(() => {
-                            const kanjis = [...DEFAULT_KANJIS()];
-                            LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
-                            void (async () => {
-                              await LS.idb?.clear("kanji");
-                              await Promise.all(
-                                kanjis.map((k) => LS.idb?.put("kanji", k)),
-                              );
-                            })();
-                            return kanjis;
-                          });
+                        onClick={async () => {
                           close();
+                          await resetDBToDefault(LS, [], "r");
                         }}
                       >
                         Yes
@@ -532,7 +644,7 @@ function App() {
               <button
                 onClick={() => {
                   document
-                    .querySelectorAll(".kanjiBtn")
+                    .querySelectorAll(`.${kanjiCSS.kanjiBtn}`)
                     .forEach((e) => (e as HTMLElement).click());
                 }}
               >
@@ -733,26 +845,30 @@ function App() {
           gridTemplateColumns: "1fr ".repeat(rowCount),
         }}
       >
-        {(kanjis ?? [])
-          .filter(
-            (f) => filter.includes(f.kanji) || doesKanjiFitFilter(filter, f),
-          )
-          .map((kanji) => {
-            return (
-              <KanjiTile
-                badges={showbadges ?? 3}
-                kanji={kanji}
-                update={async (kanji, data) => {
-                  updateKanji(kanji, data);
-                  const prev = await LS.idb?.get("kanji", kanji);
-                  if (prev) {
-                    void LS.idb?.put("kanji", { ...prev, ...data });
-                  }
-                }}
-                key={kanji.kanji}
-              />
-            );
-          })}
+        {kanjis ? (
+          kanjis
+            .filter(
+              (f) => filter.includes(f.kanji) || doesKanjiFitFilter(filter, f),
+            )
+            .map((kanji) => {
+              return (
+                <KanjiTile
+                  badges={showbadges ?? 3}
+                  kanji={kanji}
+                  update={async (kanji, data) => {
+                    updateKanji(kanji, data);
+                    const prev = await LS.idb?.get("kanji", kanji);
+                    if (prev) {
+                      void LS.idb?.put("kanji", { ...prev, ...data });
+                    }
+                  }}
+                  key={kanji.kanji}
+                />
+              );
+            })
+        ) : (
+          <>Loading...</>
+        )}
       </div>
     </>
   );

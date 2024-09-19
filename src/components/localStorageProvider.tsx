@@ -3,6 +3,8 @@ import {
   type IDBPDatabase,
   openDB,
   type OpenDBCallbacks,
+  StoreNames,
+  StoreValue,
 } from "idb";
 import React, {
   createContext,
@@ -23,10 +25,11 @@ export type LSStore<T extends DBSchema> = {
   getRaw(key: string): string | null;
   getString<T extends string>(key: string): T | null;
   getObject<T extends object>(key: string): T | null;
-  putMultiple: <Q extends T[string]["value"]>(
-    db: IDBPDatabase<T>,
-    values: Q,
-  ) => Promise<void>;
+  dbPutMultiple<Name extends StoreNames<KanjiDB>>(
+    db: IDBPDatabase<KanjiDB>,
+    storeName: Name,
+    value: StoreValue<KanjiDB, Name>[],
+  ): Promise<void>;
   idb: IDBPDatabase<T> | null;
 };
 
@@ -49,7 +52,7 @@ const LSContext = createContext<LSStore<KanjiDB>>({
   getString() {
     throw new Error("Not in store provider!");
   },
-  async putMultiple() {
+  async dbPutMultiple() {
     throw new Error("Not in store provider");
   },
   idb: null,
@@ -171,9 +174,9 @@ export const LocalStorageProvider = ({
         localStorage.setItem(key, JSON.stringify(value));
       }
     },
-    async putMultiple(db: IDBPDatabase<KanjiDB>, values: Kanji[]) {
+    async dbPutMultiple(db, store, values) {
       for (const value of values) {
-        await db.put("kanji", value);
+        await db.put(store, value);
       }
     },
     idb: null,

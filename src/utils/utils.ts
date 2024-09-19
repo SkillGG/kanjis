@@ -1,3 +1,5 @@
+import { env } from "@/env";
+
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => {};
 
@@ -54,4 +56,26 @@ export const randomEndWeighedInt = (
     }
   }
   return -1;
+};
+
+const cLog = (val: "log" | "warn" | "error", ...arr: unknown[]) => {
+  if (env.NEXT_PUBLIC_DEV === "development") console[val](...arr);
+};
+
+export const log = (str: TemplateStringsArray, ...objs: unknown[]): void => {
+  const arr = [str[0], ...objs.map((q, i) => [q, str[i + 1]])].flat();
+  if (arr[arr.length - 1] === "") arr.length--;
+  cLog("log", ...arr.filter((f) => f !== ""));
+};
+
+export const warn = (str: TemplateStringsArray, ...objs: unknown[]): void => {
+  const arr = [str[0], ...objs.map((q, i) => [q, str[i + 1]])].flat();
+  if (arr[arr.length - 1] === "") arr.length--;
+  cLog("warn", ...arr);
+};
+
+export const err = (str: TemplateStringsArray, ...objs: unknown[]): void => {
+  const arr = [str[0], ...objs.map((q, i) => [q, str[i + 1]])].flat();
+  if (arr[arr.length - 1] === "") arr.length--;
+  cLog("error", ...arr);
 };

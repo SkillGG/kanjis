@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import {
   LS_KEYS,
   type LSStore as LSStore,
@@ -27,8 +27,9 @@ import {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   type LocalStorageProvider,
 } from "./../localStorageProvider";
+import { log } from "@/utils/utils";
 
-const getLocationKanjis = (search: string): Kanji[] => {
+export const parseKanjiURI = (search: URLSearchParams): Kanji[] => {
   const locKanjis = [] as Kanji[];
 
   // &n = new
@@ -36,10 +37,11 @@ const getLocationKanjis = (search: string): Kanji[] => {
   // &l = learn
   // (勉強,2);(漢字,4);[失態,4]  = base 勉 and 強 lvl2 + base 漢 and 字 lvl 4 + extra 失 and 態 lvl 4
 
-  const parseLocKanjiList = (l: string | null, s: KanjiStatus) => {
-    if (!l) return null;
+  const parseLocKanjiList = (toParse: string | null, status: KanjiStatus) => {
+    if (!toParse) return null;
+
     const lists = [
-      ...decodeURIComponent(l).matchAll(/(\(|\[)(.*?),(\d+)(?:\)|\])/gi),
+      ...decodeURIComponent(toParse).matchAll(/(\(|\[)(.*?),(\d+)(?:\)|\])/gi),
     ];
 
     const allKanjis = [] as Kanji[];
@@ -52,190 +54,217 @@ const getLocationKanjis = (search: string): Kanji[] => {
       if (!kanjis) continue;
       let i = 1;
       for (const k of kanjis) {
-        allKanjis.push({ kanji: k, type, lvl, status: s, index: i++ });
+        allKanjis.push({ kanji: k, type, lvl, status: status, index: i++ });
       }
     }
 
     return allKanjis;
   };
 
-  const newMatch = /(?:\?|&)n=([^\?&]*)/i.exec(search);
-  const news = parseLocKanjiList(newMatch?.[1] ?? null, "new");
+  const news = parseLocKanjiList(search.get("n"), "new");
   if (news) locKanjis.push(...news);
 
-  const compMatch = /(?:\?|&)c=([^\?&]*)/i.exec(search);
-  const comps = parseLocKanjiList(compMatch?.[1] ?? null, "completed");
+  const comps = parseLocKanjiList(search.get("c"), "completed");
   if (comps) locKanjis.push(...comps);
 
-  const learnMatch = /(?:\?|&)l=([^\?&]*)/i.exec(search);
-  const lrns = parseLocKanjiList(learnMatch?.[1] ?? null, "learning");
+  const lrns = parseLocKanjiList(search.get("l"), "learning");
   if (lrns) locKanjis.push(...lrns);
 
   return locKanjis;
 };
 
-const migrateToDB = async (db: IDBPDatabase<KanjiDB>, kanji: Kanji[]) => {
-  const transaction = db.transaction("kanji", "readwrite");
-  await Promise.all(kanji.map((k) => transaction.store.put(k)));
+export const KANJI_MERGE_STRATEGIES = {
+  a: NO_OVERRIDE,
+  r: OVERRIDE_ALL,
+  p: NO_OVERRIDE,
+  m: OVERRIDE_STATUS,
+  x: NO_OVERRIDE,
+} as const;
+
+type OverrideType = "a" | "r" | "x" | "p" | "m";
+
+export const assertOverrideType = (q?: string | null): OverrideType => {
+  if (q === "a" || q === "r" || q === "x" || q === "p" || q === "m") return q;
+  return "m";
 };
+
+export const migrateFromLS = async (LS: LSStore<KanjiDB>) => {
+  const kanji = LS.getObject<Kanji[]>(LS_KEYS.kanjis);
+  if (kanji?.length && LS.idb) {
+    // migrate from LS to DB
+    const transaction = LS.idb.transaction("kanji", "readwrite");
+    await Promise.all(kanji.map((k) => transaction.store.put(k)));
+    LS.set(LS_KEYS.kanjis, null);
+  }
+};
+
+export const removeSearchParams = async (override: OverrideType) => {
+  log`Removing searchParams!`;
+  // console.trace();
+  if (override != "p") {
+    const currURL = new URL(location.href);
+    if (
+      currURL.searchParams.has("c") ||
+      currURL.searchParams.has("n") ||
+      currURL.searchParams.has("l") ||
+      currURL.searchParams.has("t") ||
+      currURL.searchParams.has("q")
+    ) {
+      currURL.searchParams.delete("c");
+      currURL.searchParams.delete("n");
+      currURL.searchParams.delete("l");
+      currURL.searchParams.delete("t");
+      currURL.searchParams.delete("q");
+      await Router.replace(currURL, currURL, { shallow: true });
+    }
+  }
+};
+
+export const getAllKanjisFromDB = async (idb: IDBPDatabase<KanjiDB>) => {
+  const transaction = idb.transaction("kanji");
+  const DBKanjiStore = transaction.store;
+  const DBKanjiCursor = DBKanjiStore.iterate(null, "next");
+  const DBKanjis: Kanji[] = [];
+
+  for await (const kanji of DBKanjiCursor) {
+    DBKanjis.push(kanji.value);
+  }
+  DBKanjis.sort((a, b) => a.index - b.index);
+  return DBKanjis;
+};
+
+export const checkKanjiListUpdate = (LS: LSStore<KanjiDB>) => {
+  const lastVersion = LS.getString<string>(LS_KEYS.kanji_ver);
+  const omitVersion = LS.getString<string>(LS_KEYS.omit_version);
+
+  let shouldUpdate = false;
+
+  if (!lastVersion || !valid(lastVersion)) {
+    shouldUpdate = true;
+  } else {
+    if (gt(DEFAULT_KANJI_VERSION, lastVersion)) {
+      shouldUpdate = true;
+    }
+  }
+
+  if (
+    !omitVersion ||
+    !valid(omitVersion) ||
+    !eq(DEFAULT_KANJI_VERSION, omitVersion)
+  ) {
+    return shouldUpdate;
+  }
+
+  return false;
+};
+
+export const getOverrideType = (search: URLSearchParams): OverrideType => {
+  return search.has("q") ? "r" : assertOverrideType(search.get("t"));
+};
+
+export const saveToIDB = async (
+  LS: LSStore<KanjiDB>,
+  overrideType: OverrideType,
+  kanji: Kanji[],
+) => {
+  if (!LS?.idb) {
+    console.error("No IDB connection!");
+    return;
+  }
+  await LS.idb.clear("kanji");
+  await LS.dbPutMultiple(LS.idb, "kanji", kanji);
+};
+
+export const getMergedKanjis = async (
+  LS: LSStore<KanjiDB>,
+  url: Kanji[],
+  override: OverrideType,
+): Promise<{ kanji: Kanji[]; updateRequired: boolean }> => {
+  if (!LS.idb) throw new Error("No IDB connection");
+  const DBKanjis = await getAllKanjisFromDB(LS.idb);
+  log`DBKanjis ${DBKanjis}`;
+  if (!DBKanjis || DBKanjis.length === 0) {
+    // no DB kanji
+    LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
+    const kanji = removeDuplicates(
+      DEFAULT_KANJIS().concat(url),
+      KANJI_MERGE_STRATEGIES[override],
+    );
+    return { kanji, updateRequired: false };
+  } else {
+    // merge states
+    try {
+      if (Array.isArray(DBKanjis)) {
+        if (override === "r") {
+          LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
+        }
+        const kanji = removeDuplicates(
+          removeDuplicates(
+            (override === "r" ? DEFAULT_KANJIS() : DBKanjis).concat(url),
+            KANJI_MERGE_STRATEGIES[override],
+          ).concat(DEFAULT_KANJIS()),
+          OVERRIDE_INDEXES,
+        ).sort((a, b) => a.index - b.index); // override indexes because older versions of DB didn't have them
+        return { kanji, updateRequired: false };
+      }
+    } catch (e) {
+      console.warn(e);
+      alert("There was an issue getting your previous data! Resetting!");
+    }
+  }
+
+  return { kanji: DEFAULT_KANJIS(), updateRequired: true };
+};
+
 /**
  * Initial setup, update-management and backup-management of IndexedDB and LocalStorage values
  * @param LS {@link LSStore} object that has bindings to LocalStore and IndexedDB data.
  * @see  {@link LocalStorageProvider} and {@link useLocalStorage}
  */
 export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
-  const { mutateKanjis, setShouldUpdate } = useKanjiStore();
-
+  const { mutateKanjis, setShouldUpdateKanjiList: setShouldUpdate } =
+    useKanjiStore();
   const utils = api.useUtils();
 
-  useEffect(() => {
-    let locationKanjis = getLocationKanjis(location.search);
+  const resetDBToDefault = useCallback(
+    async (
+      LS: LSStore<KanjiDB>,
+      urlKanjis: Kanji[],
+      override: OverrideType,
+    ) => {
+      const { kanji, updateRequired } = await getMergedKanjis(
+        LS,
+        urlKanjis,
+        "r",
+      );
+      setShouldUpdate(updateRequired);
+      LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
+      await saveToIDB(LS, override, kanji);
+      mutateKanjis(() => kanji);
+    },
+    [mutateKanjis, setShouldUpdate],
+  );
 
-    let overrideType = (/t=(a|r|p|m)/i.exec(location.search)?.[1] ?? "x") as
-      | "a"
-      | "r"
-      | "p"
-      | "m"
-      | "x";
+  const restoreKanjiFromOnlineDB = useCallback(
+    async (LS: LSStore<KanjiDB>, id: string | null) => {
+      if (!id) return null;
+      log`Restoring Kanji from Online DB with id ${id}`;
 
-    const strategies = {
-      a: NO_OVERRIDE,
-      r: OVERRIDE_ALL,
-      p: NO_OVERRIDE,
-      m: OVERRIDE_STATUS,
-      x: NO_OVERRIDE,
-    } as const;
+      const link = await utils.backup.getList.fetch(id);
 
-    void (async () => {
-      const listID = /q=([^&]*)/.exec(location.search)?.[1];
-
-      if (listID) {
-        const linkData = await utils.backup.getList.fetch(listID);
-        if ("link" in linkData) {
-          locationKanjis = getLocationKanjis(linkData.link);
-          overrideType = "r";
-        } else {
-          console.error("link failed", linkData.err);
-        }
-      }
-
-      const LSkanjis = LS.getObject<Kanji[]>(LS_KEYS.kanjis);
-
-      if (LSkanjis?.length && LS.idb) {
-        // migrate from LS to DB
-        await migrateToDB(LS.idb, LSkanjis);
-        LS.set(LS_KEYS.kanjis, null);
-      }
-      if (!LS.idb) return;
-
-      const transaction = LS.idb?.transaction("kanji");
-
-      const DBKanjiStore = transaction?.store;
-
-      const DBKanjiCursor = DBKanjiStore.iterate(null, "next");
-
-      const DBKanjis: Kanji[] = [];
-
-      for await (const kanji of DBKanjiCursor) {
-        DBKanjis.push(kanji.value);
-      }
-
-      DBKanjis.sort((a, b) => a.index - b.index);
-
-      const lastVersion = LS.getString<string>(LS_KEYS.kanji_ver);
-
-      const omitVersion = LS.getString<string>(LS_KEYS.omit_version);
-
-      let shouldUpdate = false;
-
-      if (!lastVersion || !valid(lastVersion)) {
-        shouldUpdate = true;
+      if ("link" in link) {
+        await resetDBToDefault(
+          LS,
+          parseKanjiURI(new URLSearchParams(link.link)),
+          "r",
+        );
+        return true;
       } else {
-        if (gt(DEFAULT_KANJI_VERSION, lastVersion)) {
-          shouldUpdate = true;
-        }
+        return false;
       }
+    },
+    [resetDBToDefault, utils],
+  );
 
-      if (
-        !omitVersion ||
-        !valid(omitVersion) ||
-        !eq(DEFAULT_KANJI_VERSION, omitVersion)
-      ) {
-        setShouldUpdate(shouldUpdate);
-      }
-
-      const saveToIDB = async (kanji: Kanji[]) => {
-        await LS.idb?.clear("kanji");
-        await Promise.all(kanji.map((k) => LS.idb?.put("kanji", k)));
-
-        if (overrideType != "p") {
-          const currURL = new URL(location.href);
-          if (
-            currURL.searchParams.has("c") ||
-            currURL.searchParams.has("n") ||
-            currURL.searchParams.has("l") ||
-            currURL.searchParams.has("t") ||
-            currURL.searchParams.has("q")
-          ) {
-            currURL.searchParams.delete("c");
-            currURL.searchParams.delete("n");
-            currURL.searchParams.delete("l");
-            currURL.searchParams.delete("t");
-            currURL.searchParams.delete("q");
-            void Router.replace(currURL, currURL, { shallow: true });
-          }
-        }
-      };
-
-      if (!DBKanjis || DBKanjis.length === 0) {
-        // no DB kanji
-        setShouldUpdate(false);
-        mutateKanjis(() => {
-          LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
-          const kanji = removeDuplicates(
-            DEFAULT_KANJIS().concat(locationKanjis),
-            strategies[overrideType],
-          );
-          void saveToIDB(kanji);
-          return kanji;
-        });
-      } else {
-        // merge states
-        try {
-          if (Array.isArray(DBKanjis))
-            mutateKanjis(() => {
-              if (overrideType === "r") {
-                setShouldUpdate(false);
-                LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
-              }
-              const kanji = removeDuplicates(
-                removeDuplicates(
-                  (overrideType === "r" ? DEFAULT_KANJIS() : DBKanjis).concat(
-                    locationKanjis,
-                  ),
-                  strategies[overrideType],
-                ).concat(DEFAULT_KANJIS()),
-                OVERRIDE_INDEXES,
-              ).sort((a, b) => a.index - b.index);
-
-              void saveToIDB(kanji);
-              return kanji;
-            });
-        } catch (e) {
-          console.warn(e);
-          alert("There was an issue getting your previous data! Resetting!");
-          mutateKanjis(() => {
-            setShouldUpdate(false);
-            LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
-            const kanji = removeDuplicates(
-              DEFAULT_KANJIS().concat(locationKanjis),
-              strategies[overrideType],
-            );
-            void saveToIDB(kanji);
-            return kanji;
-          });
-        }
-      }
-    })();
-  }, [LS, mutateKanjis, setShouldUpdate, utils]);
+  return { resetDBToDefault, restoreKanjiFromOnlineDB } as const;
 };

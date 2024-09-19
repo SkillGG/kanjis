@@ -18,8 +18,8 @@ export type Kanji = {
 
 export type Store = {
   kanjis: Kanji[] | null;
-  shouldUpdate: boolean;
-  setShouldUpdate: (su: boolean) => void;
+  shouldUpdateKanjiList: boolean;
+  setShouldUpdateKanjiList: (su: boolean) => void;
   mutateKanjis: (mutation: (k: Store["kanjis"]) => Store["kanjis"]) => void;
   updateKanji: (kanji: string, data: Partial<Omit<Kanji, "kanji">>) => void;
   addKanji: (kanji: Kanji) => void;
@@ -29,9 +29,9 @@ export type Store = {
 export const useKanjiStore = create<Store>((_set, _get) => {
   return {
     kanjis: null,
-    shouldUpdate: false,
-    setShouldUpdate(su) {
-      _set((prev) => ({ ...prev, shouldUpdate: su }));
+    shouldUpdateKanjiList: false,
+    setShouldUpdateKanjiList(su) {
+      _set((prev) => ({ ...prev, shouldUpdateKanjiList: su }));
     },
     mutateKanjis: (mut: (k: Store["kanjis"]) => Store["kanjis"]) => {
       _set((prev) => {

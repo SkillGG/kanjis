@@ -55,6 +55,8 @@ export const backupRouter = createTRPCRouter({
           .where(eq(listSaves.id, id))
           .limit(1);
 
+        console.log(link);
+
         if (link.length > 0 && link[0]) {
           // got the link
           return { link: link[0].link };
@@ -78,7 +80,10 @@ export const backupRouter = createTRPCRouter({
         return { reason: "ID can only consist of [A-Za-z0-9_-]" };
       }
 
+      console.log(sameID);
+
       const first = sameID[0];
+
       const num = parseInt(first?.num ?? "-1");
       if (num === 0) return true;
       return { reason: "ID already occupied!" };
