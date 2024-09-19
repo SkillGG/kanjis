@@ -49,6 +49,8 @@ export default function KanjiCardCreator() {
 
   const [canUpdateBank, setCanUpdateBank] = useState(false);
 
+  const [autoIMEChange, setAutoIMEChange] = useState(false);
+
   const allRef = useRef<HTMLButtonElement>(null);
   const addRef = useRef<HTMLButtonElement>(null);
   const mainInput = useRef<HTMLInputElement>(null);
@@ -69,13 +71,7 @@ export default function KanjiCardCreator() {
 
       if (words !== null) return;
 
-      setWords(() =>
-        object.map((k) => ({
-          ...k,
-          full: getReadings(k.word, k.meaning, k.readings),
-          hint: getReadingsWithout(k.word, k.meaning, k.readings, k.special),
-        })),
-      );
+      setWords(() => object.map((k) => toRQW(k)));
     })();
 
     const wordver = LS.getString(LS_KEYS.wordbank_ver);
@@ -99,6 +95,7 @@ export default function KanjiCardCreator() {
         }
       }
     }
+
     window.removeEventListener("keydown", handlekeydown);
     window.addEventListener("keydown", handlekeydown);
     return () => {
@@ -238,6 +235,15 @@ export default function KanjiCardCreator() {
             checked={autoFilter}
           />
         </label>
+        <br />
+        <label>
+          Auto Change IME in meaning field (doesn&apos;t work on mobile)
+          <input
+            type="checkbox"
+            onChange={() => setAutoIMEChange((p) => !p)}
+            checked={autoIMEChange}
+          />
+        </label>
         <div className="flex w-full max-w-[100%] flex-wrap sm:max-w-[100%]">
           {readings.map((a, i) => (
             <div
@@ -287,7 +293,7 @@ export default function KanjiCardCreator() {
                 className="reading-input m-0 w-[8rem] justify-self-center border-none p-0 text-center text-[1.4rem] outline-none placeholder:text-center"
                 style={{
                   backgroundColor: special.includes(i) ? "green" : "initial",
-                  imeMode: "active",
+                  imeMode: autoIMEChange ? "active" : "unset",
                 }}
               />
             </div>
@@ -329,7 +335,7 @@ export default function KanjiCardCreator() {
               }}
               ref={mainInput}
               style={{
-                imeMode: "active",
+                imeMode: autoIMEChange ? "active" : "unset",
               }}
               className="w-full text-center outline-none"
               value={wordVal}
@@ -342,7 +348,7 @@ export default function KanjiCardCreator() {
             <input
               ref={meaningInput}
               placeholder="意味"
-              type="tel"
+              type={autoIMEChange ? "tel" : "text"}
               className="w-full text-center outline-none sm:ml-2"
               value={meaning}
               onKeyDown={(e) => {
@@ -489,56 +495,68 @@ export default function KanjiCardCreator() {
         {new Set(words?.map((w) => w.word) ?? []).size}):
       </div>
       <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
-        {shownWords?.map((q) => (
-          <div
-            key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
-            className="w-fit flex-grow"
-            onContextMenu={async (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              if (!LS?.idb || !words) return;
-              await LS.idb.delete("wordbank", [q.word, q.special, q.readings]);
-              setWords(() => {
-                return words.filter((w) => !areWordsTheSame(w, q)) ?? null;
-              });
-            }}
-          >
-            <KanjiCard
-              classNames={{
-                border:
-                  "w-full border-t-[blue] border-x-[blue] border-[1px] border-b-[yellow]",
-                text: "text-xl",
-              }}
-              styles={{
-                border: {
-                  borderBottomStyle: "dotted",
-                },
-              }}
-              key={`${q.word}_${q.special}_${q.readings.join("_")}_quiz`}
-              commit={noop}
-              word={q}
-              disableButtons
-              sideOverride="quiz"
-            />
-            <KanjiCard
-              key={`${q.word}_${q.special}_${q.readings.join("_")}_ans`}
-              classNames={{
-                border:
-                  "w-full border-b-[blue] border-x-[blue] border-[1px] border-t-[yellow]",
-                text: "text-xl",
-              }}
-              styles={{
-                border: {
-                  borderTopStyle: "dotted",
-                },
-              }}
-              commit={noop}
-              word={q}
-              disableButtons
-              sideOverride="answer"
-            />
-          </div>
-        ))}
+        {shownWords
+          ?.reduce(
+            (p, n) => {
+              const prevInArr = p.find((z) => z.word === n.word);
+              if (prevInArr) {
+                const newMS = [
+                  ...(prevInArr.multiSpecial ?? [prevInArr.special]),
+                  n.special,
+                ];
+                return [
+                  ...p.filter((f) => f.word !== n.word),
+                  {
+                    ...toRQW({ ...prevInArr }, {}, newMS),
+                    multiSpecial: newMS,
+                  },
+                ];
+              }
+              return [...p, n];
+            },
+            [] as (ReactQuizWord & { multiSpecial?: number[] })[],
+          )
+          ?.map((q) => (
+            <div
+              key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
+              className="relative w-fit flex-grow"
+            >
+              <button
+                className="absolute right-2 top-1 border-none text-[red]"
+                onClick={async () => {
+                  if (!LS?.idb || !words) return;
+                  const kanjiSpecs = (q.multiSpecial as
+                    | number[]
+                    | undefined) ?? [q.special];
+                  for (const spec of kanjiSpecs) {
+                    log`Removing word ${{ ...q, special: spec }}`;
+                    await LS.idb.delete("wordbank", [q.word, spec, q.readings]);
+                    setWords((prev) => {
+                      return (
+                        prev?.filter(
+                          (w) => !areWordsTheSame(w, { ...q, special: spec }),
+                        ) ?? null
+                      );
+                    });
+                  }
+                }}
+              >
+                X
+              </button>
+              <KanjiCard
+                key={`${q.word}_${q.special}_${q.readings.join("_")}_ans`}
+                classNames={{
+                  border: "w-full border-[blue] border-[1px]",
+                  text: "text-xl",
+                }}
+                styles={{ text: { "--color": "lime" } }}
+                commit={noop}
+                word={q}
+                disableButtons
+                sideOverride="answer"
+              />
+            </div>
+          ))}
       </div>
     </>
   );

@@ -40,10 +40,14 @@ export const getReadings = (
   meaning: string,
   readings: string[],
   style?: RQWStyles,
-  special?: number,
+  specials?: number[],
 ): React.ReactNode => {
   if (word.length !== readings.length)
     throw new Error("The word and readings array's lengths do not match!");
+  if (specials)
+    for (const special of specials)
+      if (special > word.length - 1 || special < 0)
+        throw new Error("The special character is out of bounds!");
   return (
     <>
       <div style={{ lineHeight: "1.5em" }}>{meaning}</div>
@@ -52,7 +56,7 @@ export const getReadings = (
           return (
             <React.Fragment key={`word_reading_${r}_${i}`}>
               <span
-                className={`${special === i ? kanjiCSS["special-kanji"] : ""}`}
+                className={`${specials?.includes(i) ? kanjiCSS["special-kanji"] : ""}`}
                 style={{ fontFamily: "inherit" }}
               >
                 {word[i]}
@@ -78,13 +82,14 @@ export const getReadingsWithout = (
   word: string,
   meaning: string,
   readings: string[],
-  special: number,
+  specials: number[],
   style?: RQWStyles,
 ): React.ReactNode => {
   if (word.length !== readings.length)
     throw new Error("The word and readings array's lengths do not match!");
-  if (special > word.length - 1 || special < 0)
-    throw new Error("The special character is out of bounds!");
+  for (const special of specials)
+    if (special > word.length - 1 || special < 0)
+      throw new Error("The special character is out of bounds!");
   return (
     <>
       <div style={{ lineHeight: "1.5em" }}>{meaning}</div>
@@ -92,7 +97,7 @@ export const getReadingsWithout = (
         {readings.map((r, i) => {
           return (
             <React.Fragment key={`word_special_reading_${r}_${i}`}>
-              {i === special ? "〇" : word[i]}
+              {specials.includes(i) ? "〇" : word[i]}
               <rt
                 style={{
                   ...style?.rt,
@@ -115,6 +120,7 @@ export const getWordWithout = (word: string, special: number): string => {
 export const toRQW = (
   qw: QuizWord,
   styles?: { full?: RQWStyles; hint?: RQWStyles },
+  multipleSpecials?: number[],
 ): ReactQuizWord => {
   return {
     ...qw,
@@ -123,13 +129,13 @@ export const toRQW = (
       qw.meaning,
       qw.readings,
       styles?.full,
-      qw.special,
+      multipleSpecials ?? [qw.special],
     ),
     hint: getReadingsWithout(
       qw.word,
       qw.meaning,
       qw.readings,
-      qw.special,
+      multipleSpecials ?? [qw.special],
       styles?.hint,
     ),
   };
