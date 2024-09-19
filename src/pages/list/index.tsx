@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
-import {
-  DEFAULT_KANJI_VERSION,
-  DEFAULT_KANJIS,
-} from "@/components/list/defaultKanji";
+import { DEFAULT_KANJI_VERSION } from "@/components/list/defaultKanji";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
 import kanjiCSS from "@/components/list/list.module.css";
@@ -32,7 +29,7 @@ const CHECK_DEDPUE_DELAY = 500;
 
 function App() {
   const LS = useLocalStorage();
-  const { resetDBToDefault, restoreKanjiFromOnlineDB } = useKanjiStorage(LS);
+  const { resetDBToDefault, restoreKanjiFromOnlineDB } = useKanjiStorage();
 
   const mut = api.backup.backupList.useMutation();
 

@@ -1,8 +1,6 @@
 import { KanjiCard } from "@/components/draw/kanjiCard";
 import {
   areWordsTheSame,
-  getReadings,
-  getReadingsWithout,
   getWordWithout,
   type QuizWord,
   type ReactQuizWord,
@@ -23,6 +21,8 @@ import creatorCSS from "./creator.module.css";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
 const POPUP_SHOW_TIME = 1000;
+
+type MultiRQW = ReactQuizWord & { multiSpecial?: number[] };
 
 import defaultWordBank from "./wordbank.json";
 import { gt, inc } from "semver";
@@ -539,26 +539,23 @@ export default function KanjiCardCreator() {
       </div>
       <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
         {shownWords
-          ?.reduce(
-            (p, n) => {
-              const prevInArr = p.find((z) => z.word === n.word);
-              if (prevInArr) {
-                const newMS = [
-                  ...(prevInArr.multiSpecial ?? [prevInArr.special]),
-                  n.special,
-                ];
-                return [
-                  ...p.filter((f) => f.word !== n.word),
-                  {
-                    ...toRQW({ ...prevInArr }, {}, newMS),
-                    multiSpecial: newMS,
-                  },
-                ];
-              }
-              return [...p, n];
-            },
-            [] as (ReactQuizWord & { multiSpecial?: number[] })[],
-          )
+          ?.reduce<MultiRQW[]>((p, n) => {
+            const prevInArr = p.find((z) => z.word === n.word);
+            if (prevInArr) {
+              const newMS = [
+                ...(prevInArr.multiSpecial ?? [prevInArr.special]),
+                n.special,
+              ];
+              return [
+                ...p.filter((f) => f.word !== n.word),
+                {
+                  ...toRQW({ ...prevInArr }, {}, newMS),
+                  multiSpecial: newMS,
+                },
+              ];
+            }
+            return [...p, n];
+          }, [])
           ?.map((q) => (
             <div
               key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
@@ -568,9 +565,7 @@ export default function KanjiCardCreator() {
                 className="absolute right-2 top-1 border-none text-[red]"
                 onClick={async () => {
                   if (!LS?.idb || !words) return;
-                  const kanjiSpecs = (q.multiSpecial as
-                    | number[]
-                    | undefined) ?? [q.special];
+                  const kanjiSpecs = q.multiSpecial ?? [q.special];
                   for (const spec of kanjiSpecs) {
                     log`Removing word ${{ ...q, special: spec }}`;
                     await LS.idb.delete("wordbank", [q.word, spec, q.readings]);

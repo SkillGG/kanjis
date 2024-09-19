@@ -18,7 +18,7 @@ export default function Draw() {
 
   const router = useRouter();
 
-  useKanjiStorage(LS);
+  useKanjiStorage();
   const { kanjis } = useKanjiStore();
 
   const [selectedKanjis, setSelectedKanjis] = useState<string[]>([]);

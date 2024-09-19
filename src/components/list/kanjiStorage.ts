@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback } from "react";
 import {
   LS_KEYS,
   type LSStore as LSStore,
@@ -221,7 +221,7 @@ export const getMergedKanjis = async (
  * @param LS {@link LSStore} object that has bindings to LocalStore and IndexedDB data.
  * @see  {@link LocalStorageProvider} and {@link useLocalStorage}
  */
-export const useKanjiStorage = (LS: LSStore<KanjiDB>) => {
+export const useKanjiStorage = () => {
   const { mutateKanjis, setShouldUpdateKanjiList: setShouldUpdate } =
     useKanjiStore();
   const utils = api.useUtils();

@@ -3,8 +3,8 @@ import {
   type IDBPDatabase,
   openDB,
   type OpenDBCallbacks,
-  StoreNames,
-  StoreValue,
+  type StoreNames,
+  type StoreValue,
 } from "idb";
 import React, {
   createContext,
@@ -13,7 +13,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { type Kanji } from "./list/kanjiStore";
 import { type KanjiDB } from "@/pages/_app";
 
 type LSData = string | number | object;
