@@ -2,7 +2,7 @@
 
 import { type DrawSessionData } from "@/components/draw/drawSession";
 import { type QuizWord } from "@/components/draw/quizWords";
-import { useKanjiStorage } from "@/components/list/kanjiStorage";
+import { getMergedKanjis } from "@/components/list/kanjiStorage";
 import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
 import { KanjiTile } from "@/components/list/kanjiTile";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
@@ -18,8 +18,7 @@ export default function Draw() {
 
   const router = useRouter();
 
-  useKanjiStorage();
-  const { kanjis } = useKanjiStore();
+  const { kanjis, mutateKanjis } = useKanjiStore();
 
   const [selectedKanjis, setSelectedKanjis] = useState<string[]>([]);
 
@@ -45,6 +44,14 @@ export default function Draw() {
   const [words, setWords] = useState<QuizWord[]>([]);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    void (async () => {
+      if (!LS.idb) return;
+      const dbKanjis = await getMergedKanjis(LS, [], "m");
+      mutateKanjis(() => dbKanjis.kanji);
+    })();
+  }, [LS, mutateKanjis]);
 
   useEffect(() => {
     if (rowCount === null) {
