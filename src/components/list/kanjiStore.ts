@@ -16,6 +16,13 @@ export type Kanji = {
   index: number;
 };
 
+export type TagInfo = {
+  description: string;
+  color?: string;
+  border?: string;
+  bg?: string;
+};
+
 export type Store = {
   kanjis: Kanji[] | null;
   shouldUpdateKanjiList: boolean;
@@ -24,12 +31,18 @@ export type Store = {
   updateKanji: (kanji: string, data: Partial<Omit<Kanji, "kanji">>) => void;
   addKanji: (kanji: Kanji) => void;
   removeKanji: (kanji: string) => void;
+  tagColors: Record<string, TagInfo> | null;
+  setTagColors: (colors: Record<string, TagInfo>) => void;
 };
 
 export const useKanjiStore = create<Store>((_set, _get) => {
   return {
     kanjis: null,
     shouldUpdateKanjiList: false,
+    tagColors: null,
+    setTagColors(colors) {
+      _set((prev) => ({ ...prev, tagColors: colors }));
+    },
     setShouldUpdateKanjiList(su) {
       _set((prev) => ({ ...prev, shouldUpdateKanjiList: su }));
     },

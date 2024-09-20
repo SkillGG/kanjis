@@ -53,9 +53,18 @@ import defaultWordBank from "./wordbank.json";
 import { gt, inc } from "semver";
 import Link from "next/link";
 import { usePopup } from "@/components/usePopup";
+import TagLabel from "@/components/draw/tagBadge";
+import { type TagInfo, useKanjiStore } from "@/components/list/kanjiStore";
+import { TagEditor } from "@/components/wordbank/tagEditor";
 
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
+
+  const { tagColors, setTagColors } = useKanjiStore((s) => ({
+    tagColors: s.tagColors,
+    setTagColors: s.setTagColors,
+  }));
+
   const { setPopup, popup } = usePopup();
 
   const [words, setWords] = useState<ReactQuizWord[] | null>(null);
@@ -139,6 +148,31 @@ export default function KanjiCardCreator() {
   }, [LS, words]);
 
   useEffect(() => {
+    const tColors = defaultWordBank.tags as Record<string, TagInfo>;
+
+    if (!tagColors) {
+      // first edit
+      const lsColors =
+        LS.getObject<Record<string, TagInfo>>(LS_KEYS.tag_colors) ?? {};
+      setTagColors({ ...tColors, ...lsColors });
+    } else {
+      let restored = false;
+      const mix = { ...tagColors };
+      for (const [name, obj] of Object.entries(tColors)) {
+        if (!(name in mix)) {
+          restored = true;
+          mix[name] = obj;
+        }
+      }
+      if (restored) {
+        setTagColors(mix);
+      } else {
+        LS.set(LS_KEYS.tag_colors, mix);
+      }
+    }
+  }, [LS, setTagColors, tagColors]);
+
+  useEffect(() => {
     function handlekeydown(e: KeyboardEvent) {
       const num = /Digit(\d)/.exec(e.code);
       if (num && e.altKey) {
@@ -193,6 +227,7 @@ export default function KanjiCardCreator() {
     log`Update results: addedd: ${added} skipped: ${skipped}`;
     LS.set(LS_KEYS.wordbank_ver, defaultWordBank.version);
     setCanUpdateBank(false);
+    setWords((await LS.idb.getAll("wordbank")).map((w) => toRQW(w)));
   }, [LS]);
 
   useEffect(() => {
@@ -209,6 +244,8 @@ export default function KanjiCardCreator() {
     });
   }, [wordVal]);
 
+  const [openTagEditor, setOpenTagEditor] = useState(false);
+
   return (
     <>
       {popup}
@@ -220,14 +257,25 @@ export default function KanjiCardCreator() {
       >
         Go back
       </Link>
-
+      {tagColors && (
+        <TagEditor
+          close={() => setOpenTagEditor(false)}
+          state={openTagEditor ? "open" : "closed"}
+          setTags={(tC) => {
+            LS.set(LS_KEYS.tag_colors, tC);
+            setTagColors({ ...tC });
+          }}
+          tags={tagColors}
+        />
+      )}
       <div className="mx-auto w-fit max-w-[90vw] text-center sm:max-w-[70vw]">
         <div className="text-xl">Wordbank</div>
         <div className="text-[1.2rem]">
           A place to add all your words you want to use to learn with. Write a
           word into the main field, the green kanji will be made
-          &quot;guessable&quot;. Click ADD
+          &quot;guessable&quot;.
         </div>
+        <button onClick={() => setOpenTagEditor(true)}>Edit tags</button>
         <div>You can use enter to quickly focus next fields!</div>
         <label>
           Filter data on input
@@ -543,6 +591,19 @@ export default function KanjiCardCreator() {
       </div>
       <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
         {shownWords?.map((q) => {
+          const editTags = async (tags: string[]) => {
+            if (!LS?.idb || !words) return;
+            log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
+            await LS.idb.put("wordbank", { ...fromRQW(q), tags });
+            setWords((prev) => {
+              if (!prev) return prev;
+              return es5With(
+                prev,
+                prev.findIndex((w) => areWordsTheSame(q, w)),
+                { ...q, tags },
+              );
+            });
+          };
           return (
             <div
               key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
@@ -574,19 +635,38 @@ export default function KanjiCardCreator() {
                   border: "w-full border-[blue] border-[1px]",
                   text: "text-xl",
                 }}
-                editTags={async (tags) => {
-                  if (!LS?.idb || !words) return;
-                  log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
-                  await LS.idb.put("wordbank", { ...fromRQW(q), tags });
-                  setWords((prev) => {
-                    if (!prev) return prev;
-                    return es5With(
-                      prev,
-                      prev.findIndex((w) => areWordsTheSame(q, w)),
-                      { ...q, tags },
-                    );
-                  });
-                }}
+                tagOverride={
+                  <div className="flex flex-wrap gap-2">
+                    {q.tags?.map((t) => {
+                      return (
+                        <div key={t}>
+                          <TagLabel
+                            tag={t}
+                            color={tagColors?.[t]?.color}
+                            bgColor={tagColors?.[t]?.bg}
+                            border={tagColors?.[t]?.border}
+                            onClick={() => {
+                              void editTags(
+                                q.tags?.filter((f) => f !== t) ?? [],
+                              );
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
+                    <div>
+                      <TagLabel
+                        tag={"Add tag"}
+                        onClick={() => {
+                          const newTag = prompt("Tag");
+                          if (newTag) {
+                            void editTags((q.tags ?? []).concat([newTag]));
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+                }
                 styles={{ text: { "--color": "lime" } }}
                 commit={noop}
                 word={q}

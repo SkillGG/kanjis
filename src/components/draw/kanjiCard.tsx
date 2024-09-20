@@ -10,7 +10,7 @@ export const KanjiCard = ({
   sideOverride,
   disableButtons,
   classNames = { border: "", text: "" },
-  editTags,
+  tagOverride,
   styles = { border: {}, text: {} },
 }: {
   word: ReactQuizWord;
@@ -22,7 +22,7 @@ export const KanjiCard = ({
     border?: React.HTMLAttributes<"div">["className"];
     text?: React.HTMLAttributes<"div">["className"];
   };
-  editTags?: (t: string[]) => Promise<void>;
+  tagOverride?: React.ReactElement;
   styles?: {
     border?: React.HTMLAttributes<"div">["style"];
     text?: React.HTMLAttributes<"div">["style"];
@@ -93,33 +93,14 @@ export const KanjiCard = ({
               </button>
             </div>
           )}
-          {!!editTags && (
-            <div className="flex flex-wrap">
-              <dialog></dialog>
-              {word.tags?.map((t) => (
-                <div key={t}>
-                  <TagLabel
-                    tag={t}
-                    onClick={() => {
-                      void editTags(word.tags?.filter((f) => f !== t) ?? []);
-                    }}
-                  />
-                </div>
-              ))}
-              <div>
-                <TagLabel
-                  tag={"Add tag"}
-                  onClick={() => {
-                    const newTag = prompt("Tag");
-                    if (newTag) {
-                      void editTags((word.tags ?? []).concat([newTag]));
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          )}
         </>
+      )}
+      {tagOverride ?? (
+        <div className="flex">
+          {word.tags?.map((tag) => {
+            return <TagLabel key={tag} tag={tag} />;
+          })}
+        </div>
       )}
     </div>
   );

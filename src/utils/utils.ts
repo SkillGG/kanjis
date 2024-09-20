@@ -59,7 +59,9 @@ export const randomEndWeighedInt = (
 };
 
 const cLog = (val: "log" | "warn" | "error", ...arr: unknown[]) => {
-  if (env.NEXT_PUBLIC_DEV === "development") console[val](...arr);
+  if (env.NEXT_PUBLIC_DEV === "development") {
+    console[val](...arr);
+  }
 };
 
 export const log = (str: TemplateStringsArray, ...objs: unknown[]): void => {

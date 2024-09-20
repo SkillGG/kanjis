@@ -659,7 +659,22 @@ function App() {
             >
               Add kanjis
             </button>
-            <dialog ref={addRef}>
+            <dialog
+              ref={addRef}
+              onPointerDown={(event) => {
+                const dialog = addRef.current;
+                if (!dialog) return;
+                const rect = dialog.getBoundingClientRect();
+                const isInDialog =
+                  rect.top <= event.clientY &&
+                  event.clientY <= rect.top + rect.height &&
+                  rect.left <= event.clientX &&
+                  event.clientX <= rect.left + rect.width;
+                if (!isInDialog) {
+                  addRef.current?.close();
+                }
+              }}
+            >
               List kanjis to add
               <form
                 style={{
