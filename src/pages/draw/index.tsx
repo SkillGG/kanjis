@@ -39,6 +39,8 @@ export default function Draw() {
 
   const [sesssions, setSessions] = useState<DrawSessionData[]>([]);
 
+  const [donePoints, setDonePoints] = useState<number | null>(null);
+
   const [wWidth, setWWidth] = useState<number | null>(null);
 
   const [words, setWords] = useState<QuizWord[]>([]);
@@ -206,8 +208,18 @@ export default function Draw() {
               className="w-[4rem] border-green-400 text-center text-[1rem] outline-none"
               type="number"
               maxLength={4}
+              value={`${donePoints ?? ""}`}
+              onChange={({ currentTarget: { value } }) => {
+                const num = parseInt(value);
+                if (num) {
+                  setDonePoints(num);
+                } else {
+                  setDonePoints(null);
+                }
+              }}
               minLength={1}
               min={10}
+              placeholder="200"
             />
           </div>
           <div className="flex">
@@ -277,11 +289,12 @@ export default function Draw() {
                     ),
                   });
                 }
-                const sessionData = {
+                const sessionData: DrawSessionData = {
                   sessionID: sessionName,
                   sessionKanjis: selectedKanjis,
                   sessionResults: [],
                   open: true,
+                  pointsToComplete: donePoints ?? undefined,
                 };
                 await LS.idb.put("draw", sessionData);
                 void router.replace(`/draw/session/${sessionData.sessionID}`);

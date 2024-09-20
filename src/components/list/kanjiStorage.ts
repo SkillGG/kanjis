@@ -92,8 +92,7 @@ export const migrateFromLS = async (LS: LSStore<KanjiDB>) => {
   const kanji = LS.getObject<Kanji[]>(LS_KEYS.kanjis);
   if (kanji?.length && LS.idb) {
     // migrate from LS to DB
-    const transaction = LS.idb.transaction("kanji", "readwrite");
-    await Promise.all(kanji.map((k) => transaction.store.put(k)));
+    await LS.dbPutMultiple(LS.idb, "kanji", kanji);
     LS.set(LS_KEYS.kanjis, null);
   }
 };
@@ -248,22 +247,17 @@ export const useKanjiStorage = () => {
   const restoreKanjiFromOnlineDB = useCallback(
     async (LS: LSStore<KanjiDB>, id: string | null) => {
       if (!id) return null;
-      log`Restoring Kanji from Online DB with id ${id}`;
+      log`Getting Kanji from Online DB with id ${id}`;
 
       const link = await utils.backup.getList.fetch(id);
 
       if ("link" in link) {
-        await resetDBToDefault(
-          LS,
-          parseKanjiURI(new URLSearchParams(link.link)),
-          "r",
-        );
-        return true;
+        return parseKanjiURI(new URLSearchParams(link.link));
       } else {
         return false;
       }
     },
-    [resetDBToDefault, utils],
+    [utils],
   );
 
   return { resetDBToDefault, restoreKanjiFromOnlineDB } as const;

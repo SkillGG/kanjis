@@ -63,7 +63,7 @@ export const KanjiCard = ({
             <div className="flex justify-center gap-2">
               <button
                 onClick={() => {
-                  commit({ kanji: word.kanji, result: 10 });
+                  commit({ kanji: word.kanji, result: 10, word: word.word });
                   setSide("quiz");
                 }}
                 className="border-green-500 px-4 hover:bg-green-950 hover:text-green-300"
@@ -72,7 +72,7 @@ export const KanjiCard = ({
               </button>
               <button
                 onClick={() => {
-                  commit({ kanji: word.kanji, result: 0 });
+                  commit({ kanji: word.kanji, result: 0, word: word.word });
                   setSide("quiz");
                 }}
                 className="border-orange-500 px-4 hover:bg-orange-950 hover:text-orange-300"
@@ -81,7 +81,7 @@ export const KanjiCard = ({
               </button>
               <button
                 onClick={() => {
-                  commit({ kanji: word.kanji, result: -10 });
+                  commit({ kanji: word.kanji, result: -10, word: word.word });
                   setSide("quiz");
                 }}
                 className="border-red-500 px-4 hover:bg-red-950 hover:text-red-300"

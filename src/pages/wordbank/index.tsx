@@ -15,21 +15,19 @@ import React, {
   useState,
 } from "react";
 
-import kanjiCSS from "@/components/list/list.module.css";
-
 import creatorCSS from "./creator.module.css";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
-
-const POPUP_SHOW_TIME = 1000;
 
 type MultiRQW = ReactQuizWord & { multiSpecial?: number[] };
 
 import defaultWordBank from "./wordbank.json";
 import { gt, inc } from "semver";
 import Link from "next/link";
+import { usePopup } from "@/components/usePopup";
 
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
+  const { setPopup, Popup } = usePopup();
 
   const [words, setWords] = useState<ReactQuizWord[] | null>(null);
 
@@ -114,47 +112,6 @@ export default function KanjiCardCreator() {
     }
   }, [copied]);
 
-  const [popup, setPopup] = useState<
-    | {
-        text: React.ReactNode;
-        time?: number;
-        borderColor?: string;
-        color?: string;
-      }
-    | {
-        text: (close: () => void) => React.ReactNode;
-        time: "user";
-        borderColor?: string;
-        color?: string;
-      }
-    | null
-  >(null);
-  const [popupOpen, setPopupOpen] = useState(false);
-
-  useEffect(() => {
-    if (popup === null) return;
-    setPopupOpen(true);
-    if (popup.time !== "user") {
-      const oT = setTimeout(() => {
-        setPopupOpen(false);
-      }, popup.time ?? POPUP_SHOW_TIME);
-      return () => {
-        clearTimeout(oT);
-      };
-    }
-  }, [popup]);
-
-  useEffect(() => {
-    if (!popupOpen) {
-      const cT = setTimeout(() => {
-        setPopup(null);
-      }, 200);
-      return () => {
-        clearTimeout(cT);
-      };
-    }
-  }, [popupOpen]);
-
   const updateBank = useCallback(async () => {
     if (!LS.idb) return;
     const words = defaultWordBank.words as QuizWord[];
@@ -195,22 +152,7 @@ export default function KanjiCardCreator() {
 
   return (
     <>
-      {popup && (
-        <div
-          className={kanjiCSS.popup}
-          style={{
-            "--borderColor": popup.borderColor ?? "green",
-            "--textColor": popup.color ?? "white",
-          }}
-          data-open={popupOpen ? "open" : "closed"}
-        >
-          <div>
-            {typeof popup.text == "function"
-              ? popup.text(() => setPopupOpen(false))
-              : popup.text}
-          </div>
-        </div>
-      )}
+      <Popup />
       <Link
         className={
           "absolute block items-center justify-start p-2 text-left underline"

@@ -22,14 +22,14 @@ import Link from "next/link";
 import { api } from "@/utils/api";
 import shortUUID from "short-uuid";
 import { log } from "@/utils/utils";
-
-const POPUP_SHOW_TIME = 2000;
+import { usePopup } from "@/components/usePopup";
 
 const CHECK_DEDPUE_DELAY = 500;
 
 function App() {
   const LS = useLocalStorage();
   const { resetDBToDefault, restoreKanjiFromOnlineDB } = useKanjiStorage();
+  const { Popup, setPopup } = usePopup();
 
   const mut = api.backup.backupList.useMutation();
 
@@ -188,10 +188,15 @@ function App() {
           LS,
           currURL.searchParams.get("q"),
         );
-        const mergedKanjis = await getMergedKanjis(LS, [], success ? "r" : "m");
-        log`Succeeded? ${success}${mergedKanjis}`;
+        log`Succeeded? ${success}`;
 
-        if (success) await removeSearchParams("r");
+        const mergedKanjis = await getMergedKanjis(
+          LS,
+          success ? success : [],
+          "r",
+        );
+
+        if (!!success) await removeSearchParams("r");
         else
           setPopup({
             text: (
@@ -228,48 +233,7 @@ function App() {
 
       setShouldUpdate(checkKanjiListUpdate(LS));
     })();
-  }, [LS, mutateKanjis, restoreKanjiFromOnlineDB, setShouldUpdate]);
-
-  const [popup, setPopup] = useState<
-    | {
-        text: React.ReactNode;
-        time?: number;
-        borderColor?: string;
-        color?: string;
-      }
-    | {
-        text: (close: () => void) => React.ReactNode;
-        time: "user";
-        borderColor?: string;
-        color?: string;
-      }
-    | null
-  >(null);
-  const [popupOpen, setPopupOpen] = useState(false);
-
-  useEffect(() => {
-    if (popup === null) return;
-    setPopupOpen(true);
-    if (popup.time !== "user") {
-      const oT = setTimeout(() => {
-        setPopupOpen(false);
-      }, popup.time ?? POPUP_SHOW_TIME);
-      return () => {
-        clearTimeout(oT);
-      };
-    }
-  }, [popup]);
-
-  useEffect(() => {
-    if (!popupOpen) {
-      const cT = setTimeout(() => {
-        setPopup(null);
-      }, 200);
-      return () => {
-        clearTimeout(cT);
-      };
-    }
-  }, [popupOpen]);
+  }, [LS, mutateKanjis, restoreKanjiFromOnlineDB, setPopup, setShouldUpdate]);
 
   useEffect(() => {
     LS.set("rowCount", `${rowCount}`);
@@ -480,22 +444,7 @@ function App() {
             </div>
           </div>
         )}
-        {popup && (
-          <div
-            className={kanjiCSS.popup}
-            style={{
-              "--borderColor": popup.borderColor ?? "green",
-              "--textColor": popup.color ?? "white",
-            }}
-            data-open={popupOpen ? "open" : "closed"}
-          >
-            <div>
-              {typeof popup.text == "function"
-                ? popup.text(() => setPopupOpen(false))
-                : popup.text}
-            </div>
-          </div>
-        )}
+        <Popup />
         {shouldUpdate && (
           <div
             className={kanjiCSS.popup + " z-20 text-center text-[1.3rem]"}

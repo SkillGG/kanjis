@@ -9,6 +9,7 @@ import {
 import { KanjiCard } from "./kanjiCard";
 import { useLocalStorage } from "../localStorageProvider";
 import { myFont } from "@/pages/_app";
+import { usePopup } from "../usePopup";
 
 export const Quizlet = ({
   session,
@@ -18,6 +19,7 @@ export const Quizlet = ({
   commitResult: (result: SessionResult) => Promise<DrawSessionData>;
 }) => {
   const LS = useLocalStorage();
+  const { Popup, setPopup } = usePopup();
 
   const [wordGenerator, setWordGenerator] = useState<NextWordGenerator | null>(
     null,
@@ -63,16 +65,26 @@ export const Quizlet = ({
 
   return (
     <>
-      <span>
-        Cur points:{" "}
-        {session.sessionResults
-          .filter((f) => f.kanji === currentWord.kanji)
-          .reduce((p, n) => p + n.result, 0)}
-      </span>
+      <Popup />
       <KanjiCard
         classNames={{ text: "text-4xl", border: "text-2xl" }}
         commit={async (result) => {
           const newSession = await commitResult(result);
+
+          const allWords = await LS.idb?.getAllFromIndex(
+            "wordbank",
+            "kanji",
+            result.kanji,
+          );
+
+          const allWPoints = allWords?.map((word) => {
+            return newSession.sessionResults
+              .filter((r) => r.word === word.word)
+              .reduce((p, n) => p + n.result, 0);
+          });
+
+          console.log(allWPoints);
+
           await nextWord(newSession);
         }}
         word={toRQW(currentWord, {
