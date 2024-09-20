@@ -15,6 +15,7 @@ export type QuizWord = {
   special: number;
   meaning: string;
   blanked: string;
+  tags?: string[];
 };
 
 export type ReactQuizWord = QuizWord & {
@@ -115,6 +116,18 @@ export const getReadingsWithout = (
 
 export const getWordWithout = (word: string, special: number): string => {
   return [...word].map((q, i) => (i === special ? "〇" : q)).join("");
+};
+
+export const fromRQW = ({
+  blanked,
+  kanji,
+  meaning,
+  readings,
+  special,
+  word,
+  tags,
+}: QuizWord): QuizWord => {
+  return { blanked, kanji, meaning, readings, special, word, tags };
 };
 
 export const toRQW = (

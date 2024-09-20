@@ -1,12 +1,13 @@
 import { KanjiCard } from "@/components/draw/kanjiCard";
 import {
   areWordsTheSame,
+  fromRQW,
   getWordWithout,
   type QuizWord,
   type ReactQuizWord,
   toRQW,
 } from "@/components/draw/quizWords";
-import { log, noop } from "@/utils/utils";
+import { es5With, log, noop } from "@/utils/utils";
 import React, {
   useCallback,
   useEffect,
@@ -19,6 +20,34 @@ import creatorCSS from "./creator.module.css";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
 type MultiRQW = ReactQuizWord & { multiSpecial?: number[] };
+
+const alphabet = `あいうえおかきくけこがぎぐげごさしすせそざじずぜぞたちつてとだぢづでどなにぬねのはひふへほばびぶべぼぱぴぷぺぽまみむめもやゆよらりるれろわをん`;
+
+const compareReadings = (
+  a: QuizWord,
+  b: QuizWord,
+  comp: (a: number, b: number) => number = (a, b) => a - b,
+): number => {
+  const aWord = a.word
+    .split("")
+    .map((k, i) => `${k}${a.readings[i]}`)
+    .join("");
+  const bWord = b.word
+    .split("")
+    .map((k, i) => `${k}${b.readings[i]}`)
+    .join("");
+
+  const firstA = aWord.split("").find((q) => alphabet.includes(q));
+  const firstB = bWord.split("").find((q) => alphabet.includes(q));
+
+  if (!firstB) return 1;
+  if (!firstA) return -1;
+
+  const ixA = alphabet.indexOf(firstA);
+  const ixB = alphabet.indexOf(firstB);
+
+  return comp(ixA, ixB);
+};
 
 import defaultWordBank from "./wordbank.json";
 import { gt, inc } from "semver";
@@ -54,11 +83,41 @@ export default function KanjiCardCreator() {
   const mainInput = useRef<HTMLInputElement>(null);
   const meaningInput = useRef<HTMLInputElement>(null);
 
-  const shownWords = useMemo(() => {
-    return words
-      ?.filter((q) => (autoFilter ? q.word.includes(wordVal) : true))
-      .reverse();
-  }, [autoFilter, wordVal, words]);
+  const shownWords = useMemo(
+    () =>
+      [...(words ?? [])]
+        ?.filter((q) => (autoFilter ? q.word.includes(wordVal) : true))
+        ?.reduce<MultiRQW[]>((p, n) => {
+          const prevInArr = p.find(
+            (z) =>
+              z.word === n.word &&
+              z.readings.join("_") === n.readings.join("_"),
+          );
+
+          if (prevInArr) {
+            const newMS = [
+              ...(prevInArr.multiSpecial ?? [prevInArr.special]),
+              n.special,
+            ];
+            return [
+              ...p.filter(
+                (x) =>
+                  !(
+                    x.readings.join(".") === prevInArr.readings.join(".") &&
+                    x.word === prevInArr.word
+                  ),
+              ),
+              {
+                ...toRQW({ ...prevInArr }, {}, newMS),
+                multiSpecial: newMS,
+              },
+            ];
+          }
+          return [...p, { ...n, multiSpecial: [n.special] }];
+        }, [])
+        .sort((a, b) => compareReadings(a, b)),
+    [words, autoFilter, wordVal],
+  );
 
   useEffect(() => {
     void (async () => {
@@ -277,6 +336,7 @@ export default function KanjiCardCreator() {
                 }
               }}
               ref={mainInput}
+              spellCheck={true}
               style={{
                 imeMode: autoIMEChange ? "active" : "unset",
               }}
@@ -291,6 +351,7 @@ export default function KanjiCardCreator() {
             <input
               ref={meaningInput}
               placeholder="意味"
+              spellCheck={true}
               type={autoIMEChange ? "tel" : "text"}
               className="w-full text-center outline-none sm:ml-2"
               value={meaning}
@@ -481,25 +542,8 @@ export default function KanjiCardCreator() {
         {new Set(words?.map((w) => w.word) ?? []).size}):
       </div>
       <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
-        {shownWords
-          ?.reduce<MultiRQW[]>((p, n) => {
-            const prevInArr = p.find((z) => z.word === n.word);
-            if (prevInArr) {
-              const newMS = [
-                ...(prevInArr.multiSpecial ?? [prevInArr.special]),
-                n.special,
-              ];
-              return [
-                ...p.filter((f) => f.word !== n.word),
-                {
-                  ...toRQW({ ...prevInArr }, {}, newMS),
-                  multiSpecial: newMS,
-                },
-              ];
-            }
-            return [...p, n];
-          }, [])
-          ?.map((q) => (
+        {shownWords?.map((q) => {
+          return (
             <div
               key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
               className="relative w-fit flex-grow"
@@ -530,6 +574,19 @@ export default function KanjiCardCreator() {
                   border: "w-full border-[blue] border-[1px]",
                   text: "text-xl",
                 }}
+                editTags={async (tags) => {
+                  if (!LS?.idb || !words) return;
+                  log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
+                  await LS.idb.put("wordbank", { ...fromRQW(q), tags });
+                  setWords((prev) => {
+                    if (!prev) return prev;
+                    return es5With(
+                      prev,
+                      prev.findIndex((w) => areWordsTheSame(q, w)),
+                      { ...q, tags },
+                    );
+                  });
+                }}
                 styles={{ text: { "--color": "lime" } }}
                 commit={noop}
                 word={q}
@@ -537,7 +594,8 @@ export default function KanjiCardCreator() {
                 sideOverride="answer"
               />
             </div>
-          ))}
+          );
+        })}
       </div>
     </>
   );

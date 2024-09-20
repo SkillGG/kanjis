@@ -2,6 +2,7 @@ import { useState } from "react";
 import { type ReactQuizWord } from "./quizWords";
 import { type SessionResult } from "./drawSession";
 import { myFont } from "@/pages/_app";
+import TagLabel from "./tagBadge";
 
 export const KanjiCard = ({
   word,
@@ -9,6 +10,7 @@ export const KanjiCard = ({
   sideOverride,
   disableButtons,
   classNames = { border: "", text: "" },
+  editTags,
   styles = { border: {}, text: {} },
 }: {
   word: ReactQuizWord;
@@ -20,6 +22,7 @@ export const KanjiCard = ({
     border?: React.HTMLAttributes<"div">["className"];
     text?: React.HTMLAttributes<"div">["className"];
   };
+  editTags?: (t: string[]) => Promise<void>;
   styles?: {
     border?: React.HTMLAttributes<"div">["style"];
     text?: React.HTMLAttributes<"div">["style"];
@@ -88,6 +91,32 @@ export const KanjiCard = ({
               >
                 BAD
               </button>
+            </div>
+          )}
+          {!!editTags && (
+            <div className="flex flex-wrap">
+              <dialog></dialog>
+              {word.tags?.map((t) => (
+                <div key={t}>
+                  <TagLabel
+                    tag={t}
+                    onClick={() => {
+                      void editTags(word.tags?.filter((f) => f !== t) ?? []);
+                    }}
+                  />
+                </div>
+              ))}
+              <div>
+                <TagLabel
+                  tag={"Add tag"}
+                  onClick={() => {
+                    const newTag = prompt("Tag");
+                    if (newTag) {
+                      void editTags((word.tags ?? []).concat([newTag]));
+                    }
+                  }}
+                />
+              </div>
             </div>
           )}
         </>
