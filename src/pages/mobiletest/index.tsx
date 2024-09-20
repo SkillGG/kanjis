@@ -14,7 +14,10 @@ export default function Home() {
 
   const handleWindowKeydown = useCallback(
     (ev: KeyboardEvent) => {
-      addEvent("Window", `code: ${ev.code}, compose: ${ev.isComposing}`);
+      addEvent(
+        "Window",
+        `code ${ev.code}, compose: ${ev.isComposing}, key: ${ev.key}, keyCode: ${ev.keyCode} charCode: ${ev.charCode}`,
+      );
     },
     [addEvent],
   );
@@ -40,13 +43,19 @@ export default function Home() {
         onKeyDown={(ev) => {
           addEvent(
             "input.okd",
-            `code: ${ev.code}, compose: ${ev.nativeEvent.isComposing}`,
+            `code ${ev.code}, compose: ${ev.nativeEvent.isComposing}, key: ${ev.key}, keyCode: ${ev.keyCode} charCode: ${ev.charCode}`,
+          );
+        }}
+        onKeyPress={(ev) => {
+          addEvent(
+            "input.okp",
+            `code ${ev.code}, compose: ${ev.nativeEvent.isComposing}, key: ${ev.key}, keyCode: ${ev.keyCode} charCode: ${ev.charCode}`,
           );
         }}
         onKeyUp={(ev) =>
           addEvent(
             "input.okd",
-            `code: ${ev.code}, compose: ${ev.nativeEvent.isComposing}`,
+            `code ${ev.code}, compose: ${ev.nativeEvent.isComposing}, key: ${ev.key}, keyCode: ${ev.keyCode} charCode: ${ev.charCode}`,
           )
         }
         onCompositionStart={(e) => {
