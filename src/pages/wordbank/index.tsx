@@ -212,7 +212,7 @@ export default function KanjiCardCreator() {
                   );
                 }}
                 onKeyDown={(e) => {
-                  if (e.code === "Enter") {
+                  if (e.code === "Enter" || e.keyCode === 13) {
                     const next =
                       e.currentTarget.parentElement?.nextElementSibling?.querySelector(
                         "input",
@@ -262,7 +262,7 @@ export default function KanjiCardCreator() {
           <div className="mb-1 grid w-full grid-rows-2 sm:grid-cols-2 sm:grid-rows-1">
             <input
               onKeyDown={(e) => {
-                if (e.code === "Enter") {
+                if (e.code === "Enter" || e.keyCode === 13) {
                   const next =
                     document.querySelector<HTMLInputElement>(
                       ".reading-input",
@@ -295,7 +295,7 @@ export default function KanjiCardCreator() {
               className="w-full text-center outline-none sm:ml-2"
               value={meaning}
               onKeyDown={(e) => {
-                if (e.code === "Enter") {
+                if (e.code === "Enter" || e.keyCode === 13) {
                   if (e.shiftKey) {
                     // go back
                     e.currentTarget.blur();
