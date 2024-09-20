@@ -1,5 +1,5 @@
 import React, { type CSSProperties } from "react";
-import { SessionResult, type DrawSessionData } from "./drawSession";
+import { type DrawSessionData } from "./drawSession";
 import { type LSStore } from "../localStorageProvider";
 import { type KanjiDB } from "@/pages/_app";
 import { log, randomStartWeighedInt } from "@/utils/utils";
@@ -204,10 +204,10 @@ export async function* nextWordGenerator(
     };
     const words: QuizWord[] = await LS.idb.getAll("wordbank");
 
-    const getKanjiPoints = (k: string): number =>
-      currentSessionData.sessionResults
-        .filter((q) => q.kanji === k)
-        .reduce((p, n) => p + n.result, 0);
+    // const getKanjiPoints = (k: string): number =>
+    //   currentSessionData.sessionResults
+    //     .filter((q) => q.kanji === k)
+    //     .reduce((p, n) => p + n.result, 0);
 
     const getWordPoints = (w: string): number =>
       currentSessionData.sessionResults
@@ -241,21 +241,19 @@ export async function* nextWordGenerator(
       return Infinity;
     };
 
-    const getAllResultsForWord = (w: string): SessionResult[] =>
-      currentSessionData.sessionResults.filter((f) => f.word === w);
+    // const getAllResultsForWord = (w: string): SessionResult[] =>
+    //   currentSessionData.sessionResults.filter((f) => f.word === w);
 
     const getAllWordsElligibleForKanji = (k: string): QuizWord[] =>
       getAllWordsWithKanji(k)
+        .map((w) => ({ ...w, points: getWordPoints(w.word) }))
         .filter((word) => {
-          const allResultsForWord = getAllResultsForWord(word.word);
           return (
-            allResultsForWord[allResultsForWord.length - 1]?.word !==
-              word.word ||
             getDistanceFromLastWord(word.word) >
-              getAllWordsWithKanji(k).length - 2
+            getAllWordsWithKanji(k).length - 2
           );
         })
-        .sort((a, b) => getWordPoints(a.word) - getWordPoints(b.word));
+        .sort((a, b) => a.points - b.points);
 
     const kanjiWithWords = currentSessionData.sessionKanjis
       .map((k) => {
@@ -270,7 +268,7 @@ export async function* nextWordGenerator(
         };
       })
       .filter((z) => z.words.length >= 1 && z.dist > 2)
-      .sort((a, b) => a.points - b.points); // sorted by points acquired
+      .sort((a, b) => a.points - a.dist - (b.points - b.dist)); // sorted by points acquired
 
     log`Possible kanjis: ${kanjiWithWords}`;
 

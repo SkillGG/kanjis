@@ -11,6 +11,8 @@ import { useLocalStorage } from "../localStorageProvider";
 import { myFont } from "@/pages/_app";
 import { usePopup } from "../usePopup";
 
+export const DEFAULT_POINTS_TO_COMPLETE = 100;
+
 export const Quizlet = ({
   session,
   commitResult,
@@ -19,7 +21,7 @@ export const Quizlet = ({
   commitResult: (result: SessionResult) => Promise<DrawSessionData>;
 }) => {
   const LS = useLocalStorage();
-  const { Popup, setPopup } = usePopup();
+  const { popup, setPopup } = usePopup();
 
   const [wordGenerator, setWordGenerator] = useState<NextWordGenerator | null>(
     null,
@@ -65,7 +67,7 @@ export const Quizlet = ({
 
   return (
     <>
-      <Popup />
+      {popup}
       <KanjiCard
         classNames={{ text: "text-4xl", border: "text-2xl" }}
         commit={async (result) => {
@@ -83,7 +85,25 @@ export const Quizlet = ({
               .reduce((p, n) => p + n.result, 0);
           });
 
-          console.log(allWPoints);
+          const PTC = newSession.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE;
+          console.log(
+            allWPoints,
+            allWPoints?.reduce((p, n) => (!p ? p : n > PTC), true),
+          );
+
+          if (allWPoints?.reduce((p, n) => (!p ? p : n > PTC), true)) {
+            setPopup({
+              text: () => (
+                <div className="text-center text-xl">
+                  You got more than {PTC} on every word with {currentWord.kanji}
+                  <br />
+                  <button>Mark as completed</button>
+                </div>
+              ),
+              time: 6000,
+              borderColor: "green",
+            });
+          }
 
           await nextWord(newSession);
         }}

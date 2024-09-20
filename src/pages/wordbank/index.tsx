@@ -27,7 +27,7 @@ import { usePopup } from "@/components/usePopup";
 
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
-  const { setPopup, Popup } = usePopup();
+  const { setPopup, popup } = usePopup();
 
   const [words, setWords] = useState<ReactQuizWord[] | null>(null);
 
@@ -152,7 +152,7 @@ export default function KanjiCardCreator() {
 
   return (
     <>
-      <Popup />
+      {popup}
       <Link
         className={
           "absolute block items-center justify-start p-2 text-left underline"
@@ -161,6 +161,7 @@ export default function KanjiCardCreator() {
       >
         Go back
       </Link>
+
       <div className="mx-auto w-fit max-w-[90vw] text-center sm:max-w-[70vw]">
         <div className="text-xl">Wordbank</div>
         <div className="text-[1.2rem]">

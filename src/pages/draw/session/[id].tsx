@@ -1,5 +1,5 @@
 import { type DrawSessionData } from "@/components/draw/drawSession";
-import { Quizlet } from "@/components/draw/Quizlet";
+import { DEFAULT_POINTS_TO_COMPLETE, Quizlet } from "@/components/draw/Quizlet";
 import { useLocalStorage } from "@/components/localStorageProvider";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -65,7 +65,10 @@ export default function DrawSession() {
         Go back
       </Link>
       <div className="mx-[auto] w-[80vw]">
-        <div className="text-center text-lg">{sessionData.sessionID}</div>
+        <div className="text-center text-lg">
+          {sessionData.sessionID}(
+          {sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE})
+        </div>
         <Quizlet
           session={sessionData}
           commitResult={async (result) => {

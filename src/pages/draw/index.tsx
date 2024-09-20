@@ -1,6 +1,7 @@
 "use client";
 
 import { type DrawSessionData } from "@/components/draw/drawSession";
+import { DEFAULT_POINTS_TO_COMPLETE } from "@/components/draw/Quizlet";
 import { type QuizWord } from "@/components/draw/quizWords";
 import { getMergedKanjis } from "@/components/list/kanjiStorage";
 import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
@@ -219,7 +220,7 @@ export default function Draw() {
               }}
               minLength={1}
               min={10}
-              placeholder="200"
+              placeholder={`${DEFAULT_POINTS_TO_COMPLETE}`}
             />
           </div>
           <div className="flex">
@@ -304,10 +305,9 @@ export default function Draw() {
               Start new session
             </button>
           </div>
-
-          <div className="text-[0.9rem] text-[red]">
-            {sessionCreationError?.el}
-          </div>
+        </div>
+        <div className="text-[0.9rem] text-[red]">
+          {sessionCreationError?.el}
         </div>
         <div
           className="grid min-h-64 overflow-hidden"

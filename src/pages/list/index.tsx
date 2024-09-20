@@ -29,7 +29,7 @@ const CHECK_DEDPUE_DELAY = 500;
 function App() {
   const LS = useLocalStorage();
   const { resetDBToDefault, restoreKanjiFromOnlineDB } = useKanjiStorage();
-  const { Popup, setPopup } = usePopup();
+  const { popup, setPopup } = usePopup();
 
   const mut = api.backup.backupList.useMutation();
 
@@ -444,7 +444,7 @@ function App() {
             </div>
           </div>
         )}
-        <Popup />
+        {popup}
         {shouldUpdate && (
           <div
             className={kanjiCSS.popup + " z-20 text-center text-[1.3rem]"}
