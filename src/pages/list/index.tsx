@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
 import { DEFAULT_KANJI_VERSION } from "@/components/list/defaultKanji";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
@@ -24,14 +23,15 @@ import { KanjiTile } from "@/components/list/kanjiTile";
 import Link from "next/link";
 import { api } from "@/utils/api";
 import shortUUID from "short-uuid";
-import { log } from "@/utils/utils";
+import { log, warn } from "@/utils/utils";
 import { usePopup } from "@/components/usePopup";
+import { type Kanji, useAppStore } from "@/appStore";
 
 const CHECK_DEDPUE_DELAY = 500;
 
 function App() {
   const LS = useLocalStorage();
-  const { resetDBToDefault, restoreKanjiFromOnlineDB } = useKanjiStorage();
+  const { resetDBToDefault, getKanjiFromOnlineDB } = useKanjiStorage();
   const { popup, setPopup } = usePopup();
 
   const mut = api.backup.backupList.useMutation();
@@ -45,13 +45,15 @@ function App() {
     shouldUpdate,
     setShouldUpdate,
     mutateKanjis,
-  } = useKanjiStore((s) => ({
+    idb,
+  } = useAppStore((s) => ({
     kanjis: s.kanjis,
     updateKanji: s.updateKanji,
     mutateKanjis: s.mutateKanjis,
     addKanji: s.addKanji,
     shouldUpdate: s.shouldUpdateKanjiList,
     setShouldUpdate: s.setShouldUpdateKanjiList,
+    idb: s.getIDB(),
   }));
 
   const [showbadges, setShowbadges] = useState<0 | 1 | 2 | 3 | null>(null);
@@ -65,7 +67,7 @@ function App() {
 
   const [filter, setFilter] = useState("");
 
-  const [rowCount, setRowCount] = useKanjiStore((s) => [
+  const [rowCount, setRowCount] = useAppStore((s) => [
     s.settings.kanjiRowCount,
     (fn: (f: number) => number) =>
       s.setSettings("kanjiRowCount", fn(s.settings.kanjiRowCount)),
@@ -186,22 +188,19 @@ function App() {
     setShowbadges(LS.getNum<0 | 1 | 2 | 3>(LS_KEYS.badges) ?? 0);
 
     void (async () => {
-      if (!LS?.idb) return;
       const currURL = new URL(location.href);
 
       if (currURL.searchParams.has("q")) {
-        const success = await restoreKanjiFromOnlineDB(
-          LS,
+        const success = await getKanjiFromOnlineDB(
           currURL.searchParams.get("q"),
         );
         log`Succeeded? ${success}`;
-
         const mergedKanjis = await getMergedKanjis(
           LS,
+          idb,
           success ? success : [],
           "r",
         );
-
         if (!!success) await removeSearchParams("r");
         else
           setPopup({
@@ -219,27 +218,30 @@ function App() {
             borderColor: "red",
             time: 3000,
           });
-
         mutateKanjis(() => mergedKanjis.kanji);
-
-        await saveToIDB(LS, success ? "r" : "m", mergedKanjis.kanji);
-      } else {
+        await saveToIDB(idb, success ? "r" : "m", mergedKanjis.kanji);
+      } else if (currURL.searchParams.has("t")) {
         const urlKanji = parseKanjiURI(currURL.searchParams);
         const overrideType = getOverrideType(currURL.searchParams);
-        const mergedKanjis = await getMergedKanjis(LS, urlKanji, overrideType);
+        const mergedKanjis = await getMergedKanjis(
+          LS,
+          idb,
+          urlKanji,
+          overrideType,
+        );
 
         mutateKanjis(() => mergedKanjis.kanji);
 
-        await saveToIDB(LS, overrideType, mergedKanjis.kanji);
+        await saveToIDB(idb, overrideType, mergedKanjis.kanji);
 
         await removeSearchParams(overrideType);
       }
 
-      await migrateFromLS(LS);
+      await migrateFromLS(LS, idb);
 
       setShouldUpdate(checkKanjiListUpdate(LS));
     })();
-  }, [LS, mutateKanjis, restoreKanjiFromOnlineDB, setPopup, setShouldUpdate]);
+  }, [LS, getKanjiFromOnlineDB, idb, mutateKanjis, setPopup, setShouldUpdate]);
 
   const addRef = useRef<HTMLDialogElement>(null);
   const clearAddRef = useRef<HTMLButtonElement>(null);
@@ -282,7 +284,7 @@ function App() {
             }}
           >
             <div
-              className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto"
+              className="mx-2 flex w-fit flex-row flex-wrap justify-center gap-y-2 rounded-xl border-2 p-[1em] sm:mx-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col">
@@ -375,7 +377,7 @@ function App() {
             }}
           >
             <div
-              className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto"
+              className="mx-2 flex w-fit flex-row flex-wrap justify-center gap-y-2 rounded-xl border-2 p-[1em] sm:mx-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col">
@@ -423,12 +425,19 @@ function App() {
                 <button
                   onClick={async () => {
                     if (canRestore === true) {
-                      const success = await restoreKanjiFromOnlineDB(
-                        LS,
-                        restoreID,
-                      );
+                      const success = await getKanjiFromOnlineDB(restoreID);
+                      warn`${success}`;
                       if (success) {
+                        const merged = await getMergedKanjis(
+                          LS,
+                          idb,
+                          success,
+                          "m",
+                        );
+                        log`${merged.kanji}`;
                         setRestorePopupOpen(false);
+                        await saveToIDB(idb, "r", merged.kanji);
+                        mutateKanjis(() => merged.kanji);
                         await removeSearchParams("r");
                       } else {
                         setPopup({
@@ -566,7 +575,7 @@ function App() {
                         className="border-red-500"
                         onClick={async () => {
                           close();
-                          await resetDBToDefault(LS, [], "r");
+                          await resetDBToDefault(LS, idb, [], "r");
                         }}
                       >
                         Yes
@@ -590,7 +599,7 @@ function App() {
                 onChange={(e) => setKanjisToSelect(e.target.value)}
                 placeholder="森 or lvl1 base cpl"
                 onKeyDown={(e) => {
-                  if (e.code === "Enter") {
+                  if (e.code === "Enter" || e.keyCode === 13) {
                     setFilter(kanjisToSelect);
                   }
                 }}
@@ -837,9 +846,9 @@ function App() {
                   kanji={kanji}
                   update={async (kanji, data) => {
                     updateKanji(kanji, data);
-                    const prev = await LS.idb?.get("kanji", kanji);
+                    const prev = await idb?.get("kanji", kanji);
                     if (prev) {
-                      void LS.idb?.put("kanji", { ...prev, ...data });
+                      await idb?.put("kanji", { ...prev, ...data });
                     }
                   }}
                   key={kanji.kanji}

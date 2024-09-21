@@ -1,5 +1,5 @@
 import { DEFAULT_KANJIS } from "./defaultKanji";
-import { type Kanji } from "./kanjiStore";
+import { type Kanji } from "../../appStore";
 
 export const doesKanjiFitFilter = (f: string, k: Kanji) => {
   if (f.length <= 0) return true;

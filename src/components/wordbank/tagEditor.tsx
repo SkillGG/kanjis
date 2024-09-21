@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { type TagInfo } from "../list/kanjiStore";
+import { type TagInfo } from "../../appStore";
 import { log } from "@/utils/utils";
 
 const TagEdit = ({
@@ -215,6 +215,16 @@ export const TagEditor = ({
               />
             );
           })}
+          <div className="text-center" style={{ gridColumn: "1 / span 6" }}>
+            <button
+              className="text-xl"
+              onClick={() => {
+                setTags({ ...tags, newTag: { description: "" } });
+              }}
+            >
+              ADD
+            </button>
+          </div>
         </div>
       </dialog>
     </>

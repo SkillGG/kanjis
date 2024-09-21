@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
-import { type Kanji } from "./kanjiStore";
+import { type Kanji } from "../../appStore";
 import kanjiCSS from "./list.module.css";
 import { hoverColors, bgColors, borderColors, extraSignColor } from "./theme";
 

@@ -2,6 +2,8 @@ import { env } from "@/env";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => {};
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const asyncNoop = async () => {};
 
 export const randomInt = (min: number, max: number) =>
   Math.round(Math.random() * Math.trunc(max)) + Math.trunc(min);
@@ -73,13 +75,13 @@ export const log = (str: TemplateStringsArray, ...objs: unknown[]): void => {
 export const warn = (str: TemplateStringsArray, ...objs: unknown[]): void => {
   const arr = [str[0], ...objs.map((q, i) => [q, str[i + 1]])].flat();
   if (arr[arr.length - 1] === "") arr.length--;
-  cLog("warn", ...arr);
+  cLog("warn", ...arr.filter((f) => f !== ""));
 };
 
 export const err = (str: TemplateStringsArray, ...objs: unknown[]): void => {
   const arr = [str[0], ...objs.map((q, i) => [q, str[i + 1]])].flat();
   if (arr[arr.length - 1] === "") arr.length--;
-  cLog("error", ...arr);
+  cLog("error", ...arr.filter((f) => f !== ""));
 };
 
 export const toSpliced = <T>(

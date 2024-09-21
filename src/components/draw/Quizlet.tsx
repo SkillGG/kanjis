@@ -7,8 +7,7 @@ import {
   type QuizWord,
 } from "./quizWords";
 import { KanjiCard, type KanjiCardSide } from "./kanjiCard";
-import { useLocalStorage } from "../localStorageProvider";
-import { strokeOrderFont } from "@/pages/_app";
+import { useAppStore } from "../../appStore";
 
 export const DEFAULT_POINTS_TO_COMPLETE = 100;
 
@@ -16,13 +15,13 @@ export const Quizlet = ({
   session,
   commitResult,
   onSideChanged,
+  disableAnswering,
 }: {
   session: DrawSessionData;
   commitResult: (result: SessionResult) => Promise<DrawSessionData>;
   onSideChanged?: (side: KanjiCardSide) => void;
+  disableAnswering?: boolean;
 }) => {
-  const LS = useLocalStorage();
-
   const [wordGenerator, setWordGenerator] = useState<NextWordGenerator | null>(
     null,
   );
@@ -43,10 +42,12 @@ export const Quizlet = ({
     [wordGenerator],
   );
 
+  const idb = useAppStore((s) => s.getIDB());
+
   useEffect(() => {
     void (async () => {
-      if (!LS.idb || !session) return;
-      const newWG = nextWordGenerator(session, LS);
+      if (!session) return;
+      const newWG = nextWordGenerator(session, idb);
       setWordGenerator(newWG);
       const firstWord = await newWG.next();
       if (firstWord.done) {
@@ -59,7 +60,7 @@ export const Quizlet = ({
         setCurrentWord(firstWord.value);
       }
     })();
-  }, [LS, session]);
+  }, [idb, session]);
 
   if (currentWord === null) {
     return <>{error ? error : "Loading..."}</>;
@@ -74,6 +75,7 @@ export const Quizlet = ({
           tags: "text-base",
           buttons: "text-base sm:text-3xl mb-2 sm:mt-2",
         }}
+        disableButtons={disableAnswering}
         commit={async (result) => {
           const newSession = await commitResult(result);
           await nextWord(newSession);

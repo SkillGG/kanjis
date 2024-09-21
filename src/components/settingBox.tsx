@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useKanjiStore } from "./list/kanjiStore";
+import { DEFAULT_SETTINGS, useAppStore } from "../appStore";
 import { LS_KEYS, useLocalStorage } from "./localStorageProvider";
 
 export default function SettingBox({
@@ -15,7 +15,7 @@ export default function SettingBox({
   wordbank?: boolean;
   name?: string;
 }) {
-  const { settings, setSettings } = useKanjiStore((s) => ({
+  const { settings, setSettings } = useAppStore((s) => ({
     settings: s.settings,
     setSettings: s.setSettings,
   }));
@@ -70,7 +70,21 @@ export default function SettingBox({
       {draw !== false && (
         <>
           {draw === undefined && <div className="text-2xl">/draw</div>}
-          <div className="mb-2">{/** DRAW SETTINGS */}</div>
+          <div className="mb-2">
+            <label className="block text-balance">
+              Automatically mark as completed
+              <input
+                type="checkbox"
+                checked={settings.autoMarkAsCompleted}
+                onChange={() => {
+                  setSettings(
+                    "autoMarkAsCompleted",
+                    !settings.autoMarkAsCompleted,
+                  );
+                }}
+              />
+            </label>
+          </div>
           <hr />
         </>
       )}
@@ -98,6 +112,23 @@ export default function SettingBox({
                     "wordBankAutoFilter",
                     !settings.wordBankAutoFilter,
                   );
+                }}
+              />
+            </label>
+            <label className="block text-balance">
+              Max number of words to show (over 500 may slow down the page):
+              <input
+                type="number"
+                className="text-left text-base outline-none"
+                maxLength={4}
+                min={100}
+                max={9999}
+                value={`${settings.showMax}`}
+                onChange={(e) => {
+                  const val =
+                    parseInt(e.currentTarget.value.trim()) ??
+                    DEFAULT_SETTINGS.showMax;
+                  setSettings("showMax", Math.min(Math.max(1, val), 9999));
                 }}
               />
             </label>

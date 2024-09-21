@@ -8,17 +8,15 @@ import {
   type QuizWord,
 } from "@/components/draw/quizWords";
 import { KanjiTile } from "@/components/list/kanjiTile";
-import { useLocalStorage } from "@/components/localStorageProvider";
 import { usePopup } from "@/components/usePopup";
-import { noop } from "@/utils/utils";
+import { useAppStore } from "@/appStore";
+import { log, noop } from "@/utils/utils";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function DrawSession() {
   const router = useRouter();
-
-  const LS = useLocalStorage();
 
   const { id } = router.query;
 
@@ -30,28 +28,37 @@ export default function DrawSession() {
 
   const [words, setWords] = useState<QuizWord[] | null>(null);
 
-  useEffect(() => {
-    void (async () => {
-      if (!LS.idb || words) return;
-      setWords(await LS.idb.getAll("wordbank"));
-    })();
-  }, [LS, words]);
+  const [disableAnswering, setDisableAnswering] = useState(false);
+
+  const [autoComplete, setAutoComplete] = useAppStore((s) => [
+    s.settings.autoMarkAsCompleted,
+    (v: boolean) => s.setSettings("autoMarkAsCompleted", v),
+  ]);
+
+  const idb = useAppStore((s) => s.getIDB());
 
   useEffect(() => {
     void (async () => {
-      if (id === undefined || !LS.idb) return;
+      if (words) return;
+      setWords(await idb.getAll("wordbank"));
+    })();
+  }, [idb, words]);
+
+  useEffect(() => {
+    void (async () => {
+      if (id === undefined) return;
       if (typeof id !== "string") {
         setLoadingError("Wrong session id!");
         return;
       }
-      const sD = await LS.idb.get("draw", id);
+      const sD = await idb.get("draw", id);
       if (!sD)
         return setLoadingError(
           `Could not load session data for session "${id}"`,
         );
       setSessionData(sD);
     })();
-  }, [LS, id]);
+  }, [id, idb]);
 
   const [canClose, setCanClose] = useState(false);
 
@@ -77,6 +84,54 @@ export default function DrawSession() {
     }
   }, [sessionData, words]);
 
+  const askForEndingSession = useCallback(() => {
+    if (!sessionData) return;
+    setDisableAnswering(true);
+    setPopup({
+      modal: true,
+      onCancel: () => {
+        // canceled
+        setDisableAnswering(false);
+        setShowCanClose(true);
+      },
+      text: (close) => (
+        <div className="flex flex-col text-center text-xl">
+          You&apos;ve done everything!
+          <br />
+          <div className="flex gap-2 text-center">
+            <button
+              onClick={async () => {
+                const newSession = { ...sessionData, open: false };
+                await idb.put("draw", newSession);
+                setSessionData((p) => (p ? newSession : p));
+                close();
+                await Router.replace("/draw");
+              }}
+            >
+              Close the session!
+            </button>
+            <button
+              onClick={async () => {
+                setShowCanClose(true);
+                close(true);
+              }}
+            >
+              Keep going
+            </button>
+          </div>
+        </div>
+      ),
+      time: "user",
+      borderColor: "green",
+      modalStyle: {
+        styles: {
+          "--offsetFromCenter": "50%",
+          "--backdrop": "#ffffff33",
+        },
+      },
+    });
+  }, [idb, sessionData, setPopup]);
+
   useEffect(() => {
     if (sessionData) {
       // check if all results are completed
@@ -87,11 +142,15 @@ export default function DrawSession() {
 
       if (allCompleted) {
         setCanClose(true);
+
+        if (!showCanClose) {
+          askForEndingSession();
+        }
       } else {
         setShowCanClose(false);
       }
     }
-  }, [sessionData]);
+  }, [askForEndingSession, sessionData, showCanClose]);
 
   const [side, setSide] = useState<KanjiCardSide>("quiz");
 
@@ -119,40 +178,41 @@ export default function DrawSession() {
     return <span>This session has already been closed!</span>;
   }
 
+  log`${autoComplete}`;
+
   return (
     <>
       <Link
         href="/draw"
-        className="block w-fit bg-transparent p-2 underline sm:fixed"
+        className="block w-fit bg-transparent p-2 underline sm:fixed sm:left-0 sm:top-0"
       >
         Go back
       </Link>
       <div className="w-full lg:mx-[auto] lg:w-[80vw]">
-        <div className="text-center text-lg">
+        <div className="my-2 flex justify-center gap-2 text-center text-lg">
           {sessionData.sessionID}(
           {sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE})
           {canClose && showCanClose && (
-            <div>
+            <div className="mr-2 block">
               <button
                 onClick={async () => {
-                  if (!LS?.idb) throw new Error("No database connection!");
                   const newSession = { ...sessionData, open: false };
-                  await LS.idb.put("draw", newSession);
+                  await idb.put("draw", newSession);
                   setSessionData((p) => (p ? newSession : p));
                   await Router.push("/draw");
                 }}
               >
-                Close session
+                Close
               </button>
             </div>
           )}
         </div>
         {popup}
         <Quizlet
+          disableAnswering={disableAnswering}
           onSideChanged={setSide}
           session={sessionData}
           commitResult={async (result) => {
-            if (!LS?.idb) throw new Error("No database connection!");
             if (!sessionData) throw new Error("Session Data not found!");
             const newSession: DrawSessionData = sessionData
               ? {
@@ -160,10 +220,10 @@ export default function DrawSession() {
                   sessionResults: [...sessionData?.sessionResults, result],
                 }
               : sessionData;
-            await LS.idb.put("draw", newSession);
+            await idb.put("draw", newSession);
             setSessionData(() => newSession);
 
-            const allWords = await LS.idb?.getAllFromIndex(
+            const allWords = await idb?.getAllFromIndex(
               "wordbank",
               "kanji",
               result.kanji,
@@ -182,34 +242,80 @@ export default function DrawSession() {
               !isKanjiCompleted(newSession, result.kanji) &&
               allWPoints?.reduce((p, n) => (!p ? p : n > PTC), true)
             ) {
-              setPopup({
-                modal: true,
-                text: (close) => (
-                  <div className="text-center text-xl">
-                    You got more than {PTC} on every word with {result.kanji}
-                    <br />
-                    <button
-                      onClick={async () => {
-                        close();
-                        const sessionWithCompleted: DrawSessionData = {
-                          ...newSession,
-                          sessionResults: [
-                            ...newSession.sessionResults,
-                            { ...result, result: 0, completed: true },
-                          ],
-                        };
+              if (!autoComplete) {
+                setDisableAnswering(true);
+                setPopup({
+                  modal: true,
+                  onCancel: () => {
+                    setDisableAnswering(false);
+                  },
+                  text: (close) => (
+                    <div className="text-center text-xl">
+                      You got more than {PTC} on every word with {result.kanji}
+                      <br />
+                      Mark kanji as completed (in this session)?
+                      <br />
+                      <div className="flex flex-row justify-center gap-2">
+                        <button
+                          onClick={async () => {
+                            close(true);
+                            const sessionWithCompleted: DrawSessionData = {
+                              ...newSession,
+                              sessionResults: [
+                                ...newSession.sessionResults,
+                                { ...result, result: 0, completed: true },
+                              ],
+                            };
 
-                        await LS.idb?.put("draw", sessionWithCompleted);
-                        setSessionData(sessionWithCompleted);
-                      }}
-                    >
-                      Mark as completed
-                    </button>
-                  </div>
-                ),
-                time: 6000,
-                borderColor: "green",
-              });
+                            await idb?.put("draw", sessionWithCompleted);
+                            setSessionData(sessionWithCompleted);
+                          }}
+                        >
+                          Yes
+                        </button>
+                        <button
+                          onClick={async () => {
+                            const sessionWithCompleted: DrawSessionData = {
+                              ...newSession,
+                              sessionResults: [
+                                ...newSession.sessionResults,
+                                { ...result, result: 0, completed: true },
+                              ],
+                            };
+
+                            await idb?.put("draw", sessionWithCompleted);
+                            setSessionData(sessionWithCompleted);
+                            setAutoComplete(true);
+                            close(true);
+                          }}
+                        >
+                          Yes, Don&apos;t ask anymore
+                        </button>
+                        <button
+                          onClick={() => {
+                            close(true);
+                          }}
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
+                  ),
+                  time: "user",
+                  borderColor: "green",
+                });
+              } else {
+                const sessionWithCompleted: DrawSessionData = {
+                  ...newSession,
+                  sessionResults: [
+                    ...newSession.sessionResults,
+                    { ...result, result: 0, completed: true },
+                  ],
+                };
+
+                await idb?.put("draw", sessionWithCompleted);
+                setSessionData(sessionWithCompleted);
+              }
             }
             if (
               newSession.sessionKanjis.reduce(
@@ -218,54 +324,16 @@ export default function DrawSession() {
               )
             ) {
               // every kanji is done
-              setPopup({
-                modal: true,
-                onCancel: () => {
-                  // canceled
-                },
-                text: (close) => (
-                  <div className="flex text-center text-xl">
-                    You&quot;ve done everything!
-                    <br />
-                    <button
-                      onClick={async () => {
-                        if (!LS?.idb)
-                          throw new Error("No database connection!");
-                        const newSession = { ...sessionData, open: false };
-                        await LS.idb.put("draw", newSession);
-                        setSessionData((p) => (p ? newSession : p));
-                        close();
-                      }}
-                    >
-                      Close the session!
-                    </button>
-                    <br />
-                    <button
-                      onClick={async () => {
-                        setShowCanClose(true);
-                        close(true);
-                      }}
-                    >
-                      Keep going
-                    </button>
-                  </div>
-                ),
-                time: "user",
-                borderColor: "green",
-                modalStyle: {
-                  styles: {
-                    "--offsetFromCenter": "50%",
-                    "--backdrop": "#ffffff33",
-                  },
-                },
-              });
+              if (!showCanClose) {
+                askForEndingSession();
+              }
             }
 
             return newSession;
           }}
         />
         {side === "answer" && (
-          <div className="mx-auto mt-3 flex flex-wrap justify-center text-center sm:max-w-[50%]">
+          <div className="mx-auto mt-3 flex flex-wrap justify-center gap-1 text-center sm:max-w-[50%]">
             {words &&
               sessionData.sessionKanjis.map((kanji) => {
                 if (isKanjiCompleted(sessionData, kanji)) {
@@ -273,6 +341,7 @@ export default function DrawSession() {
                     <div key={kanji}>
                       <KanjiTile
                         badges={3}
+                        style={{ border: "1px solid lime" }}
                         kanji={{
                           kanji,
                           index: 0,
@@ -283,7 +352,7 @@ export default function DrawSession() {
                         update={noop}
                         disabled
                         lvlBadge=""
-                        extraBadge="DONE"
+                        extraBadge=""
                       />
                     </div>
                   );

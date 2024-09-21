@@ -3,8 +3,8 @@ import { type ReactQuizWord } from "./quizWords";
 import { type SessionResult } from "./drawSession";
 import { strokeOrderFont } from "@/pages/_app";
 import TagLabel from "./tagBadge";
-import { useTagColors } from "../useTagColors";
 import { twMerge } from "tailwind-merge";
+import { useAppStore } from "../../appStore";
 
 export type KanjiCardSide = "quiz" | "answer";
 
@@ -19,7 +19,7 @@ export const KanjiCard = ({
   onSideChanged,
 }: {
   word: ReactQuizWord;
-  commit: (result: SessionResult) => void;
+  commit: (result: SessionResult) => Promise<void>;
   sideOverride?: KanjiCardSide;
   disableButtons?: boolean;
   points?: number;
@@ -40,7 +40,7 @@ export const KanjiCard = ({
 }) => {
   const [side, setSide] = useState<KanjiCardSide>("quiz");
 
-  const { tagColors } = useTagColors();
+  const tagColors = useAppStore((s) => s.tagColors);
 
   const flipRef = useRef<HTMLButtonElement>(null);
   const goodRef = useRef<HTMLButtonElement>(null);
@@ -123,8 +123,12 @@ export const KanjiCard = ({
             >
               <button
                 ref={goodRef}
-                onClick={() => {
-                  commit({ kanji: word.kanji, result: 10, word: word.word });
+                onClick={async () => {
+                  await commit({
+                    kanji: word.kanji,
+                    result: 10,
+                    word: word.word,
+                  });
                   setSide("quiz");
                 }}
                 className="border-green-500 px-4 hover:bg-green-950 hover:text-green-300"
@@ -133,8 +137,12 @@ export const KanjiCard = ({
               </button>
               <button
                 ref={okRef}
-                onClick={() => {
-                  commit({ kanji: word.kanji, result: 0, word: word.word });
+                onClick={async () => {
+                  await commit({
+                    kanji: word.kanji,
+                    result: 0,
+                    word: word.word,
+                  });
                   setSide("quiz");
                 }}
                 className="border-orange-500 px-4 hover:bg-orange-950 hover:text-orange-300"
@@ -143,8 +151,12 @@ export const KanjiCard = ({
               </button>
               <button
                 ref={badRef}
-                onClick={() => {
-                  commit({ kanji: word.kanji, result: -10, word: word.word });
+                onClick={async () => {
+                  await commit({
+                    kanji: word.kanji,
+                    result: -10,
+                    word: word.word,
+                  });
                   setSide("quiz");
                 }}
                 className="border-red-500 px-4 hover:bg-red-950 hover:text-red-300"

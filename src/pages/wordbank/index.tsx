@@ -7,7 +7,7 @@ import {
   type ReactQuizWord,
   toRQW,
 } from "@/components/draw/quizWords";
-import { es5With, log, noop } from "@/utils/utils";
+import { asyncNoop, es5With, log } from "@/utils/utils";
 import React, {
   useCallback,
   useEffect,
@@ -55,18 +55,24 @@ import Link from "next/link";
 import { usePopup } from "@/components/usePopup";
 import TagLabel from "@/components/draw/tagBadge";
 import { TagEditor } from "@/components/wordbank/tagEditor";
-import { useTagColors } from "@/components/useTagColors";
-import { useKanjiStore } from "@/components/list/kanjiStore";
 import SettingBox from "@/components/settingBox";
+import { dbPutMultiple, useAppStore } from "@/appStore";
 
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
 
-  const { tagColors, setTagColors } = useTagColors();
+  const [tagColors, setTagColors] = useAppStore((s) => [
+    s.tagColors,
+    s.setTagColors,
+  ]);
+
+  const idb = useAppStore((s) => s.getIDB());
 
   const { setPopup, popup } = usePopup();
 
   const [words, setWords] = useState<ReactQuizWord[] | null>(null);
+
+  const [loading, setLoading] = useState(true);
 
   const [meaning, setMeaning] = useState("");
 
@@ -80,11 +86,17 @@ export default function KanjiCardCreator() {
 
   const [sureIfAdd, setSureIfAdd] = useState(false);
 
-  const autoFilter = useKanjiStore((s) => s.settings.wordBankAutoFilter);
+  const autoFilter = useAppStore((s) => s.settings.wordBankAutoFilter);
+
+  const showLimit = useAppStore((s) => s.settings.showMax);
+
+  const [page, setPage] = useState(0);
 
   const [canUpdateBank, setCanUpdateBank] = useState(false);
 
-  const autoIMEChange = useKanjiStore((s) => s.settings.autoChangeIME);
+  const [addWithTags, setAddWithTags] = useState<string[]>([]);
+
+  const autoIMEChange = useAppStore((s) => s.settings.autoChangeIME);
 
   const allRef = useRef<HTMLButtonElement>(null);
   const addRef = useRef<HTMLButtonElement>(null);
@@ -129,14 +141,15 @@ export default function KanjiCardCreator() {
 
   useEffect(() => {
     void (async () => {
-      if (!LS?.idb) return;
-      const object = await LS.idb.getAll("wordbank");
+      if (!idb) return;
+      const object = await idb.getAll("wordbank");
 
       if (!object) return;
 
       if (words !== null) return;
 
       setWords(() => object.map((k) => toRQW(k)));
+      setLoading(false);
     })();
 
     const wordver = LS.getString(LS_KEYS.wordbank_ver);
@@ -144,7 +157,7 @@ export default function KanjiCardCreator() {
     if (!wordver || gt(defaultWordBank.version, wordver)) {
       setCanUpdateBank(true);
     }
-  }, [LS, words]);
+  }, [LS, idb, words]);
 
   useEffect(() => {
     function handlekeydown(e: KeyboardEvent) {
@@ -180,13 +193,13 @@ export default function KanjiCardCreator() {
   }, [copied]);
 
   const updateBank = useCallback(async () => {
-    if (!LS.idb) return;
+    if (!idb) return;
     const words = defaultWordBank.words as QuizWord[];
     log`Updating wordbank!`;
     const skipped = [];
     const added = [];
     for (const word of words) {
-      const numberof = await LS.idb.count("wordbank", [
+      const numberof = await idb.count("wordbank", [
         word.word,
         word.special,
         word.readings,
@@ -197,15 +210,15 @@ export default function KanjiCardCreator() {
       }
 
       // remove no-reading versions:
-      await LS.idb.put("wordbank", word);
+      await idb.put("wordbank", word);
 
       added.push(word);
     }
     log`Update results: addedd: ${added} skipped: ${skipped}`;
     LS.set(LS_KEYS.wordbank_ver, defaultWordBank.version);
     setCanUpdateBank(false);
-    setWords((await LS.idb.getAll("wordbank")).map((w) => toRQW(w)));
-  }, [LS]);
+    setWords((await idb.getAll("wordbank")).map((w) => toRQW(w)));
+  }, [LS, idb]);
 
   useEffect(() => {
     setReadings((q) => {
@@ -222,6 +235,14 @@ export default function KanjiCardCreator() {
   }, [wordVal]);
 
   const [openTagEditor, setOpenTagEditor] = useState(false);
+
+  const wordCount = new Set(
+    shownWords?.map((w) => w.word + w.readings.join(".")) ?? [],
+  ).size;
+
+  useEffect(() => {
+    setPage(0);
+  }, [shownWords]);
 
   return (
     <>
@@ -247,7 +268,7 @@ export default function KanjiCardCreator() {
       )}
       <div className="mx-auto w-fit max-w-[90vw] text-center sm:max-w-[70vw]">
         <div className="text-xl">Wordbank</div>
-        <div className="text-[1.2rem]">
+        <div className="text-balance text-[1.2rem]">
           A place to add all your words you want to use to learn with. Write a
           word into the main field, the green kanji will be made
           &quot;guessable&quot;.
@@ -423,7 +444,7 @@ export default function KanjiCardCreator() {
               }}
             />
           </div>
-          <div>
+          <div className="flex flex-wrap justify-center gap-2">
             <button
               className="ml-2 p-3"
               ref={addRef}
@@ -442,6 +463,7 @@ export default function KanjiCardCreator() {
                         special: sp,
                         word: wordVal,
                         meaning,
+                        tags: addWithTags,
                         blanked: getWordWithout(wordVal, sp),
                       };
 
@@ -453,7 +475,7 @@ export default function KanjiCardCreator() {
                       setWords((p) =>
                         !p ? [toRQW(newW)] : [...p, toRQW(newW)],
                       );
-                      await LS.idb?.put("wordbank", newW);
+                      await idb?.put("wordbank", newW);
                       setSureIfAdd(false);
                     }
                   }
@@ -493,6 +515,15 @@ export default function KanjiCardCreator() {
             <button
               className="ml-2 p-3"
               onClick={() => {
+                setWordVal("");
+                setMeaning("");
+              }}
+            >
+              CLEAR
+            </button>
+            <button
+              className="ml-2 p-3"
+              onClick={() => {
                 if (words) {
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                   const newVer = inc(defaultWordBank.version, "patch", true);
@@ -500,6 +531,7 @@ export default function KanjiCardCreator() {
                   void navigator.clipboard.writeText(
                     JSON.stringify({
                       version: newVer,
+                      tags: tagColors,
                       words: words.map(
                         ({
                           blanked,
@@ -538,11 +570,11 @@ export default function KanjiCardCreator() {
                       <button
                         className="text-[red]"
                         onClick={async () => {
-                          if (!LS.idb) return;
+                          if (!idb) return;
                           log`Restoring...`;
-                          await LS.idb.clear("wordbank");
-                          await LS.dbPutMultiple(
-                            LS.idb,
+                          await idb.clear("wordbank");
+                          await dbPutMultiple(
+                            idb,
                             "wordbank",
                             defaultWordBank.words,
                           );
@@ -581,101 +613,264 @@ export default function KanjiCardCreator() {
                 {defaultWordBank.version})
               </button>
             )}
-          </div>
-        </div>
-      </div>
-      <div className="text-center text-xl">
-        Kanjis currently in wordbank (
-        {new Set(words?.map((w) => w.word) ?? []).size}):
-      </div>
-      <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
-        {shownWords?.map((q) => {
-          const editTags = async (tags: string[]) => {
-            if (!LS?.idb || !words) return;
-            log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
-            await LS.idb.put("wordbank", { ...fromRQW(q), tags });
-            setWords((prev) => {
-              if (!prev) return prev;
-              return es5With(
-                prev,
-                prev.findIndex((w) => areWordsTheSame(q, w)),
-                { ...q, tags },
-              );
-            });
-          };
-          return (
-            <div
-              key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
-              className="relative w-fit flex-grow"
-            >
-              <button
-                className="absolute right-2 top-1 border-none text-[red]"
-                onClick={async () => {
-                  if (!LS?.idb || !words) return;
-                  const kanjiSpecs = q.multiSpecial ?? [q.special];
-                  for (const spec of kanjiSpecs) {
-                    log`Removing word ${{ ...q, special: spec }}`;
-                    await LS.idb.delete("wordbank", [q.word, spec, q.readings]);
-                    setWords((prev) => {
-                      return (
-                        prev?.filter(
-                          (w) => !areWordsTheSame(w, { ...q, special: spec }),
-                        ) ?? null
-                      );
-                    });
-                  }
-                }}
-              >
-                X
-              </button>
-              <KanjiCard
-                key={`${q.word}_${q.special}_${q.readings.join("_")}_ans`}
-                classNames={{
-                  border: "w-full border-[blue] border-[1px]",
-                  text: "text-xl",
-                }}
-                tagOverride={
-                  <div className="flex flex-wrap gap-2">
-                    {q.tags?.map((t) => {
-                      return (
-                        <div key={t}>
-                          <TagLabel
-                            tag={t}
-                            color={tagColors?.[t]?.color}
-                            bgColor={tagColors?.[t]?.bg}
-                            border={tagColors?.[t]?.border}
-                            onClick={() => {
-                              void editTags(
-                                q.tags?.filter((f) => f !== t) ?? [],
-                              );
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
-                    <div>
+            <div>
+              <div className="flex h-full flex-wrap content-center gap-2">
+                {[...new Set(addWithTags)].map((t) => {
+                  return (
+                    <div key={t} className="h-fit">
                       <TagLabel
-                        tag={"Add tag"}
+                        tag={t}
+                        color={tagColors?.[t]?.color}
+                        bgColor={tagColors?.[t]?.bg}
+                        border={tagColors?.[t]?.border}
                         onClick={() => {
-                          const newTag = prompt("Tag");
-                          if (newTag) {
-                            void editTags((q.tags ?? []).concat([newTag]));
-                          }
+                          setAddWithTags((p) => p.filter((q) => q !== t));
                         }}
                       />
                     </div>
+                  );
+                })}
+                {(!tagColors ||
+                  !Object.keys(tagColors).reduce(
+                    (p, n) => (!p ? p : addWithTags.includes(n)),
+                    true,
+                  )) && (
+                  <div className="h-fit">
+                    <TagLabel
+                      tag={"Add tag"}
+                      onClick={() => {
+                        setPopup({
+                          modal: true,
+                          modalStyle: {
+                            styles: { "--backdrop": "#fff6" },
+                          },
+                          text(close) {
+                            if (!tagColors) {
+                              close(true);
+                              return <></>;
+                            }
+                            return (
+                              <>
+                                <div className="text-xl">Choose a tag</div>
+                                <div className="flex flex-col items-center gap-2">
+                                  {Object.entries(tagColors)
+                                    .filter(([t]) => !addWithTags.includes(t))
+                                    .map((tc) => (
+                                      <div key={tc[0]}>
+                                        <TagLabel
+                                          tag={tc[0]}
+                                          bgColor={tc[1].bg}
+                                          border={tc[1].border}
+                                          color={tc[1].color}
+                                          onClick={() => {
+                                            setAddWithTags((p) => [
+                                              ...p,
+                                              tc[0],
+                                            ]);
+                                            close();
+                                          }}
+                                        />
+                                      </div>
+                                    ))}
+                                </div>
+                              </>
+                            );
+                          },
+                          time: "user",
+                        });
+                      }}
+                    />
                   </div>
-                }
-                styles={{ text: { "--color": "lime" } }}
-                commit={noop}
-                word={q}
-                disableButtons
-                sideOverride="answer"
-              />
+                )}
+              </div>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </div>
+      {!words || loading ? (
+        <div className="text-center text-xl">Loading...</div>
+      ) : (
+        <>
+          <div className="flex justify-center text-xl">
+            Kanjis currently in wordbank ({wordCount}):
+            {showLimit < wordCount && (
+              <div className="ml-4 text-center text-xl">
+                ({page * showLimit}-
+                {Math.min((page + 1) * showLimit, wordCount)})
+                <button
+                  disabled={page === 0}
+                  className="text-base disabled:text-[gray]"
+                  onClick={() => {
+                    setPage((p) => p - 1);
+                  }}
+                >
+                  Prev
+                </button>
+                <button
+                  disabled={(page + 1) * showLimit > wordCount}
+                  className="text-base disabled:text-[gray]"
+                  onClick={() => {
+                    setPage((p) => p + 1);
+                  }}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
+            {shownWords.length === 0 ? (
+              <>No words found</>
+            ) : (
+              shownWords
+                .slice(
+                  page * showLimit,
+                  Math.min((page + 1) * showLimit, wordCount),
+                )
+                .map((q) => {
+                  const editTags = async (tags: string[]) => {
+                    if (!idb || !words) return;
+                    log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
+                    await idb.put("wordbank", { ...fromRQW(q), tags });
+                    setWords((prev) => {
+                      if (!prev) return prev;
+                      return es5With(
+                        prev,
+                        prev.findIndex((w) => areWordsTheSame(q, w)),
+                        { ...q, tags },
+                      );
+                    });
+                  };
+                  return (
+                    <div
+                      key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
+                      className="relative w-fit flex-grow"
+                    >
+                      <button
+                        className="absolute right-2 top-1 border-none text-[red]"
+                        onClick={async () => {
+                          if (!idb || !words) return;
+                          const kanjiSpecs = q.multiSpecial ?? [q.special];
+                          for (const spec of kanjiSpecs) {
+                            log`Removing word ${{ ...q, special: spec }}`;
+                            await idb.delete("wordbank", [
+                              q.word,
+                              spec,
+                              q.readings,
+                            ]);
+                            setWords((prev) => {
+                              return (
+                                prev?.filter(
+                                  (w) =>
+                                    !areWordsTheSame(w, {
+                                      ...q,
+                                      special: spec,
+                                    }),
+                                ) ?? null
+                              );
+                            });
+                          }
+                        }}
+                      >
+                        X
+                      </button>
+                      <KanjiCard
+                        key={`${q.word}_${q.special}_${q.readings.join("_")}_ans`}
+                        classNames={{
+                          border: "w-full border-[blue] border-[1px]",
+                          text: "text-xl",
+                        }}
+                        tagOverride={
+                          <div className="flex flex-wrap gap-2">
+                            {q.tags?.map((t) => {
+                              return (
+                                <div key={t}>
+                                  <TagLabel
+                                    tag={t}
+                                    color={tagColors?.[t]?.color}
+                                    bgColor={tagColors?.[t]?.bg}
+                                    border={tagColors?.[t]?.border}
+                                    onClick={() => {
+                                      void editTags(
+                                        q.tags?.filter((f) => f !== t) ?? [],
+                                      );
+                                    }}
+                                  />
+                                </div>
+                              );
+                            })}
+                            {(!tagColors ||
+                              !Object.keys(tagColors).reduce(
+                                (p, n) =>
+                                  !p ? p : (q.tags?.includes(n) ?? false),
+                                true,
+                              )) && (
+                              <div>
+                                <TagLabel
+                                  tag={"Add tag"}
+                                  onClick={() => {
+                                    setPopup({
+                                      modal: true,
+                                      modalStyle: {
+                                        styles: { "--backdrop": "#fff6" },
+                                      },
+                                      text(close) {
+                                        if (!tagColors) {
+                                          close(true);
+                                          return <></>;
+                                        }
+                                        return (
+                                          <>
+                                            <div className="text-xl">
+                                              Choose a tag
+                                            </div>
+                                            <div className="flex flex-col items-center gap-2">
+                                              {Object.entries(tagColors)
+                                                .filter(
+                                                  ([t]) => !q.tags?.includes(t),
+                                                )
+                                                .map((tc) => (
+                                                  <div key={tc[0]}>
+                                                    <TagLabel
+                                                      tag={tc[0]}
+                                                      bgColor={tc[1].bg}
+                                                      border={tc[1].border}
+                                                      color={tc[1].color}
+                                                      onClick={() => {
+                                                        void editTags([
+                                                          ...(q.tags ?? []),
+                                                          tc[0],
+                                                        ]);
+                                                        close();
+                                                      }}
+                                                    />
+                                                  </div>
+                                                ))}
+                                            </div>
+                                          </>
+                                        );
+                                      },
+                                      time: "user",
+                                    });
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        }
+                        styles={{ text: { "--color": "lime" } }}
+                        commit={asyncNoop}
+                        word={q}
+                        disableButtons
+                        sideOverride="answer"
+                      />
+                    </div>
+                  );
+                })
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 }

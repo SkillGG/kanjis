@@ -14,11 +14,15 @@ import {
   DEFAULT_KANJIS,
   OVERRIDE_INDEXES,
 } from "./defaultKanji";
-import { type Kanji, type KanjiStatus, useKanjiStore } from "./kanjiStore";
+import {
+  dbPutMultiple,
+  type Kanji,
+  type AppDB,
+  type KanjiStatus,
+  useAppStore,
+} from "../../appStore";
 import { eq, gt, valid } from "semver";
 import Router from "next/router";
-import { type IDBPDatabase } from "idb";
-import { type KanjiDB } from "@/pages/_app";
 import { api } from "@/utils/api";
 
 import {
@@ -88,11 +92,11 @@ export const assertOverrideType = (q?: string | null): OverrideType => {
   return "m";
 };
 
-export const migrateFromLS = async (LS: LSStore<KanjiDB>) => {
+export const migrateFromLS = async (LS: LSStore, idb: AppDB) => {
   const kanji = LS.getObject<Kanji[]>(LS_KEYS.kanjis);
-  if (kanji?.length && LS.idb) {
+  if (kanji?.length && idb) {
     // migrate from LS to DB
-    await LS.dbPutMultiple(LS.idb, "kanji", kanji);
+    await dbPutMultiple(idb, "kanji", kanji);
     LS.set(LS_KEYS.kanjis, null);
   }
 };
@@ -119,7 +123,7 @@ export const removeSearchParams = async (override: OverrideType) => {
   }
 };
 
-export const getAllKanjisFromDB = async (idb: IDBPDatabase<KanjiDB>) => {
+export const getAllKanjisFromDB = async (idb: AppDB) => {
   const transaction = idb.transaction("kanji");
   const DBKanjiStore = transaction.store;
   const DBKanjiCursor = DBKanjiStore.iterate(null, "next");
@@ -132,7 +136,7 @@ export const getAllKanjisFromDB = async (idb: IDBPDatabase<KanjiDB>) => {
   return DBKanjis;
 };
 
-export const checkKanjiListUpdate = (LS: LSStore<KanjiDB>) => {
+export const checkKanjiListUpdate = (LS: LSStore) => {
   const lastVersion = LS.getString<string>(LS_KEYS.kanji_ver);
   const omitVersion = LS.getString<string>(LS_KEYS.omit_version);
 
@@ -162,26 +166,23 @@ export const getOverrideType = (search: URLSearchParams): OverrideType => {
 };
 
 export const saveToIDB = async (
-  LS: LSStore<KanjiDB>,
+  idb: AppDB,
   overrideType: OverrideType,
   kanji: Kanji[],
 ) => {
-  if (!LS?.idb) {
-    console.error("No IDB connection!");
-    return;
-  }
-  await LS.idb.clear("kanji");
-  await LS.dbPutMultiple(LS.idb, "kanji", kanji);
+  await idb.clear("kanji");
+  await dbPutMultiple(idb, "kanji", kanji);
 };
 
 export const getMergedKanjis = async (
-  LS: LSStore<KanjiDB>,
+  LS: LSStore,
+  idb: AppDB,
   url: Kanji[],
   override: OverrideType,
 ): Promise<{ kanji: Kanji[]; updateRequired: boolean }> => {
-  if (!LS.idb) throw new Error("No IDB connection");
-  const DBKanjis = await getAllKanjisFromDB(LS.idb);
-  log`DBKanjis ${DBKanjis}`;
+  const DBKanjis = await getAllKanjisFromDB(idb);
+  // log`DBKanjis ${DBKanjis}`;
+  // console.trace();
   if (!DBKanjis || DBKanjis.length === 0) {
     // no DB kanji
     LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
@@ -221,31 +222,36 @@ export const getMergedKanjis = async (
  * @see  {@link LocalStorageProvider} and {@link useLocalStorage}
  */
 export const useKanjiStorage = () => {
-  const { mutateKanjis, setShouldUpdateKanjiList: setShouldUpdate } =
-    useKanjiStore();
+  const { mutateKanjis, setShouldUpdate } = useAppStore((s) => ({
+    mutateKanjis: s.mutateKanjis,
+    setShouldUpdate: s.setShouldUpdateKanjiList,
+    getIDB: s.getIDB,
+  }));
   const utils = api.useUtils();
 
   const resetDBToDefault = useCallback(
     async (
-      LS: LSStore<KanjiDB>,
+      LS: LSStore,
+      idb: AppDB,
       urlKanjis: Kanji[],
       override: OverrideType,
     ) => {
       const { kanji, updateRequired } = await getMergedKanjis(
         LS,
+        idb,
         urlKanjis,
         "r",
       );
       setShouldUpdate(updateRequired);
       LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
-      await saveToIDB(LS, override, kanji);
+      await saveToIDB(idb, override, kanji);
       mutateKanjis(() => kanji);
     },
     [mutateKanjis, setShouldUpdate],
   );
 
-  const restoreKanjiFromOnlineDB = useCallback(
-    async (LS: LSStore<KanjiDB>, id: string | null) => {
+  const getKanjiFromOnlineDB = useCallback(
+    async (id: string | null) => {
       if (!id) return null;
       log`Getting Kanji from Online DB with id ${id}`;
 
@@ -260,5 +266,8 @@ export const useKanjiStorage = () => {
     [utils],
   );
 
-  return { resetDBToDefault, restoreKanjiFromOnlineDB } as const;
+  return {
+    resetDBToDefault,
+    getKanjiFromOnlineDB,
+  } as const;
 };

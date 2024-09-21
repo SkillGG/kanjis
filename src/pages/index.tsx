@@ -1,4 +1,3 @@
-import { useKanjiStorage } from "@/components/list/kanjiStorage";
 import SettingBox from "@/components/settingBox";
 import { usePopup } from "@/components/usePopup";
 import { randomEndWeighedInt } from "@/utils/utils";
@@ -12,12 +11,12 @@ export type Settings = {
   autoChangeIME: boolean;
   wordBankAutoFilter: boolean;
   kanjiRowCount: number;
+  autoMarkAsCompleted: boolean;
+  showMax: number;
 };
 
 export default function Home() {
   // const hello = api.post.hello.useQuery({ text: "from tRPC" });
-
-  useKanjiStorage();
 
   useEffect(() => {
     if (typeof window !== "undefined") window.wrN = randomEndWeighedInt;

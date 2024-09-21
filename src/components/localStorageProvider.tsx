@@ -1,38 +1,27 @@
 import {
   type DBSchema,
   type IDBPDatabase,
-  openDB,
   type OpenDBCallbacks,
-  type StoreNames,
-  type StoreValue,
 } from "idb";
 import React, {
   createContext,
   type PropsWithChildren,
   useContext,
-  useEffect,
   useState,
 } from "react";
-import { type KanjiDB } from "@/pages/_app";
 
 type LSData = string | number | object;
 
-export type LSStore<T extends DBSchema> = {
+export type LSStore = {
   set<T extends LSData>(key: string, val: T | null): void;
   get<T extends LSData>(key: string): T | null;
   getNum<T extends number>(key: string): T | null;
   getRaw(key: string): string | null;
   getString<T extends string>(key: string): T | null;
   getObject<T extends object>(key: string): T | null;
-  dbPutMultiple<Name extends StoreNames<KanjiDB>>(
-    db: IDBPDatabase<KanjiDB>,
-    storeName: Name,
-    value: StoreValue<KanjiDB, Name>[],
-  ): Promise<void>;
-  idb: IDBPDatabase<T> | null;
 };
 
-const LSContext = createContext<LSStore<KanjiDB>>({
+const LSContext = createContext<LSStore>({
   set() {
     throw new Error("Not in store provider!");
   },
@@ -51,11 +40,8 @@ const LSContext = createContext<LSStore<KanjiDB>>({
   getString() {
     throw new Error("Not in store provider!");
   },
-  async dbPutMultiple() {
-    throw new Error("Not in store provider");
-  },
-  idb: null,
 });
+
 export const LS_KEYS = {
   kanjis: "kanjis",
   kanji_ver: "default_kanji_version",
@@ -74,34 +60,8 @@ export type DBInit<T extends DBSchema> = {
   init: OpenDBCallbacks<T>["upgrade"];
 };
 
-export const LocalStorageProvider = ({
-  children,
-  dbCreator,
-  surpressWarnings,
-}: PropsWithChildren<{
-  surpressWarnings?: boolean;
-  dbCreator: DBInit<KanjiDB>;
-}>) => {
-  const [db, setDB] = useState<IDBPDatabase<KanjiDB> | null>(null);
-
-  useEffect(() => {
-    void openDB<KanjiDB>(dbCreator.name, dbCreator.version, {
-      blocked(_currentVersion, _blockedVersion, _event) {
-        console.error("DB creation blocked");
-      },
-      blocking(_currentVersion, _blockedVersion, _event) {
-        console.error("DB is blocking creation of other DB");
-      },
-      upgrade(database, oV, nV, transaction, ev) {
-        dbCreator.init?.(database, oV, nV, transaction, ev);
-      },
-    }).then((db) => {
-      setDB(db);
-      dbCreator.seed(db);
-    });
-  }, [dbCreator]);
-
-  const [LStore, setStore] = useState<LSStore<KanjiDB>>({
+export const createLSStore = (surpressWarnings: boolean): LSStore => {
+  return {
     get<T extends LSData>(key: string) {
       if (typeof window === undefined) return null;
 
@@ -175,18 +135,16 @@ export const LocalStorageProvider = ({
         localStorage.setItem(key, JSON.stringify(value));
       }
     },
-    async dbPutMultiple(db, store, values) {
-      for (const value of values) {
-        await db.put(store, value);
-      }
-    },
-    idb: null,
-  });
+  };
+};
 
-  useEffect(() => {
-    if (!db) return;
-    else setStore((prev) => ({ ...prev, idb: db }));
-  }, [db]);
+export const LocalStorageProvider = ({
+  children,
+  surpressWarnings,
+}: PropsWithChildren<{
+  surpressWarnings?: boolean;
+}>) => {
+  const [LStore] = useState<LSStore>(createLSStore(surpressWarnings ?? false));
 
   return <LSContext.Provider value={LStore}>{children}</LSContext.Provider>;
 };

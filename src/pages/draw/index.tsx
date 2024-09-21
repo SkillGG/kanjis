@@ -3,10 +3,11 @@
 import { type DrawSessionData } from "@/components/draw/drawSession";
 import { DEFAULT_POINTS_TO_COMPLETE } from "@/components/draw/Quizlet";
 import { type QuizWord } from "@/components/draw/quizWords";
-import { getMergedKanjis } from "@/components/list/kanjiStorage";
-import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
 import { KanjiTile } from "@/components/list/kanjiTile";
 import { useLocalStorage } from "@/components/localStorageProvider";
+import SettingBox from "@/components/settingBox";
+import { usePopup } from "@/components/usePopup";
+import { type Kanji, useAppStore } from "@/appStore";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -26,11 +27,14 @@ export default function Draw() {
 
   const router = useRouter();
 
-  const { kanjis, mutateKanjis } = useKanjiStore();
+  const { kanjis, idb } = useAppStore((s) => ({
+    kanjis: s.kanjis,
+    idb: s.getIDB(),
+  }));
 
   const [selectedKanjis, setSelectedKanjis] = useState<string[]>([]);
 
-  const [rowCount, setRowCount] = useKanjiStore((s) => [
+  const [rowCount, setRowCount] = useAppStore((s) => [
     s.settings.kanjiRowCount,
     (f: (p: number) => number) =>
       s.setSettings("kanjiRowCount", f(s.settings.kanjiRowCount)),
@@ -55,25 +59,17 @@ export default function Draw() {
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  useEffect(() => {
-    void (async () => {
-      if (!LS.idb) return;
-      const dbKanjis = await getMergedKanjis(LS, [], "m");
-      mutateKanjis(() => dbKanjis.kanji);
-    })();
-  }, [LS, mutateKanjis]);
+  const { popup, setPopup } = usePopup();
 
   useEffect(() => {
     void (async () => {
-      if (!LS?.idb) return;
-
-      const prevSessionIndex = await LS.idb.count("draw");
+      const prevSessionIndex = await idb.count("draw");
       if (!sessionName) setSessionName(`Session ${prevSessionIndex + 1}`);
 
-      const openSessions = await LS.idb.getAll("draw");
+      const openSessions = await idb.getAll("draw");
       setSessions(() => openSessions.filter((s) => s.open));
 
-      setWords(await LS.idb.getAll("wordbank"));
+      setWords(await idb.getAll("wordbank"));
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [LS]);
@@ -203,6 +199,7 @@ export default function Draw() {
       >
         Go back
       </Link>
+      {popup}
       <div className="mx-[auto] flex flex-col items-center gap-2 text-center">
         <div className="pt-2 text-xl" ref={headerDiv}>
           {sesssions.length > 0 && (
@@ -334,9 +331,8 @@ export default function Draw() {
                       </>
                     ),
                   });
-                if (!LS.idb) return;
 
-                if ((await LS.idb.count("draw", sessionName)) > 0) {
+                if ((await idb.count("draw", sessionName)) > 0) {
                   return setSessionCreationError({
                     reason: "name",
                     el: `Session with that name already exists!`,
@@ -377,12 +373,50 @@ export default function Draw() {
                   open: true,
                   pointsToComplete: donePoints ?? undefined,
                 };
-                await LS.idb.put("draw", sessionData);
+                await idb.put("draw", sessionData);
                 void router.replace(`/draw/session/${sessionData.sessionID}`);
               }}
               className="ml-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] hover:bg-slate-500"
             >
               Start new session
+            </button>
+            <button
+              onClick={() => {
+                setPopup({
+                  modal: true,
+                  modalStyle: {
+                    styles: { "--backdrop": "#fff5" },
+                  },
+                  contentStyle: {
+                    className: "px-8",
+                  },
+                  text(close) {
+                    return (
+                      <div className="text-center">
+                        <SettingBox
+                          name="Draw settings"
+                          wordbank={false}
+                          draw={true}
+                          global={false}
+                          list={false}
+                        />
+                        <button
+                          onClick={() => {
+                            close();
+                          }}
+                          className="absolute right-[2px] top-[5px] border-none text-[red]"
+                        >
+                          X
+                        </button>
+                      </div>
+                    );
+                  },
+                  time: "user",
+                });
+              }}
+              className="ml-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] hover:bg-slate-500"
+            >
+              Settings
             </button>
           </div>
         </div>

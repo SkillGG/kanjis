@@ -1,13 +1,12 @@
 import React, { type CSSProperties } from "react";
 import { type SessionResult, type DrawSessionData } from "./drawSession";
-import { type LSStore } from "../localStorageProvider";
-import { type KanjiDB } from "@/pages/_app";
 import { log, randomStartWeighedInt } from "@/utils/utils";
 import Link from "next/link";
 import Router from "next/router";
 
 import kanjiCSS from "@/components/list/list.module.css";
 import { twMerge } from "tailwind-merge";
+import { type AppDB } from "../../appStore";
 
 export type QuizWord = {
   kanji: string;
@@ -277,8 +276,8 @@ export const getAllWordsElligibleForKanji = (
     .map((w) => ({ ...w, points: getWordPoints(session, w.word, w.kanji) }))
     .filter((word) => {
       return (
-        getDistanceFromLastWord(session, word.word) >
-        getAllWordsWithKanji(words, kanji).length - 2
+        getDistanceFromLastWord(session, word.word) >=
+        getAllWordsWithKanji(words, kanji).length - 3
       );
     })
     .sort((a, b) => a.points - b.points);
@@ -291,12 +290,8 @@ export const isKanjiCompleted = (
 
 export async function* nextWordGenerator(
   startingData: DrawSessionData,
-  LS: LSStore<KanjiDB>,
+  idb: AppDB,
 ): NextWordGenerator {
-  if (!LS?.idb) {
-    console.error("LocalStorage not provided!");
-    return getErr("Could not connected to IndexedDB");
-  }
   let currentSessionData = startingData;
   while (true) {
     if (!currentSessionData) {
@@ -317,8 +312,7 @@ export async function* nextWordGenerator(
           <br />
           <Link
             onClick={() => {
-              if (!LS?.idb) return;
-              void LS.idb.put("draw", { ...currentSessionData, open: false });
+              void idb.put("draw", { ...currentSessionData, open: false });
             }}
             href="/draw"
             className="underline"
@@ -330,7 +324,7 @@ export async function* nextWordGenerator(
         </>,
       );
     };
-    const dbWords: QuizWord[] = await LS.idb.getAll("wordbank");
+    const dbWords: QuizWord[] = await idb.getAll("wordbank");
 
     const kanjiWithWords = currentSessionData.sessionKanjis
       .map((k) => {
@@ -342,6 +336,9 @@ export async function* nextWordGenerator(
         return {
           kanji: k,
           words,
+          completed: currentSessionData.sessionResults.find(
+            (r) => r.kanji === k && r.completed,
+          ),
           dist: getDistanceFromLastKanji(currentSessionData, k),
           points:
             words
@@ -353,10 +350,21 @@ export async function* nextWordGenerator(
               ) / 3,
         };
       })
-      .filter((z) => z.words.length >= 1 && z.dist > 2)
+      .filter((z, _, a) => {
+        const completed = a.filter((k) => k.completed);
+        const notCompleted = a.filter((k) => !k.completed);
+        const minDIST =
+          completed.length === a.length ? 0 : notCompleted.length - 3;
+
+        return completed.length === a.length
+          ? true
+          : notCompleted.find((k) => k.kanji === z.kanji) &&
+              z.words.length >= 1 &&
+              z.dist >= minDIST;
+      })
       .sort((a, b) => a.points - a.dist - (b.points - b.dist)); // sorted by points acquired
 
-    log`Possible kanjis: ${kanjiWithWords}`;
+    log`Possible kanjis: ${kanjiWithWords.map((k) => `${k.kanji}:${k.dist}`).join(", ")}`;
 
     if (!kanjiWithWords || kanjiWithWords.length === 0) {
       currentSessionData = yield getNoWordErr(
@@ -367,7 +375,7 @@ export async function* nextWordGenerator(
     const randomKanjiIndex = randomStartWeighedInt(
       0,
       kanjiWithWords.length - 1,
-      10,
+      20,
     );
     const randomKanjiWithWords = kanjiWithWords[randomKanjiIndex];
 
@@ -389,7 +397,7 @@ export async function* nextWordGenerator(
     const randomWordIndex = randomStartWeighedInt(
       0,
       randomKanjiWithWords.words.length - 1,
-      10,
+      20,
     );
 
     const randomWord = randomKanjiWithWords.words[randomWordIndex];

@@ -1,5 +1,5 @@
 import { log } from "@/utils/utils";
-import { type Kanji } from "./kanjiStore";
+import { type Kanji } from "../../appStore";
 
 export const DEFAULT_KANJI_VERSION = "0.2.2";
 

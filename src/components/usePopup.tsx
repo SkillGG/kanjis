@@ -55,13 +55,14 @@ export const usePopup = () => {
   useEffect(() => {
     if (!popupOpen) {
       const cT = setTimeout(() => {
+        popup?.onCancel?.();
         setPopup(null);
       }, 400);
       return () => {
         clearTimeout(cT);
       };
     }
-  }, [popupOpen]);
+  }, [popup, popupOpen]);
 
   return {
     setPopup,
