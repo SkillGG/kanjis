@@ -6,7 +6,6 @@
   border: 2px solid var(--border);
   line-height: normal;
   font-size: 1.625rem;
-  padding: 0.65rem;
   position: relative;
 }
 
@@ -34,37 +33,6 @@
 
 .special-kanji {
   color: var(--color);
-}
-
-.popup {
-  position: fixed;
-  background-color: transparent;
-  top: -15%;
-  left: 0;
-  width: 100vw;
-  user-select: none;
-  z-index: 20;
-  transition-duration: 200ms;
-}
-
-.popup > div {
-  margin: 0 auto;
-  color: var(--textColor);
-  margin: 0 auto;
-  left: 0;
-  padding: 1em;
-  border: 1px solid var(--borderColor);
-  border-radius: 0.5em;
-  @apply mx-auto w-fit sm:mx-auto sm:w-fit;
-}
-
-.popup[data-open="open"] {
-  top: 2%;
-  transition-duration: 200ms;
-}
-
-.popup[data-open="closed"] {
-  transition-duration: 200ms;
 }
 
 .setting-menu {
@@ -100,7 +68,6 @@
 .kanjiBtn[data-extra]::after {
   position: absolute;
   top: -1px;
-  font-size: 1rem;
   right: 2px;
   content: attr(data-extra);
   color: var(--extraSign);
@@ -110,7 +77,6 @@
   position: absolute;
   top: -1px;
   left: 2px;
-  font-size: 0.9rem;
   content: attr(data-lvl);
   color: var(--extraSign);
 }

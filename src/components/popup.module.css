@@ -1,0 +1,74 @@
+.popup {
+  width: 100vw;
+  background-color: transparent;
+  z-index: 100;
+  position: fixed;
+  @apply flex justify-center;
+  transition-duration: 200ms;
+  left: 0;
+}
+
+.popup > div {
+  position: absolute;
+  top: -5%;
+  transition-duration: 200ms;
+  color: var(--textColor);
+  border: 1px solid var(--borderColor);
+  background-color: #333;
+  transition-duration: 200ms;
+}
+
+.popup[data-open="open"] {
+  top: 2%;
+  opacity: 1;
+  transition-duration: 200ms;
+}
+
+.popup[data-open="closed"] {
+  top: 2%;
+  opacity: 0;
+  transition-duration: 200ms;
+}
+
+.popup[data-open="open"] > div {
+  top: 2%;
+  transition-duration: 200ms;
+}
+
+.popup[data-open="closed"] > div {
+  top: -5%;
+  transition-duration: 200ms;
+}
+
+.popupModal {
+  background-color: var(--backdrop);
+  width: 100vw;
+  height: 100vh;
+  @apply flex items-center;
+}
+
+.popupModal > div {
+  position: absolute;
+  top: -5%;
+  transition-duration: 200ms;
+}
+
+.popupModal[data-open="open"] {
+  top: 0;
+  opacity: 1;
+}
+
+.popupModal[data-open="closed"] {
+  top: 0;
+  opacity: 0;
+}
+
+.popupModal[data-open="open"] > div {
+  top: 2%;
+  transition-duration: 200ms;
+}
+
+.popupModal[data-open="closed"] > div {
+  top: -5%;
+  transition-duration: 200ms;
+}

@@ -6,13 +6,20 @@ import { type QuizWord } from "@/components/draw/quizWords";
 import { getMergedKanjis } from "@/components/list/kanjiStorage";
 import { type Kanji, useKanjiStore } from "@/components/list/kanjiStore";
 import { KanjiTile } from "@/components/list/kanjiTile";
-import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
+import { useLocalStorage } from "@/components/localStorageProvider";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
 const MIN_SESSION_SIZE = 5;
 const MIN_WORD_SIZE = 10;
+
+type Sorting = {
+  name: string;
+  check: (kanjis: Kanji[], selected: string[]) => boolean;
+  deselect: (kanjis: Kanji[], selected: string[]) => string[];
+  select: (kanjis: Kanji[], selected: string[]) => string[];
+};
 
 export default function Draw() {
   const LS = useLocalStorage();
@@ -23,13 +30,13 @@ export default function Draw() {
 
   const [selectedKanjis, setSelectedKanjis] = useState<string[]>([]);
 
-  const [rowCount, setRowCount] = useState<number | null>(null);
+  const [rowCount, setRowCount] = useKanjiStore((s) => [
+    s.settings.kanjiRowCount,
+    (f: (p: number) => number) =>
+      s.setSettings("kanjiRowCount", f(s.settings.kanjiRowCount)),
+  ]);
 
   const [showFilter, setShowFilter] = useState<string>("");
-
-  const [learningKanjis, setLearningKanjis] = useState<Kanji[]>([]);
-  const [completedKanjis, setCompletedKanjis] = useState<Kanji[]>([]);
-  const [newKanjis, setNewKanjis] = useState<Kanji[]>([]);
 
   const [sessionName, setSessionName] = useState<string>("");
 
@@ -57,32 +64,8 @@ export default function Draw() {
   }, [LS, mutateKanjis]);
 
   useEffect(() => {
-    if (rowCount === null) {
-      setRowCount(LS.getNum(LS_KEYS.row_count + "_draw") ?? 8);
-    } else {
-      LS.set(LS_KEYS.row_count + "_draw", rowCount);
-    }
-  }, [LS, rowCount]);
-
-  useEffect(() => {
     void (async () => {
       if (!LS?.idb) return;
-      const learning = await LS.idb.getAllFromIndex(
-        "kanji",
-        "status",
-        "learning",
-      );
-      setLearningKanjis(learning);
-
-      const completed = await LS.idb.getAllFromIndex(
-        "kanji",
-        "status",
-        "completed",
-      );
-      setCompletedKanjis(completed);
-
-      const newKs = await LS.idb.getAllFromIndex("kanji", "status", "new");
-      setNewKanjis(newKs);
 
       const prevSessionIndex = await LS.idb.count("draw");
       if (!sessionName) setSessionName(`Session ${prevSessionIndex + 1}`);
@@ -115,6 +98,101 @@ export default function Draw() {
   if (!kanjis || rowCount === null) {
     return <>Loading</>;
   }
+
+  const availableSortings: Sorting[] = [
+    {
+      name: "ALL",
+      check(kanjis, selected) {
+        return kanjis.reduce(
+          (p, n) => (!p ? p : selected.includes(n.kanji)),
+          true,
+        );
+      },
+      deselect() {
+        return [];
+      },
+      select(k) {
+        return k.map((k) => k.kanji);
+      },
+    },
+    ...[...new Set<string>(kanjis.map((k) => k.status))]
+      .sort()
+      .map<Sorting>((status) => ({
+        name: status.toUpperCase(),
+        check(kanjis, selected) {
+          return kanjis.reduce(
+            (p, n) =>
+              !p || n.status !== status ? p : selected.includes(n.kanji),
+            true,
+          );
+        },
+        deselect(k, s) {
+          return s.filter(
+            (q) => k.find((x) => x.kanji === q)?.status !== status,
+          );
+        },
+        select(kanjis, selected) {
+          return [
+            ...selected,
+            ...kanjis.filter((k) => k.status === status).map((k) => k.kanji),
+          ];
+        },
+      })),
+    ...[...new Set<number>(kanjis.map((k) => k.lvl))].map<Sorting>((lvl) => ({
+      name: `LVL${lvl}`,
+      check(kanjis, selected) {
+        return kanjis.reduce(
+          (p, n) => (!p || n.lvl !== lvl ? p : selected.includes(n.kanji)),
+          true,
+        );
+      },
+      deselect(k, s) {
+        return s.filter((q) => k.find((x) => x.kanji === q)?.lvl !== lvl);
+      },
+      select(kanjis, selected) {
+        return [
+          ...selected,
+          ...kanjis.filter((k) => k.lvl === lvl).map((k) => k.kanji),
+        ];
+      },
+    })),
+    ...[...new Set<string>(words.map<string[]>((w) => w.tags ?? []).flat())]
+      .sort()
+      .map<Sorting>((tag) => ({
+        name: tag.toUpperCase(),
+        check(kanjis, selected) {
+          return words
+            .filter((w) => w.tags?.includes(tag))
+            .reduce(
+              (p, n) =>
+                !p
+                  ? p
+                  : kanjis.find((k) => k.kanji === n.kanji)
+                    ? selected.includes(n.kanji)
+                    : p,
+              true,
+            );
+        },
+        deselect(k, s) {
+          return s.filter(
+            (q) => !words.find((w) => w.tags?.includes(tag) && w.kanji === q),
+          );
+        },
+        select(kanjis, s) {
+          return [
+            ...s,
+            ...kanjis
+              .filter(
+                (k) =>
+                  !!words.find(
+                    (w) => w.tags?.includes(tag) && w.kanji === k.kanji,
+                  ),
+              )
+              .map((k) => k.kanji),
+          ];
+        },
+      })),
+  ];
 
   return (
     <>
@@ -204,7 +282,7 @@ export default function Draw() {
           <span>{sesssions.length === 0 ? "C" : "c"}reate a new session</span>
         </div>
         <div ref={nameDiv} className="flex flex-wrap gap-x-1">
-          <div className="relative flex min-h-[2.5rem] underline after:absolute after:left-[calc(50%_-_21px)] after:top-[-5px] after:content-['Points']">
+          <div className="relative flex min-h-[2.5rem] underline after:absolute after:left-1.5 after:top-[-5px] after:content-['Points']">
             <input
               className="w-[4rem] border-green-400 text-center text-[1rem] outline-none"
               type="number"
@@ -292,7 +370,9 @@ export default function Draw() {
                 }
                 const sessionData: DrawSessionData = {
                   sessionID: sessionName,
-                  sessionKanjis: selectedKanjis,
+                  sessionKanjis: selectedKanjis.filter(
+                    (k) => !!words.find((w) => w.kanji === k),
+                  ),
                   sessionResults: [],
                   open: true,
                   pointsToComplete: donePoints ?? undefined,
@@ -310,18 +390,18 @@ export default function Draw() {
           {sessionCreationError?.el}
         </div>
         <div
-          className="grid min-h-64 overflow-hidden"
+          className="grid min-h-64 w-full overflow-hidden"
           style={{ gridAutoRows: "min-content" }}
         >
           <div
-            className="flex h-full max-h-[--maxh] flex-col sm:max-h-[--maxhsm]"
+            className="flex h-full max-h-[--maxh] w-full flex-col sm:max-h-[--maxhsm]"
             style={{
-              "--maxh": `calc(100vh - ${
+              "--maxh": `calc(99vh - ${
                 (headerDiv.current?.offsetHeight ?? 0) +
                 (nameDiv.current?.offsetHeight ?? 0) +
                 (dashboardLinkRef.current?.offsetHeight ?? 0)
               }px - 1.0rem)`,
-              "--maxhsm": `calc(100vh - ${
+              "--maxhsm": `calc(99vh - ${
                 (headerDiv.current?.offsetHeight ?? 0) +
                 (nameDiv.current?.offsetHeight ?? 0)
               }px - 1.0rem)`,
@@ -333,7 +413,7 @@ export default function Draw() {
               <div
                 className="mb-2 flex max-w-[--maxw] select-none flex-wrap justify-around gap-x-2 gap-y-2 justify-self-center"
                 style={{
-                  "--maxw": `${Math.min(wWidth ?? Infinity, (rowCount ?? 8) * 55)}px`,
+                  "--maxw": `${Math.min(wWidth ?? Infinity, rowCount * 55)}px`,
                 }}
               >
                 <div className="flex flex-col justify-center text-center">
@@ -341,296 +421,41 @@ export default function Draw() {
                   <div>
                     <button
                       onClick={() => {
-                        setRowCount((p) => (p ?? 8) + 1);
-                      }}
-                    >
-                      +
-                    </button>{" "}
-                    {rowCount ?? 8}{" "}
-                    <button
-                      onClick={() => {
                         setRowCount((p) => {
-                          if (!p || p <= 1) return p;
+                          if (p <= 1) return p;
                           return p - 1;
                         });
                       }}
                     >
                       -
+                    </button>{" "}
+                    {rowCount}{" "}
+                    <button
+                      onClick={() => {
+                        setRowCount((p) => p + 1);
+                      }}
+                    >
+                      +
                     </button>
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    setSelectedKanjis((prev) => {
-                      if (
-                        kanjis.reduce(
-                          (p, n) => (!p ? p : prev.includes(n.kanji)),
-                          true,
-                        )
-                      ) {
-                        return prev.filter(
-                          (f) => !kanjis.find((k) => k.kanji === f),
-                        );
-                      }
-                      return [
-                        ...new Set([
-                          ...prev,
-                          ...(kanjis.map((k) => k.kanji) ?? []),
-                        ]),
-                      ];
-                    });
-                  }}
-                  className={`block ${
-                    kanjis.reduce(
-                      (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                      true,
-                    )
-                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
-                      : ""
-                  }`}
-                >
-                  ALL
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedKanjis((prev) => {
-                      const lv1 = kanjis.filter((f) => f.lvl === 1);
-                      if (
-                        lv1.reduce(
-                          (p, n) => (!p ? p : prev.includes(n.kanji)),
-                          true,
-                        )
-                      ) {
-                        return prev.filter(
-                          (f) => !lv1.find((k) => k.kanji === f),
-                        );
-                      }
-                      return [
-                        ...new Set([
-                          ...prev,
-                          ...(lv1.map((k) => k.kanji) ?? []),
-                        ]),
-                      ];
-                    });
-                  }}
-                  className={`block ${
-                    kanjis
-                      .filter((f) => f.lvl === 1)
-                      .reduce(
-                        (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                        true,
-                      )
-                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
-                      : ""
-                  }`}
-                >
-                  LVL1
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedKanjis((prev) => {
-                      const lv2 = kanjis.filter((f) => f.lvl === 2);
-                      if (
-                        lv2.reduce(
-                          (p, n) => (!p ? p : prev.includes(n.kanji)),
-                          true,
-                        )
-                      ) {
-                        return prev.filter(
-                          (f) => !lv2.find((k) => k.kanji === f),
-                        );
-                      }
-                      return [
-                        ...new Set([
-                          ...prev,
-                          ...(lv2.map((k) => k.kanji) ?? []),
-                        ]),
-                      ];
-                    });
-                  }}
-                  className={`${
-                    kanjis
-                      .filter((f) => f.lvl === 2)
-                      .reduce(
-                        (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                        true,
-                      )
-                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
-                      : ""
-                  }`}
-                >
-                  LVL2
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedKanjis((prev) => {
-                      const base = kanjis.filter((f) => f.type === "base");
-                      if (
-                        base.reduce(
-                          (p, n) => (!p ? p : prev.includes(n.kanji)),
-                          true,
-                        )
-                      ) {
-                        return prev.filter(
-                          (f) => !base.find((k) => k.kanji === f),
-                        );
-                      }
-                      return [
-                        ...new Set([
-                          ...prev,
-                          ...(base.map((k) => k.kanji) ?? []),
-                        ]),
-                      ];
-                    });
-                  }}
-                  className={`block ${
-                    kanjis
-                      .filter((f) => f.type === "base")
-                      .reduce(
-                        (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                        true,
-                      )
-                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
-                      : ""
-                  }`}
-                >
-                  BASE
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedKanjis((prev) => {
-                      const base = kanjis.filter((f) => f.type === "extra");
-                      if (
-                        base.reduce(
-                          (p, n) => (!p ? p : prev.includes(n.kanji)),
-                          true,
-                        )
-                      ) {
-                        return prev.filter(
-                          (f) => !base.find((k) => k.kanji === f),
-                        );
-                      }
-                      return [
-                        ...new Set([
-                          ...prev,
-                          ...(base.map((k) => k.kanji) ?? []),
-                        ]),
-                      ];
-                    });
-                  }}
-                  className={`block ${
-                    kanjis
-                      .filter((f) => f.type === "extra")
-                      .reduce(
-                        (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                        true,
-                      )
-                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
-                      : ""
-                  }`}
-                >
-                  EXTRAS
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedKanjis((prev) => {
-                      if (
-                        newKanjis.reduce(
-                          (p, n) => (!p ? p : prev.includes(n.kanji)),
-                          true,
-                        )
-                      ) {
-                        return prev.filter(
-                          (f) => !newKanjis.find((k) => k.kanji === f),
-                        );
-                      }
-                      return [
-                        ...new Set([
-                          ...prev,
-                          ...(newKanjis.map((k) => k.kanji) ?? []),
-                        ]),
-                      ];
-                    });
-                  }}
-                  className={`block ${
-                    newKanjis.reduce(
-                      (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                      true,
-                    )
-                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
-                      : ""
-                  }`}
-                >
-                  NEW
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedKanjis((prev) => {
-                      if (
-                        learningKanjis.reduce(
-                          (p, n) => (!p ? p : prev.includes(n.kanji)),
-                          true,
-                        )
-                      ) {
-                        return prev.filter(
-                          (f) => !learningKanjis.find((k) => k.kanji === f),
-                        );
-                      }
-                      return [
-                        ...new Set([
-                          ...prev,
-                          ...(learningKanjis.map((k) => k.kanji) ?? []),
-                        ]),
-                      ];
-                    });
-                  }}
-                  data-full={learningKanjis.reduce(
-                    (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                    true,
-                  )}
-                  className={`block ${
-                    learningKanjis.reduce(
-                      (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                      true,
-                    )
-                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
-                      : ""
-                  }`}
-                >
-                  LEARNING
-                </button>
-                <button
-                  onClick={() => {
-                    setSelectedKanjis((prev) => {
-                      if (
-                        completedKanjis.reduce(
-                          (p, n) => (!p ? p : prev.includes(n.kanji)),
-                          true,
-                        )
-                      ) {
-                        return prev.filter(
-                          (f) => !completedKanjis.find((k) => k.kanji === f),
-                        );
-                      }
-                      return [
-                        ...new Set([
-                          ...prev,
-                          ...(completedKanjis.map((k) => k.kanji) ?? []),
-                        ]),
-                      ];
-                    });
-                  }}
-                  className={`block ${
-                    completedKanjis.reduce(
-                      (p, n) => (!p ? p : selectedKanjis.includes(n.kanji)),
-                      true,
-                    )
-                      ? "border-[1px] border-solid border-green-800 bg-[#282]"
-                      : ""
-                  }`}
-                >
-                  COMPLETED
-                </button>
+                {availableSortings.map((s) => {
+                  return (
+                    <button
+                      key={s.name}
+                      onClick={() => {
+                        setSelectedKanjis((prev) => {
+                          if (s.check(kanjis, prev))
+                            return s.deselect(kanjis, prev);
+                          else return s.select(kanjis, prev);
+                        });
+                      }}
+                      className={`block ${s.check(kanjis, selectedKanjis) ? "border-[1px] border-solid border-green-800 bg-[#282]" : ""}`}
+                    >
+                      {s.name}
+                    </button>
+                  );
+                })}
                 <label className="block">
                   FIND:
                   <input
@@ -669,41 +494,45 @@ export default function Draw() {
                   </div>
                 </div>
               </div>
-              <div
-                className="z-20 grid w-fit gap-1 justify-self-center overflow-auto pt-3"
-                style={{
-                  gridTemplateColumns: "1fr ".repeat(rowCount ?? 8),
-                }}
-              >
-                {kanjis
-                  ?.filter((f) =>
-                    showFilter ? showFilter.includes(f.kanji) : true,
-                  )
-                  .map((kanji) => {
-                    const on = selectedKanjis.includes(kanji.kanji);
-                    return (
-                      <KanjiTile
-                        badges={0}
-                        kanji={{
-                          ...kanji,
-                          status: on ? "completed" : "new",
-                        }}
-                        style={{
-                          "--border": on ? "green" : "red",
-                        }}
-                        extraBadge={`${words.filter((f) => f.kanji === kanji.kanji).length}`}
-                        className="hover:z-10"
-                        key={kanji.kanji}
-                        update={() => {
-                          setSelectedKanjis((prev) =>
-                            prev.includes(kanji.kanji)
-                              ? prev.filter((k) => k !== kanji.kanji)
-                              : [...prev, kanji.kanji],
-                          );
-                        }}
-                      />
-                    );
-                  })}
+              <div className="z-20 grid w-full justify-center justify-self-center overflow-auto pt-3">
+                <div
+                  className="grid w-min gap-1"
+                  style={{
+                    gridTemplateColumns: "1fr ".repeat(rowCount ?? 8),
+                  }}
+                >
+                  {kanjis
+                    ?.filter((f) =>
+                      showFilter ? showFilter.includes(f.kanji) : true,
+                    )
+                    .map((kanji) => {
+                      const on =
+                        selectedKanjis.includes(kanji.kanji) &&
+                        words.filter((w) => w.kanji === kanji.kanji).length;
+                      return (
+                        <KanjiTile
+                          badges={0}
+                          kanji={{
+                            ...kanji,
+                            status: on ? "completed" : "new",
+                          }}
+                          style={{
+                            "--border": on ? "green" : "red",
+                          }}
+                          extraBadge={`${words.filter((f) => f.kanji === kanji.kanji).length}`}
+                          className="w-min hover:z-10"
+                          key={kanji.kanji}
+                          update={() => {
+                            setSelectedKanjis((prev) =>
+                              prev.includes(kanji.kanji)
+                                ? prev.filter((k) => k !== kanji.kanji)
+                                : [...prev, kanji.kanji],
+                            );
+                          }}
+                        />
+                      );
+                    })}
+                </div>
               </div>
             </div>
           </div>

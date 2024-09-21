@@ -4,6 +4,9 @@ import { DEFAULT_KANJI_VERSION } from "@/components/list/defaultKanji";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
 import kanjiCSS from "@/components/list/list.module.css";
+
+import popupCSS from "@/components/popup.module.css";
+
 import {
   checkKanjiListUpdate,
   getMergedKanjis,
@@ -62,7 +65,11 @@ function App() {
 
   const [filter, setFilter] = useState("");
 
-  const [rowCount, setRowCount] = useState(10);
+  const [rowCount, setRowCount] = useKanjiStore((s) => [
+    s.settings.kanjiRowCount,
+    (fn: (f: number) => number) =>
+      s.setSettings("kanjiRowCount", fn(s.settings.kanjiRowCount)),
+  ]);
 
   const [restoreID, setRestoreID] = useState("");
   const [restoreIDText, setRestoreIDText] = useState("");
@@ -176,7 +183,6 @@ function App() {
   }, [customID]);
 
   useEffect(() => {
-    setRowCount(LS.getNum(LS_KEYS.row_count) ?? 10);
     setShowbadges(LS.getNum<0 | 1 | 2 | 3>(LS_KEYS.badges) ?? 0);
 
     void (async () => {
@@ -235,10 +241,6 @@ function App() {
     })();
   }, [LS, mutateKanjis, restoreKanjiFromOnlineDB, setPopup, setShouldUpdate]);
 
-  useEffect(() => {
-    LS.set("rowCount", `${rowCount}`);
-  }, [rowCount, LS]);
-
   const addRef = useRef<HTMLDialogElement>(null);
   const clearAddRef = useRef<HTMLButtonElement>(null);
 
@@ -268,14 +270,21 @@ function App() {
       <div>
         {customIDPopup && (
           <div
-            className={kanjiCSS.popup}
+            className={popupCSS.popup + " " + popupCSS.popupModal}
             style={{
               "--borderColor": "green",
               "--textColor": "white",
+              "--backdrop": "#fff3",
             }}
             data-open={customIDPopupOpen ? "open" : "closed"}
+            onClick={() => {
+              setCustomIDPopupOpen(false);
+            }}
           >
-            <div className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto">
+            <div
+              className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex flex-col">
                 <input
                   value={customIDText}
@@ -354,14 +363,21 @@ function App() {
         )}
         {restorePopup && (
           <div
-            className={kanjiCSS.popup}
+            className={popupCSS.popup + " " + popupCSS.popupModal}
             style={{
               "--borderColor": "green",
+              "--backdrop": "#fff3",
               "--textColor": "white",
             }}
             data-open={restorePopupOpen ? "open" : "closed"}
+            onClick={() => {
+              setRestorePopupOpen(false);
+            }}
           >
-            <div className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto">
+            <div
+              className="mx-2 flex flex-row flex-wrap justify-center gap-y-2 sm:mx-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex flex-col">
                 <input
                   value={restoreIDText}
@@ -542,6 +558,7 @@ function App() {
               className="w-min break-words border-red-600 text-orange-300 sm:break-keep"
               onClick={() => {
                 setPopup({
+                  modal: true,
                   text: (close) => (
                     <div className="text-center">
                       <div>Do you really want to delete all your progress?</div>
@@ -554,7 +571,7 @@ function App() {
                       >
                         Yes
                       </button>
-                      <button onClick={close}>No</button>
+                      <button onClick={() => close()}>No</button>
                     </div>
                   ),
                   borderColor: "red",
@@ -590,7 +607,9 @@ function App() {
               <button
                 onClick={() => {
                   document
-                    .querySelectorAll(`.${kanjiCSS.kanjiBtn}`)
+                    .querySelectorAll(
+                      `.${kanjiCSS.kanjiBtn}:not([data-disabled="true"])`,
+                    )
                     .forEach((e) => (e as HTMLElement).click());
                 }}
               >
@@ -785,7 +804,7 @@ function App() {
             <div className="flex flex-row items-center justify-center">
               <button
                 className="mx-1"
-                onClick={() => setRowCount((p) => (p === 1 ? 1 : p - 1))}
+                onClick={() => setRowCount((p) => (p <= 1 ? 1 : p - 1))}
               >
                 -
               </button>

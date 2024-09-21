@@ -54,6 +54,7 @@ import localFont from "next/font/local";
 export const myFont = localFont({ src: "./KSOF.ttf" });
 
 const MyApp: AppType = ({ Component, pageProps }) => {
+
   const [dbSchema] = useState<DBInit<KanjiDB>>({
     name: "kanjiDB",
     version: 16,

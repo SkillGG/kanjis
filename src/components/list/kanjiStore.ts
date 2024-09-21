@@ -1,4 +1,7 @@
+import { type Settings } from "@/pages";
+import { err } from "@/utils/utils";
 import { create } from "zustand";
+import { LS_KEYS } from "../localStorageProvider";
 
 export const KanjiStatus = ["new", "learning", "completed"] as const;
 
@@ -33,6 +36,8 @@ export type Store = {
   removeKanji: (kanji: string) => void;
   tagColors: Record<string, TagInfo> | null;
   setTagColors: (colors: Record<string, TagInfo>) => void;
+  settings: Settings;
+  setSettings: <T extends keyof Settings>(key: T, value: Settings[T]) => void;
 };
 
 export const useKanjiStore = create<Store>((_set, _get) => {
@@ -40,6 +45,11 @@ export const useKanjiStore = create<Store>((_set, _get) => {
     kanjis: null,
     shouldUpdateKanjiList: false,
     tagColors: null,
+    settings: {
+      autoChangeIME: false,
+      wordBankAutoFilter: true,
+      kanjiRowCount: 8,
+    },
     setTagColors(colors) {
       _set((prev) => ({ ...prev, tagColors: colors }));
     },
@@ -82,5 +92,46 @@ export const useKanjiStore = create<Store>((_set, _get) => {
         return newStore;
       });
     },
+    setSettings(key, value) {
+      _set((prev) => ({
+        ...prev,
+        settings: { ...prev.settings, [key]: value },
+      }));
+    },
   };
 });
+
+if (typeof window !== "undefined") {
+  try {
+    // load settings from localStorage
+    const lsS = localStorage.getItem(LS_KEYS.settings);
+
+    if (!lsS) throw new Error("No settings saved in LS");
+
+    const lsO = JSON.parse(lsS) as unknown;
+
+    if (lsO && typeof lsO === "object") {
+      const { setSettings } = useKanjiStore.getState();
+
+      // we have an object
+      if ("autoChangeIME" in lsO && typeof lsO.autoChangeIME === "boolean") {
+        setSettings("autoChangeIME", lsO.autoChangeIME);
+      }
+      if (
+        "wordBankAutoFilter" in lsO &&
+        typeof lsO.wordBankAutoFilter === "boolean"
+      ) {
+        setSettings("wordBankAutoFilter", lsO.wordBankAutoFilter);
+      }
+      if ("kanjiRowCount" in lsO && typeof lsO.kanjiRowCount === "number") {
+        setSettings("kanjiRowCount", lsO.kanjiRowCount);
+      }
+    }
+
+    useKanjiStore.subscribe((state) =>
+      localStorage.setItem(LS_KEYS.settings, JSON.stringify(state.settings)),
+    );
+  } catch (e) {
+    err`Could not load settings from localStorage! ${e}`;
+  }
+}

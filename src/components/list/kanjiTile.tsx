@@ -1,3 +1,4 @@
+import { twMerge } from "tailwind-merge";
 import { type Kanji } from "./kanjiStore";
 import kanjiCSS from "./list.module.css";
 import { hoverColors, bgColors, borderColors, extraSignColor } from "./theme";
@@ -37,9 +38,12 @@ export const KanjiTile = ({
       }}
       key={kanji}
       id={kanji}
-      className={
-        (className ?? "") + " " + kanjiCSS.kanjiBtn + ` p-[0.4rem] text-[2rem]`
-      }
+      className={twMerge(
+        kanjiCSS.kanjiBtn +
+          ` p-[0.65rem] text-[2rem] before:text-[0.9rem] after:text-[1rem]` +
+          " " +
+          (className ?? ""),
+      )}
       data-disabled={disabled}
       style={{
         "--hoverColor": hoverColors[status],

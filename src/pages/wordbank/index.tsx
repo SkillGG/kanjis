@@ -54,16 +54,15 @@ import { gt, inc } from "semver";
 import Link from "next/link";
 import { usePopup } from "@/components/usePopup";
 import TagLabel from "@/components/draw/tagBadge";
-import { type TagInfo, useKanjiStore } from "@/components/list/kanjiStore";
 import { TagEditor } from "@/components/wordbank/tagEditor";
+import { useTagColors } from "@/components/useTagColors";
+import { useKanjiStore } from "@/components/list/kanjiStore";
+import SettingBox from "@/components/settingBox";
 
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
 
-  const { tagColors, setTagColors } = useKanjiStore((s) => ({
-    tagColors: s.tagColors,
-    setTagColors: s.setTagColors,
-  }));
+  const { tagColors, setTagColors } = useTagColors();
 
   const { setPopup, popup } = usePopup();
 
@@ -81,11 +80,11 @@ export default function KanjiCardCreator() {
 
   const [sureIfAdd, setSureIfAdd] = useState(false);
 
-  const [autoFilter, setAutoFilter] = useState(true);
+  const autoFilter = useKanjiStore((s) => s.settings.wordBankAutoFilter);
 
   const [canUpdateBank, setCanUpdateBank] = useState(false);
 
-  const [autoIMEChange, setAutoIMEChange] = useState(false);
+  const autoIMEChange = useKanjiStore((s) => s.settings.autoChangeIME);
 
   const allRef = useRef<HTMLButtonElement>(null);
   const addRef = useRef<HTMLButtonElement>(null);
@@ -146,31 +145,6 @@ export default function KanjiCardCreator() {
       setCanUpdateBank(true);
     }
   }, [LS, words]);
-
-  useEffect(() => {
-    const tColors = defaultWordBank.tags as Record<string, TagInfo>;
-
-    if (!tagColors) {
-      // first edit
-      const lsColors =
-        LS.getObject<Record<string, TagInfo>>(LS_KEYS.tag_colors) ?? {};
-      setTagColors({ ...tColors, ...lsColors });
-    } else {
-      let restored = false;
-      const mix = { ...tagColors };
-      for (const [name, obj] of Object.entries(tColors)) {
-        if (!(name in mix)) {
-          restored = true;
-          mix[name] = obj;
-        }
-      }
-      if (restored) {
-        setTagColors(mix);
-      } else {
-        LS.set(LS_KEYS.tag_colors, mix);
-      }
-    }
-  }, [LS, setTagColors, tagColors]);
 
   useEffect(() => {
     function handlekeydown(e: KeyboardEvent) {
@@ -275,25 +249,47 @@ export default function KanjiCardCreator() {
           word into the main field, the green kanji will be made
           &quot;guessable&quot;.
         </div>
-        <button onClick={() => setOpenTagEditor(true)}>Edit tags</button>
+        <button className="mr-2" onClick={() => setOpenTagEditor(true)}>
+          Edit tags
+        </button>
+        <button
+          onClick={() => {
+            setPopup({
+              modal: true,
+              modalStyle: {
+                styles: { "--backdrop": "#fff5" },
+              },
+              contentStyle: {
+                className: "px-8",
+              },
+              text(close) {
+                return (
+                  <div className="text-center">
+                    <SettingBox
+                      name="Worbank settings"
+                      wordbank={true}
+                      draw={false}
+                      global={false}
+                      list={false}
+                    />
+                    <button
+                      onClick={() => {
+                        close();
+                      }}
+                      className="absolute right-[2px] top-[5px] border-none text-[red]"
+                    >
+                      X
+                    </button>
+                  </div>
+                );
+              },
+              time: "user",
+            });
+          }}
+        >
+          Settings
+        </button>
         <div>You can use enter to quickly focus next fields!</div>
-        <label>
-          Filter data on input
-          <input
-            type="checkbox"
-            onChange={() => setAutoFilter((p) => !p)}
-            checked={autoFilter}
-          />
-        </label>
-        <br />
-        <label>
-          Auto Change IME in meaning field (doesn&apos;t work on mobile)
-          <input
-            type="checkbox"
-            onChange={() => setAutoIMEChange((p) => !p)}
-            checked={autoIMEChange}
-          />
-        </label>
         <div className="flex w-full max-w-[100%] flex-wrap sm:max-w-[100%]">
           {readings.map((a, i) => (
             <div

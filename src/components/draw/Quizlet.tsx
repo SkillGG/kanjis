@@ -6,22 +6,22 @@ import {
   toRQW,
   type QuizWord,
 } from "./quizWords";
-import { KanjiCard } from "./kanjiCard";
+import { KanjiCard, type KanjiCardSide } from "./kanjiCard";
 import { useLocalStorage } from "../localStorageProvider";
 import { myFont } from "@/pages/_app";
-import { usePopup } from "../usePopup";
 
 export const DEFAULT_POINTS_TO_COMPLETE = 100;
 
 export const Quizlet = ({
   session,
   commitResult,
+  onSideChanged,
 }: {
   session: DrawSessionData;
   commitResult: (result: SessionResult) => Promise<DrawSessionData>;
+  onSideChanged?: (side: KanjiCardSide) => void;
 }) => {
   const LS = useLocalStorage();
-  const { popup, setPopup } = usePopup();
 
   const [wordGenerator, setWordGenerator] = useState<NextWordGenerator | null>(
     null,
@@ -67,59 +67,38 @@ export const Quizlet = ({
 
   return (
     <>
-      {popup}
       <KanjiCard
-        classNames={{ text: "text-4xl", border: "text-2xl" }}
+        onSideChanged={onSideChanged}
+        classNames={{
+          border: "text-base sm:text-xl min-w-[50%]",
+          tags: "text-base",
+          buttons: "text-base sm:text-3xl mb-2 sm:mt-2",
+        }}
         commit={async (result) => {
           const newSession = await commitResult(result);
-
-          const allWords = await LS.idb?.getAllFromIndex(
-            "wordbank",
-            "kanji",
-            result.kanji,
-          );
-
-          const allWPoints = allWords?.map((word) => {
-            return newSession.sessionResults
-              .filter((r) => r.word === word.word)
-              .reduce((p, n) => p + n.result, 0);
-          });
-
-          const PTC = newSession.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE;
-          console.log(
-            allWPoints,
-            allWPoints?.reduce((p, n) => (!p ? p : n > PTC), true),
-          );
-
-          if (allWPoints?.reduce((p, n) => (!p ? p : n > PTC), true)) {
-            setPopup({
-              text: () => (
-                <div className="text-center text-xl">
-                  You got more than {PTC} on every word with {currentWord.kanji}
-                  <br />
-                  <button>Mark as completed</button>
-                </div>
-              ),
-              time: 6000,
-              borderColor: "green",
-            });
-          }
-
           await nextWord(newSession);
         }}
         word={toRQW(currentWord, {
           full: {
+            text: {
+              className: "text-xl sm:text-5xl sm:leading-[6rem] text-balance",
+            },
             ruby: {
-              fontFamily: myFont.style.fontFamily,
-              fontSize: "10rem",
-              lineHeight: "1.25em",
-              "--color": "green",
+              className:
+                "text-[5rem] sm:text-[8rem] sm:leading-[6rem] break-keep",
+              style: { fontFamily: myFont.style.fontFamily },
             },
           },
           hint: {
+            text: {
+              className: "text-xl sm:text-5xl sm:leading-[6rem] text-balance",
+            },
             ruby: {
-              lineHeight: "1.25em",
-              fontSize: "10rem",
+              className:
+                "text-[5rem] sm:text-[8rem] sm:leading-[6rem] break-keep mb-2",
+            },
+            rt: {
+              className: "mb-2",
             },
           },
         })}

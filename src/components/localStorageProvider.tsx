@@ -64,6 +64,7 @@ export const LS_KEYS = {
   row_count: "rowCount",
   wordbank_ver: "wordbank_version",
   tag_colors: "tagColors",
+  settings: "settings",
 } as const;
 
 export type DBInit<T extends DBSchema> = {

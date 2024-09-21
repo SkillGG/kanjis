@@ -1,5 +1,5 @@
 import React, { type CSSProperties } from "react";
-import { type DrawSessionData } from "./drawSession";
+import { type SessionResult, type DrawSessionData } from "./drawSession";
 import { type LSStore } from "../localStorageProvider";
 import { type KanjiDB } from "@/pages/_app";
 import { log, randomStartWeighedInt } from "@/utils/utils";
@@ -36,6 +36,21 @@ export const areWordsTheSame = (
   );
 };
 
+type RQWStyles = {
+  ruby?: {
+    style?: CSSProperties;
+    className?: React.HTMLAttributes<"div">["className"];
+  };
+  rt?: {
+    style?: CSSProperties;
+    className?: React.HTMLAttributes<"div">["className"];
+  };
+  text?: {
+    style?: CSSProperties;
+    className?: React.HTMLAttributes<"div">["className"];
+  };
+};
+
 export const getReadings = (
   word: string,
   meaning: string,
@@ -51,21 +66,27 @@ export const getReadings = (
         throw new Error("The special character is out of bounds!");
   return (
     <>
-      <div style={{ lineHeight: "1.5em" }}>{meaning}</div>
-      <ruby style={{ ...style?.ruby }}>
+      <div style={{ ...style?.text?.style }} className={style?.text?.className}>
+        {meaning}
+      </div>
+      <ruby
+        style={{ ...style?.ruby?.style }}
+        className={style?.ruby?.className}
+      >
         {readings.map((r, i) => {
           return (
             <React.Fragment key={`word_reading_${r}_${i}`}>
               <span
                 className={`${specials?.includes(i) ? kanjiCSS["special-kanji"] : ""}`}
-                style={{ fontFamily: "inherit" }}
+                style={{ all: "inherit" }}
               >
                 {word[i]}
               </span>
               <rt
                 style={{
-                  ...style?.rt,
+                  ...style?.rt?.style,
                 }}
+                className={style?.rt?.className}
               >
                 {r}
               </rt>
@@ -76,8 +97,6 @@ export const getReadings = (
     </>
   );
 };
-
-type RQWStyles = { ruby?: CSSProperties; rt?: CSSProperties };
 
 export const getReadingsWithout = (
   word: string,
@@ -93,16 +112,22 @@ export const getReadingsWithout = (
       throw new Error("The special character is out of bounds!");
   return (
     <>
-      <div style={{ lineHeight: "1.5em" }}>{meaning}</div>
-      <ruby style={{ ...style?.ruby }}>
+      <div style={{ ...style?.text?.style }} className={style?.text?.className}>
+        {meaning}
+      </div>
+      <ruby
+        style={{ ...style?.ruby?.style }}
+        className={style?.ruby?.className}
+      >
         {readings.map((r, i) => {
           return (
             <React.Fragment key={`word_special_reading_${r}_${i}`}>
               {specials.includes(i) ? "〇" : word[i]}
               <rt
                 style={{
-                  ...style?.rt,
+                  ...style?.rt?.style,
                 }}
+                className={style?.rt?.className}
               >
                 {r}
               </rt>
@@ -162,7 +187,10 @@ export type NextWordGenerator = AsyncGenerator<
   DrawSessionData
 >;
 
-const getErr = (m: string, ch: React.ReactNode = null): GeneratorError => {
+export const getErr = (
+  m: string,
+  ch: React.ReactNode = null,
+): GeneratorError => {
   return {
     err: (
       <div className="text-center text-base text-red-500">
@@ -173,6 +201,74 @@ const getErr = (m: string, ch: React.ReactNode = null): GeneratorError => {
     message: m,
   };
 };
+
+export const getWordPoints = (
+  session: DrawSessionData,
+  word: string,
+  kanji: string,
+): number =>
+  session.sessionResults
+    .filter((sr) => sr.word === word && sr.kanji === kanji)
+    .reduce((p, n) => p + n.result, 0);
+
+export const getAllWordsWithKanji = (
+  words: QuizWord[],
+  kanji: string,
+): QuizWord[] => words.filter((q) => q.kanji === kanji);
+
+export const getDistanceFromLastKanji = (
+  session: DrawSessionData,
+  kanji: string,
+): number => {
+  if (!session.sessionResults.find((q) => q.kanji === kanji)) return Infinity;
+  let num = 0;
+  const revSRs = [...session.sessionResults].reverse();
+  for (const result of revSRs) {
+    if (result.kanji === kanji) return num;
+    num++;
+  }
+  return Infinity;
+};
+
+export const getDistanceFromLastWord = (
+  session: DrawSessionData,
+  word: string,
+): number => {
+  if (!session.sessionResults.find((q) => q.word === word)) return Infinity;
+  let num = 0;
+  const revSRs = [...session.sessionResults].reverse();
+  for (const result of revSRs) {
+    if (result.word === word) return num;
+    num++;
+  }
+  return Infinity;
+};
+
+export const getAllResultsForWord = (
+  session: DrawSessionData,
+  word: string,
+): SessionResult[] => session.sessionResults.filter((f) => f.word === word);
+
+export const getAllWordsElligibleForKanji = (
+  session: DrawSessionData,
+  words: QuizWord[],
+  kanji: string,
+): QuizWord[] =>
+  getAllWordsWithKanji(words, kanji)
+    .map((w) => ({ ...w, points: getWordPoints(session, w.word, w.kanji) }))
+    .filter((word) => {
+      return (
+        getDistanceFromLastWord(session, word.word) >
+        getAllWordsWithKanji(words, kanji).length - 2
+      );
+    })
+    .sort((a, b) => a.points - b.points);
+
+export const isKanjiCompleted = (
+  session: DrawSessionData,
+  kanji: string,
+): boolean =>
+  !!session.sessionResults.find((r) => r.kanji === kanji && r.completed);
 
 export async function* nextWordGenerator(
   startingData: DrawSessionData,
@@ -215,69 +311,27 @@ export async function* nextWordGenerator(
         </>,
       );
     };
-    const words: QuizWord[] = await LS.idb.getAll("wordbank");
-
-    // const getKanjiPoints = (k: string): number =>
-    //   currentSessionData.sessionResults
-    //     .filter((q) => q.kanji === k)
-    //     .reduce((p, n) => p + n.result, 0);
-
-    const getWordPoints = (w: string): number =>
-      currentSessionData.sessionResults
-        .filter((sr) => sr.word === w)
-        .reduce((p, n) => p + n.result, 0);
-
-    const getAllWordsWithKanji = (k: string): QuizWord[] =>
-      words.filter((q) => q.kanji === k);
-
-    const getDistanceFromLastKanji = (k: string): number => {
-      if (!currentSessionData.sessionResults.find((q) => q.kanji === k))
-        return Infinity;
-      let num = 0;
-      const revSRs = [...currentSessionData.sessionResults].reverse();
-      for (const result of revSRs) {
-        if (result.kanji === k) return num;
-        num++;
-      }
-      return Infinity;
-    };
-
-    const getDistanceFromLastWord = (w: string): number => {
-      if (!currentSessionData.sessionResults.find((q) => q.word === w))
-        return Infinity;
-      let num = 0;
-      const revSRs = [...currentSessionData.sessionResults].reverse();
-      for (const result of revSRs) {
-        if (result.word === w) return num;
-        num++;
-      }
-      return Infinity;
-    };
-
-    // const getAllResultsForWord = (w: string): SessionResult[] =>
-    //   currentSessionData.sessionResults.filter((f) => f.word === w);
-
-    const getAllWordsElligibleForKanji = (k: string): QuizWord[] =>
-      getAllWordsWithKanji(k)
-        .map((w) => ({ ...w, points: getWordPoints(w.word) }))
-        .filter((word) => {
-          return (
-            getDistanceFromLastWord(word.word) >
-            getAllWordsWithKanji(k).length - 2
-          );
-        })
-        .sort((a, b) => a.points - b.points);
+    const dbWords: QuizWord[] = await LS.idb.getAll("wordbank");
 
     const kanjiWithWords = currentSessionData.sessionKanjis
       .map((k) => {
-        const words = getAllWordsElligibleForKanji(k);
+        const words = getAllWordsElligibleForKanji(
+          currentSessionData,
+          dbWords,
+          k,
+        );
         return {
           kanji: k,
           words,
-          dist: getDistanceFromLastKanji(k),
+          dist: getDistanceFromLastKanji(currentSessionData, k),
           points:
-            words.slice(0, 3).reduce((p, n) => p + getWordPoints(n.word), 0) /
-            3,
+            words
+              .slice(0, 3)
+              .reduce(
+                (p, n) =>
+                  p + getWordPoints(currentSessionData, n.word, n.kanji),
+                0,
+              ) / 3,
         };
       })
       .filter((z) => z.words.length >= 1 && z.dist > 2)
