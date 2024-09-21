@@ -51,10 +51,12 @@ import wordBankWords from "@/pages/wordbank/wordbank.json";
 
 import localFont from "next/font/local";
 
-export const myFont = localFont({ src: "./KSOF.ttf" });
+export const strokeOrderFont = localFont({
+  src: "./KSOF.ttf",
+  variable: "--KSOF",
+});
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-
   const [dbSchema] = useState<DBInit<KanjiDB>>({
     name: "kanjiDB",
     version: 16,
@@ -122,7 +124,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   return (
     <LocalStorageProvider surpressWarnings dbCreator={dbSchema}>
-      <div className={GeistSans.className}>
+      <div className={`${GeistSans.className} ${strokeOrderFont.className}`}>
         <Component {...pageProps} />
       </div>
     </LocalStorageProvider>

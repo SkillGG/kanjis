@@ -195,7 +195,10 @@ export default function KanjiCardCreator() {
         skipped.push(word);
         continue;
       }
+
+      // remove no-reading versions:
       await LS.idb.put("wordbank", word);
+
       added.push(word);
     }
     log`Update results: addedd: ${added} skipped: ${skipped}`;

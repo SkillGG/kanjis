@@ -8,7 +8,7 @@ import {
 } from "./quizWords";
 import { KanjiCard, type KanjiCardSide } from "./kanjiCard";
 import { useLocalStorage } from "../localStorageProvider";
-import { myFont } from "@/pages/_app";
+import { strokeOrderFont } from "@/pages/_app";
 
 export const DEFAULT_POINTS_TO_COMPLETE = 100;
 
@@ -80,17 +80,19 @@ export const Quizlet = ({
         }}
         word={toRQW(currentWord, {
           full: {
-            text: {
+            meaning: {
               className: "text-xl sm:text-5xl sm:leading-[6rem] text-balance",
             },
             ruby: {
               className:
-                "text-[5rem] sm:text-[8rem] sm:leading-[6rem] break-keep",
-              style: { fontFamily: myFont.style.fontFamily },
+                "text-[5rem] sm:text-[8rem] sm:leading-[6rem] break-keep font-ksof",
+            },
+            kanji: {
+              className: "font-ksof",
             },
           },
           hint: {
-            text: {
+            meaning: {
               className: "text-xl sm:text-5xl sm:leading-[6rem] text-balance",
             },
             ruby: {

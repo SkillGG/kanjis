@@ -7,6 +7,7 @@ import Link from "next/link";
 import Router from "next/router";
 
 import kanjiCSS from "@/components/list/list.module.css";
+import { twMerge } from "tailwind-merge";
 
 export type QuizWord = {
   kanji: string;
@@ -45,7 +46,11 @@ type RQWStyles = {
     style?: CSSProperties;
     className?: React.HTMLAttributes<"div">["className"];
   };
-  text?: {
+  meaning?: {
+    style?: CSSProperties;
+    className?: React.HTMLAttributes<"div">["className"];
+  };
+  kanji?: {
     style?: CSSProperties;
     className?: React.HTMLAttributes<"div">["className"];
   };
@@ -66,7 +71,10 @@ export const getReadings = (
         throw new Error("The special character is out of bounds!");
   return (
     <>
-      <div style={{ ...style?.text?.style }} className={style?.text?.className}>
+      <div
+        style={{ ...style?.meaning?.style }}
+        className={style?.meaning?.className}
+      >
         {meaning}
       </div>
       <ruby
@@ -77,8 +85,11 @@ export const getReadings = (
           return (
             <React.Fragment key={`word_reading_${r}_${i}`}>
               <span
-                className={`${specials?.includes(i) ? kanjiCSS["special-kanji"] : ""}`}
-                style={{ all: "inherit" }}
+                className={twMerge(
+                  specials?.includes(i) && kanjiCSS["special-kanji"],
+                  style?.kanji?.className,
+                )}
+                style={style?.kanji?.style}
               >
                 {word[i]}
               </span>
@@ -112,7 +123,10 @@ export const getReadingsWithout = (
       throw new Error("The special character is out of bounds!");
   return (
     <>
-      <div style={{ ...style?.text?.style }} className={style?.text?.className}>
+      <div
+        style={{ ...style?.meaning?.style }}
+        className={style?.meaning?.className}
+      >
         {meaning}
       </div>
       <ruby
@@ -122,7 +136,12 @@ export const getReadingsWithout = (
         {readings.map((r, i) => {
           return (
             <React.Fragment key={`word_special_reading_${r}_${i}`}>
-              {specials.includes(i) ? "〇" : word[i]}
+              <span
+                className={twMerge(style?.kanji?.className)}
+                style={style?.kanji?.style}
+              >
+                {specials.includes(i) ? "〇" : word[i]}
+              </span>
               <rt
                 style={{
                   ...style?.rt?.style,

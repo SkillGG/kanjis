@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { type ReactQuizWord } from "./quizWords";
 import { type SessionResult } from "./drawSession";
-import { myFont } from "@/pages/_app";
+import { strokeOrderFont } from "@/pages/_app";
 import TagLabel from "./tagBadge";
 import { useTagColors } from "../useTagColors";
 import { twMerge } from "tailwind-merge";
@@ -106,7 +106,10 @@ export const KanjiCard = ({
         <>
           <div
             className={twMerge(`text-center text-2xl`, classNames.text)}
-            style={{ ...styles.text, fontFamily: myFont.style.fontFamily }}
+            style={{
+              ...styles.text,
+              fontFamily: strokeOrderFont.style.fontFamily,
+            }}
           >
             {word.full}
           </div>
