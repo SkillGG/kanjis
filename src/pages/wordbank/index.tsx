@@ -536,24 +536,7 @@ export default function KanjiCardCreator() {
                     JSON.stringify({
                       version: newVer,
                       tags: tagColors,
-                      words: words.map(
-                        ({
-                          blanked,
-                          kanji,
-                          meaning,
-                          readings,
-                          special,
-                          word,
-                        }) =>
-                          ({
-                            blanked,
-                            kanji,
-                            meaning,
-                            readings,
-                            special,
-                            word,
-                          }) as QuizWord,
-                      ),
+                      words: words.map((w) => fromRQW(w)),
                     }),
                   );
                   setCopied(true);
