@@ -162,6 +162,10 @@ export default function KanjiCardCreator() {
   useEffect(() => {
     function handlekeydown(e: KeyboardEvent) {
       const num = /Digit(\d)/.exec(e.code);
+      if (e.code === "KeyW" && e.altKey) {
+        log`${wordVal.split("").map((_, i) => i)}`;
+        setSpecial(wordVal.split("").map((_, i) => i));
+      }
       if (num && e.altKey) {
         const special = parseInt(num[1] ?? "a");
         if (!isNaN(special)) {
@@ -179,7 +183,7 @@ export default function KanjiCardCreator() {
     return () => {
       window.removeEventListener("keydown", handlekeydown);
     };
-  }, []);
+  }, [wordVal]);
 
   useEffect(() => {
     if (copied) {
@@ -356,7 +360,7 @@ export default function KanjiCardCreator() {
                       setTimeout(() => toFocus?.focus(), 20);
                     } else {
                       e.currentTarget.blur();
-                      toFocus?.focus();
+                      setTimeout(() => toFocus?.focus(), 20);
                     }
                   }
                 }}
@@ -399,7 +403,7 @@ export default function KanjiCardCreator() {
                     setTimeout(() => next?.focus(), 20);
                   } else {
                     e.currentTarget.blur();
-                    next?.focus();
+                    setTimeout(() => next?.focus(), 20);
                   }
                 }
               }}
@@ -502,14 +506,14 @@ export default function KanjiCardCreator() {
                   }
                   setMeaning("");
                   setWordVal("");
-                  mainInput.current?.focus();
+                  setTimeout(() => mainInput.current?.focus(), 20);
                 })();
               }}
             >
               {sureIfAdd ? (
                 <b className="text-[red]">No meaning! Are you sure?</b>
               ) : (
-                "ADD (alt + return)"
+                "ADD"
               )}
             </button>
             <button

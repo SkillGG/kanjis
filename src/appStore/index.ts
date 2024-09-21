@@ -241,7 +241,6 @@ if (typeof window !== "undefined") {
   // load settings from localStorage
   const lsS = localStorage.getItem(LS_KEYS.settings);
 
-  err`No settings stored in LS!`;
   if (lsS) {
     const lsO = JSON.parse(lsS) as unknown;
 
@@ -256,6 +255,8 @@ if (typeof window !== "undefined") {
         }
       }
     }
+  } else {
+    err`No settings stored in LS!`;
   }
 
   useAppStore.subscribe((state, prev) => {
