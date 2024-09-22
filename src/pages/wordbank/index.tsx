@@ -244,10 +244,6 @@ export default function KanjiCardCreator() {
     shownWords?.map((w) => w.word + w.readings.join(".")) ?? [],
   ).size;
 
-  useEffect(() => {
-    setPage(0);
-  }, [shownWords]);
-
   return (
     <>
       {popup}
@@ -418,6 +414,7 @@ export default function KanjiCardCreator() {
               onChange={(e) => {
                 setSureIfAdd(false);
                 setWordVal(e.target.value);
+                setPage(0);
               }}
             />
             <input
