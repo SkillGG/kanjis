@@ -1,5 +1,5 @@
 {
-  "version": "0.2.13",
+  "version": "0.2.14",
   "tags": {
     "BKB_vol1": {
       "description": "Basic Kanji Book vol.1",
@@ -883,7 +883,7 @@
       "readings": ["じょう", "きょう"],
       "special": 0,
       "word": "上京",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "上〇",
@@ -919,7 +919,7 @@
       "readings": ["じょう", "えい"],
       "special": 0,
       "word": "上映",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "他動詞"]
     },
     {
       "blanked": "上〇",
@@ -955,7 +955,7 @@
       "readings": ["げ", "しゅく"],
       "special": 0,
       "word": "下宿",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "下〇",
@@ -1099,7 +1099,7 @@
       "readings": ["ふ", "そく"],
       "special": 0,
       "word": "不足",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "不〇",
@@ -1198,7 +1198,7 @@
       "readings": ["ちゅう", "し"],
       "special": 0,
       "word": "中止",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "中〇",
@@ -1333,7 +1333,7 @@
       "readings": ["じょう", "こう"],
       "special": 0,
       "word": "乗降",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "乗〇",
@@ -2260,7 +2260,7 @@
       "readings": ["でん", "ごん"],
       "special": 0,
       "word": "伝言",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "伝〇",
@@ -2341,7 +2341,7 @@
       "readings": ["てい", "か"],
       "special": 0,
       "word": "低下",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "低〇",
@@ -2737,7 +2737,7 @@
       "readings": ["さく", "ぶん"],
       "special": 0,
       "word": "作文",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "作〇",
@@ -3088,7 +3088,7 @@
       "readings": ["にゅう", "こく"],
       "special": 0,
       "word": "入国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "入〇",
@@ -3106,7 +3106,7 @@
       "readings": ["にゅう", "がく"],
       "special": 0,
       "word": "入学",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "入〇",
@@ -3529,7 +3529,7 @@
       "readings": ["うつ", ""],
       "special": 0,
       "word": "写す",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "他動詞"]
     },
     {
       "blanked": "〇る",
@@ -3565,7 +3565,7 @@
       "readings": ["だ", ""],
       "special": 0,
       "word": "出す",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "〇る",
@@ -3601,7 +3601,7 @@
       "readings": ["しゅっ", "こく"],
       "special": 0,
       "word": "出国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "出〇",
@@ -3619,7 +3619,7 @@
       "readings": ["しゅっ", "せき"],
       "special": 0,
       "word": "出席",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "出〇",
@@ -3754,7 +3754,7 @@
       "readings": ["とう", "ちゃく"],
       "special": 0,
       "word": "到着",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "到〇",
@@ -3907,7 +3907,7 @@
       "readings": ["ろう", "どう"],
       "special": 0,
       "word": "労働",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "労〇",
@@ -3952,7 +3952,7 @@
       "readings": ["べん", "きょう"],
       "special": 0,
       "word": "勉強",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "自動詞"]
     },
     {
       "blanked": "勉〇",
@@ -3979,7 +3979,7 @@
       "readings": ["どう", "さ"],
       "special": 0,
       "word": "動作",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "動〇",
@@ -4516,7 +4516,7 @@
       "blanked": "〇米",
       "kanji": "南",
       "meaning": "South America",
-      "readings": ["なｎ", "べい"],
+      "readings": ["なん", "べい"],
       "special": 0,
       "word": "南米",
       "tags": ["BKB_vol1"]
@@ -4525,7 +4525,7 @@
       "blanked": "南〇",
       "kanji": "米",
       "meaning": "South America",
-      "readings": ["なｎ", "べい"],
+      "readings": ["なん", "べい"],
       "special": 1,
       "word": "南米",
       "tags": ["BKB_vol1"]
@@ -5154,7 +5154,7 @@
     {
       "blanked": "〇つ",
       "kanji": "四",
-      "meaning": "April",
+      "meaning": "four (things)",
       "readings": ["よっ", ""],
       "special": 0,
       "word": "四つ",
@@ -5200,10 +5200,19 @@
       "blanked": "〇日",
       "kanji": "四",
       "meaning": "4th day",
-      "readings": ["とっ", "か"],
+      "readings": ["よっ", "か"],
       "special": 0,
       "word": "四日",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "四〇",
+      "kanji": "日",
+      "meaning": "4th day",
+      "readings": ["よっ", "か"],
+      "special": 1,
+      "word": "四日",
+      "tags": []
     },
     {
       "blanked": "〇月",
@@ -5248,7 +5257,7 @@
       "readings": ["まわ", ""],
       "special": 0,
       "word": "回す",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "〇る",
@@ -5743,7 +5752,7 @@
       "readings": ["ばい", "ばい"],
       "special": 0,
       "word": "売買",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "売〇",
@@ -5851,7 +5860,7 @@
       "readings": ["がい", "しゅつ"],
       "special": 0,
       "word": "外出",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "外〇",
@@ -6985,7 +6994,7 @@
       "readings": ["しゅく", "はく"],
       "special": 0,
       "word": "宿泊",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "宿〇",
@@ -7669,7 +7678,7 @@
       "readings": ["さ", "せつ"],
       "special": 0,
       "word": "左折",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "左〇",
@@ -7885,7 +7894,7 @@
       "readings": ["こう", "こく"],
       "special": 0,
       "word": "広告",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "広〇",
@@ -8146,7 +8155,7 @@
       "readings": ["たい", "き"],
       "special": 0,
       "word": "待機",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "待〇",
@@ -8200,7 +8209,7 @@
       "readings": ["じょ", "こう"],
       "special": 0,
       "word": "徐行",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "徐〇",
@@ -8218,7 +8227,7 @@
       "readings": ["ふく", "しゅう"],
       "special": 0,
       "word": "復習",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "復〇",
@@ -8299,7 +8308,7 @@
       "readings": ["おも", "", "だ", ""],
       "special": 0,
       "word": "思い出す",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "他動詞"]
     },
     {
       "blanked": "思い〇す",
@@ -8488,7 +8497,7 @@
       "readings": ["しょう", "たい"],
       "special": 0,
       "word": "招待",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "招〇",
@@ -8551,7 +8560,7 @@
       "readings": ["じ", "ぞく"],
       "special": 0,
       "word": "持続",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "自動詞"]
     },
     {
       "blanked": "持〇",
@@ -8569,7 +8578,7 @@
       "readings": ["さが", ""],
       "special": 0,
       "word": "探す",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "〇店",
@@ -8938,7 +8947,7 @@
       "readings": ["りょう", "り"],
       "special": 0,
       "word": "料理",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "料〇",
@@ -9136,7 +9145,7 @@
       "readings": ["りょ", "こう"],
       "special": 0,
       "word": "旅行",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "旅〇",
@@ -9514,7 +9523,7 @@
       "readings": ["うつ", ""],
       "special": 0,
       "word": "映す",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "他動詞"]
     },
     {
       "blanked": "〇る",
@@ -10045,7 +10054,7 @@
       "readings": ["ふく", "よう"],
       "special": 0,
       "word": "服用",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "服〇",
@@ -11296,7 +11305,7 @@
       "readings": ["すい", "えい"],
       "special": 0,
       "word": "水泳",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "水〇",
@@ -11413,7 +11422,7 @@
       "readings": ["なお", ""],
       "special": 0,
       "word": "治す",
-      "tags": ["BKB_vol1"]
+      "tags": ["他動詞"]
     },
     {
       "blanked": "〇める",
@@ -11557,7 +11566,16 @@
       "readings": ["わた", ""],
       "special": 0,
       "word": "渡す",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
+    },
+    {
+      "blanked": "〇る",
+      "kanji": "渡",
+      "meaning": "to cross over",
+      "readings": ["わた", ""],
+      "special": 0,
+      "word": "渡る",
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "〇米",
@@ -12421,7 +12439,7 @@
       "readings": ["りゅう", "がく"],
       "special": 0,
       "word": "留学",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "留〇",
@@ -12466,7 +12484,7 @@
       "readings": ["る", "す", "ばん"],
       "special": 0,
       "word": "留守番",
-      "tags": ["BKB_vol1"]
+      "tags": ["自動詞"]
     },
     {
       "blanked": "留〇番",
@@ -12646,7 +12664,7 @@
       "readings": ["はつ", "おん"],
       "special": 0,
       "word": "発音",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "他動詞"]
     },
     {
       "blanked": "発〇",
@@ -13592,6 +13610,15 @@
       "special": 0,
       "word": "答え",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇える",
+      "kanji": "答",
+      "meaning": "(Vi) to answer a question, (Vt) to say in reply",
+      "readings": ["こた", "", ""],
+      "special": 0,
+      "word": "答える",
+      "tags": ["BKB_vol1", "他動詞", "自動詞"]
     },
     {
       "blanked": "〇理費",
@@ -14566,6 +14593,33 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "行〇区分",
+      "kanji": "政",
+      "meaning": "administrative division",
+      "readings": ["ぎょう", "せい", "く", "ぶん"],
+      "special": 1,
+      "word": "行政区分",
+      "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "行政〇分",
+      "kanji": "区",
+      "meaning": "administrative division",
+      "readings": ["ぎょう", "せい", "く", "ぶん"],
+      "special": 2,
+      "word": "行政区分",
+      "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "行政区〇",
+      "kanji": "分",
+      "meaning": "administrative division",
+      "readings": ["ぎょう", "せい", "く", "ぶん"],
+      "special": 3,
+      "word": "行政区分",
+      "tags": ["BKB_vol1"]
+    },
+    {
       "blanked": "〇方",
       "kanji": "行",
       "meaning": "whereabouts, destination",
@@ -14896,7 +14950,7 @@
       "readings": ["ほう", "もん"],
       "special": 0,
       "word": "訪問",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "訪〇",
@@ -14923,7 +14977,7 @@
       "readings": ["はな", ""],
       "special": 0,
       "word": "話す",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "〇題",
@@ -14976,7 +15030,7 @@
       "readings": ["どく", "しょ"],
       "special": 0,
       "word": "読書",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "自動詞"]
     },
     {
       "blanked": "読〇",
@@ -15165,7 +15219,7 @@
       "readings": ["しつ", "もん"],
       "special": 0,
       "word": "質問",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "自動詞"]
     },
     {
       "blanked": "質〇",
@@ -15237,7 +15291,7 @@
       "readings": ["た", ""],
       "special": 0,
       "word": "足す",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "〇りる",
@@ -15471,7 +15525,7 @@
       "readings": ["つう", "がく"],
       "special": 0,
       "word": "通学",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "通〇",
@@ -15606,7 +15660,7 @@
       "readings": ["しん", "にゅう"],
       "special": 0,
       "word": "進入",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "進〇",
@@ -15624,7 +15678,7 @@
       "readings": ["しん", "ぽ"],
       "special": 0,
       "word": "進歩",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "進〇",
@@ -15660,7 +15714,7 @@
       "readings": ["ち", "こく"],
       "special": 0,
       "word": "遅刻",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "遅〇",
@@ -16311,13 +16365,40 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇じる",
+      "kanji": "閉",
+      "meaning": "to close",
+      "readings": ["と", "", ""],
+      "special": 0,
+      "word": "閉じる",
+      "tags": ["BKB_vol1", "他動詞", "自動詞"]
+    },
+    {
+      "blanked": "〇まる",
+      "kanji": "閉",
+      "meaning": "to close",
+      "readings": ["し", "", ""],
+      "special": 0,
+      "word": "閉まる",
+      "tags": ["BKB_vol1", "自動詞"]
+    },
+    {
+      "blanked": "〇める",
+      "kanji": "閉",
+      "meaning": "to close",
+      "readings": ["し", "", ""],
+      "special": 0,
+      "word": "閉める",
+      "tags": ["BKB_vol1", "他動詞"]
+    },
+    {
       "blanked": "〇会",
       "kanji": "閉",
       "meaning": "to close a meeting",
       "readings": ["へい", "かい"],
       "special": 0,
       "word": "閉会",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "自動詞"]
     },
     {
       "blanked": "閉〇",
@@ -16335,7 +16416,7 @@
       "readings": ["へい", "てん"],
       "special": 0,
       "word": "閉店",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "自動詞"]
     },
     {
       "blanked": "閉〇",
@@ -16345,6 +16426,24 @@
       "special": 1,
       "word": "閉店",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇く",
+      "kanji": "開",
+      "meaning": "to open",
+      "readings": ["あ", ""],
+      "special": 0,
+      "word": "開く",
+      "tags": ["BKB_vol1", "自動詞"]
+    },
+    {
+      "blanked": "〇く",
+      "kanji": "開",
+      "meaning": "to open",
+      "readings": ["ひら", ""],
+      "special": 0,
+      "word": "開く",
+      "tags": ["BKB_vol1", "他動詞"]
     },
     {
       "blanked": "〇会",
@@ -16614,7 +16713,7 @@
       "readings": ["でん", "わ"],
       "special": 0,
       "word": "電話",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "電〇",
@@ -16767,7 +16866,7 @@
       "readings": ["しず", "", ""],
       "special": 0,
       "word": "静まる",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "〇寂",
@@ -16794,7 +16893,7 @@
       "readings": ["せい", "し"],
       "special": 0,
       "word": "静止",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "静〇",
@@ -17046,7 +17145,7 @@
       "readings": ["しょく", "じ"],
       "special": 0,
       "word": "食事",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "食〇",
@@ -17226,7 +17325,7 @@
       "readings": ["ちゅう", "しゃ"],
       "special": 0,
       "word": "駐車",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "自動詞"]
     },
     {
       "blanked": "駐〇",
@@ -17470,69 +17569,6 @@
       "special": 1,
       "word": "黒板",
       "tags": ["BKB_vol2"]
-    },
-    {
-      "blanked": "〇える",
-      "kanji": "答",
-      "meaning": "(Vi) to answer a question, (Vt) to say in reply",
-      "readings": ["こた", "", ""],
-      "special": 0,
-      "word": "答える",
-      "tags": ["BKB_vol1", "他動詞", "自動詞"]
-    },
-    {
-      "blanked": "〇まる",
-      "kanji": "閉",
-      "meaning": "to close",
-      "readings": ["し", "", ""],
-      "special": 0,
-      "word": "閉まる",
-      "tags": ["BKB_vol1", "自動詞"]
-    },
-    {
-      "blanked": "〇める",
-      "kanji": "閉",
-      "meaning": "to close",
-      "readings": ["し", "", ""],
-      "special": 0,
-      "word": "閉める",
-      "tags": ["BKB_vol1", "他動詞"]
-    },
-    {
-      "blanked": "〇じる",
-      "kanji": "閉",
-      "meaning": "to close",
-      "readings": ["と", "", ""],
-      "special": 0,
-      "word": "閉じる",
-      "tags": ["BKB_vol1", "他動詞", "自動詞"]
-    },
-    {
-      "blanked": "〇る",
-      "kanji": "渡",
-      "meaning": "to cross over",
-      "readings": ["わた", ""],
-      "special": 0,
-      "word": "渡る",
-      "tags": ["BKB_vol1", "自動詞"]
-    },
-    {
-      "blanked": "〇く",
-      "kanji": "開",
-      "meaning": "to open",
-      "readings": ["あ", ""],
-      "special": 0,
-      "word": "開く",
-      "tags": ["BKB_vol1", "自動詞"]
-    },
-    {
-      "blanked": "〇く",
-      "kanji": "開",
-      "meaning": "to open",
-      "readings": ["ひら", ""],
-      "special": 0,
-      "word": "開く",
-      "tags": ["BKB_vol1", "他動詞"]
     }
   ]
 }
