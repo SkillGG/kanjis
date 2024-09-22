@@ -134,7 +134,7 @@ export const defaultDBSchema: DBInit<AppDBSchema> = {
 export type AppDB = IDBPDatabase<AppDBSchema>;
 
 export type Store = {
-  kanjis: Kanji[] | null;
+  kanjis: Kanji[];
   shouldUpdateKanjiList: boolean;
   setShouldUpdateKanjiList: (su: boolean) => void;
   mutateKanjis: (mutation: (k: Store["kanjis"]) => Store["kanjis"]) => void;
@@ -186,7 +186,7 @@ export type AppDBSchema = DBSchema & {
 
 export const useAppStore = create<Store>((_set, _get) => {
   return {
-    kanjis: null,
+    kanjis: [],
     shouldUpdateKanjiList: false,
     tagColors: null,
     settings: DEFAULT_SETTINGS,

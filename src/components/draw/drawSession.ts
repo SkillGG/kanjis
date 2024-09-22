@@ -9,6 +9,7 @@ export type DrawSessionData = {
   sessionID: string;
   sessionKanjis: string[];
   sessionResults: SessionResult[];
+  sessionWordTags?: string[];
   open: boolean;
   pointsToComplete?: number;
 };

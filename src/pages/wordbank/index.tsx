@@ -106,12 +106,27 @@ export default function KanjiCardCreator() {
   const shownWords = useMemo(
     () =>
       [...(words ?? [])]
-        ?.filter((q) => (autoFilter ? q.word.includes(wordVal) : true))
+        ?.filter((q) =>
+          autoFilter
+            ? (q.word.includes(wordVal) || q.meaning.includes(wordVal)) &&
+              (addWithTags.length === 0
+                ? true
+                : !!q.tags?.some((t) => addWithTags.includes(t)) ||
+                  (addWithTags.includes("UNTAGGED") &&
+                    (!q.tags || q.tags.length == 0)))
+            : true,
+        )
         ?.reduce<MultiRQW[]>((p, n) => {
+          const areReadingsTheSame = (a: QuizWord, b: QuizWord) =>
+            a.readings.join("_") === b.readings.join("_");
+          const areTagsTheSame = (a: QuizWord, b: QuizWord) =>
+            a.tags?.sort().join("_") === b.tags?.sort().join("_");
+
           const prevInArr = p.find(
             (z) =>
               z.word === n.word &&
-              z.readings.join("_") === n.readings.join("_"),
+              areReadingsTheSame(z, n) &&
+              areTagsTheSame(z, n),
           );
 
           if (prevInArr) {
@@ -123,7 +138,8 @@ export default function KanjiCardCreator() {
               ...p.filter(
                 (x) =>
                   !(
-                    x.readings.join(".") === prevInArr.readings.join(".") &&
+                    areTagsTheSame(x, prevInArr) &&
+                    areReadingsTheSame(x, prevInArr) &&
                     x.word === prevInArr.word
                   ),
               ),
@@ -136,7 +152,7 @@ export default function KanjiCardCreator() {
           return [...p, { ...n, multiSpecial: [n.special] }];
         }, [])
         .sort((a, b) => compareReadings(a, b)),
-    [words, autoFilter, wordVal],
+    [words, autoFilter, wordVal, addWithTags],
   );
 
   useEffect(() => {
@@ -240,8 +256,16 @@ export default function KanjiCardCreator() {
 
   const [openTagEditor, setOpenTagEditor] = useState(false);
 
-  const wordCount = new Set(
-    shownWords?.map((w) => w.word + w.readings.join(".")) ?? [],
+  const shownWordCount = new Set(
+    shownWords?.map(
+      (w) => w.word + w.readings.join(".") + w.tags?.sort().join("_"),
+    ) ?? [],
+  ).size;
+
+  const allWordCount = new Set(
+    words?.map(
+      (w) => w.word + w.readings.join(".") + w.tags?.sort().join("_"),
+    ) ?? [],
   ).size;
 
   return (
@@ -637,6 +661,20 @@ export default function KanjiCardCreator() {
                               <>
                                 <div className="text-xl">Choose a tag</div>
                                 <div className="flex flex-col items-center gap-2">
+                                  {!addWithTags.includes("UNTAGGED") && (
+                                    <div>
+                                      <TagLabel
+                                        tag={"UNTAGGED"}
+                                        onClick={() => {
+                                          setAddWithTags((p) => [
+                                            ...p,
+                                            "UNTAGGED",
+                                          ]);
+                                          close();
+                                        }}
+                                      />
+                                    </div>
+                                  )}
                                   {Object.entries(tagColors)
                                     .filter(([t]) => !addWithTags.includes(t))
                                     .map((tc) => (
@@ -675,12 +713,14 @@ export default function KanjiCardCreator() {
         <div className="text-center text-xl">Loading...</div>
       ) : (
         <>
-          <div className="flex justify-center text-xl">
-            Kanjis currently in wordbank ({wordCount}):
-            {showLimit < wordCount && (
-              <div className="ml-4 text-center text-xl">
+          <div className="flex flex-wrap justify-center text-xl">
+            <div className="text-center">
+              Kanjis currently in wordbank ({shownWordCount}/{allWordCount}):
+            </div>
+            {showLimit < shownWordCount && (
+              <div className="ml-4 flex flex-row items-center text-center text-xl">
                 ({page * showLimit}-
-                {Math.min((page + 1) * showLimit, wordCount)})
+                {Math.min((page + 1) * showLimit, shownWordCount)})
                 <button
                   disabled={page === 0}
                   className="text-base disabled:text-[gray]"
@@ -691,7 +731,7 @@ export default function KanjiCardCreator() {
                   Prev
                 </button>
                 <button
-                  disabled={(page + 1) * showLimit > wordCount}
+                  disabled={(page + 1) * showLimit > shownWordCount}
                   className="text-base disabled:text-[gray]"
                   onClick={() => {
                     setPage((p) => p + 1);
@@ -709,21 +749,30 @@ export default function KanjiCardCreator() {
               shownWords
                 .slice(
                   page * showLimit,
-                  Math.min((page + 1) * showLimit, wordCount),
+                  Math.min((page + 1) * showLimit, shownWordCount),
                 )
                 .map((q) => {
                   const editTags = async (tags: string[]) => {
                     if (!idb || !words) return;
                     log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
-                    await idb.put("wordbank", { ...fromRQW(q), tags });
-                    setWords((prev) => {
-                      if (!prev) return prev;
-                      return es5With(
-                        prev,
-                        prev.findIndex((w) => areWordsTheSame(q, w)),
-                        { ...q, tags },
-                      );
-                    });
+
+                    const specials = q.multiSpecial ?? [q.special];
+
+                    for (const special of specials) {
+                      const disjoinedQ = { ...q, special };
+                      await idb.put("wordbank", {
+                        ...fromRQW({ ...disjoinedQ, special }),
+                        tags,
+                      });
+                      setWords((prev) => {
+                        if (!prev) return prev;
+                        return es5With(
+                          prev,
+                          prev.findIndex((w) => areWordsTheSame(disjoinedQ, w)),
+                          { ...disjoinedQ, tags },
+                        );
+                      });
+                    }
                   };
                   return (
                     <div
