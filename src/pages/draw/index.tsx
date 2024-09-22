@@ -7,10 +7,12 @@ import { KanjiTile } from "@/components/list/kanjiTile";
 import { useLocalStorage } from "@/components/localStorageProvider";
 import SettingBox from "@/components/settingBox";
 import { usePopup } from "@/components/usePopup";
-import { type Kanji, useAppStore } from "@/appStore";
+import { dbPutMultiple, type Kanji, useAppStore } from "@/appStore";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { log } from "@/utils/utils";
+import { getMergedKanjis } from "@/components/list/kanjiStorage";
 
 const MIN_SESSION_SIZE = 5;
 const MIN_WORD_SIZE = 10;
@@ -27,34 +29,35 @@ export default function Draw() {
 
   const router = useRouter();
 
-  const { kanjis, idb } = useAppStore((s) => ({
+  const { kanjis, idb, mutateKanji } = useAppStore((s) => ({
     kanjis: s.kanjis,
     idb: s.getIDB(),
+    mutateKanji: s.mutateKanjis,
   }));
 
-  const [selectedKanjis, setSelectedKanjis] = useState<string[]>([]);
-
-  const [rowCount, setRowCount] = useAppStore((s) => [
+  const markAsLearning = useAppStore(
+    (s) => s.settings.markKanjisAsLearningOnSessionStart,
+  );
+  const [rowCount, setSettings] = useAppStore((s) => [
     s.settings.kanjiRowCount,
-    (f: (p: number) => number) =>
-      s.setSettings("kanjiRowCount", f(s.settings.kanjiRowCount)),
+    s.setSettings,
   ]);
 
+  const setRowCount = useCallback(
+    (f: (p: number) => number) => setSettings("kanjiRowCount", f(rowCount)),
+    [rowCount, setSettings],
+  );
+
+  const [selectedKanjis, setSelectedKanjis] = useState<string[]>([]);
   const [showFilter, setShowFilter] = useState<string>("");
-
   const [sessionName, setSessionName] = useState<string>("");
-
   const [sessionCreationError, setSessionCreationError] = useState<{
     reason: "name" | "kanjiNum" | "wordNum";
     el: React.ReactNode;
   } | null>(null);
-
   const [sesssions, setSessions] = useState<DrawSessionData[]>([]);
-
   const [donePoints, setDonePoints] = useState<number | null>(null);
-
   const [wWidth, setWWidth] = useState<number | null>(null);
-
   const [words, setWords] = useState<QuizWord[]>([]);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -374,7 +377,32 @@ export default function Draw() {
                   pointsToComplete: donePoints ?? undefined,
                 };
                 await idb.put("draw", sessionData);
-                void router.replace(`/draw/session/${sessionData.sessionID}`);
+
+                if (markAsLearning) {
+                  const kanjiToMarkAsLearning = kanjis.filter(
+                    (k) =>
+                      k.status === "new" && selectedKanjis.includes(k.kanji),
+                  );
+                  log`Marking as learning ${kanjiToMarkAsLearning}`;
+
+                  const newKanji = kanjiToMarkAsLearning.map<Kanji>((k) => ({
+                    ...k,
+                    status: "learning",
+                  }));
+
+                  await dbPutMultiple(idb, "kanji", newKanji);
+
+                  const newKanjiList = await getMergedKanjis(
+                    LS,
+                    idb,
+                    newKanji,
+                    "m",
+                  );
+
+                  mutateKanji(() => newKanjiList.kanji);
+                }
+
+                await router.replace(`/draw/session/${sessionData.sessionID}`);
               }}
               className="ml-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] hover:bg-slate-500"
             >
@@ -521,10 +549,23 @@ export default function Draw() {
                   >
                     words: (
                     {
-                      words.filter((f) => selectedKanjis.includes(f.kanji))
-                        .length
+                      new Set(
+                        words
+                          .filter((f) => !!selectedKanjis.includes(f.kanji))
+                          .map((w) => w.word),
+                      ).size
                     }
-                    /{words.length})
+                    /
+                    {
+                      new Set(
+                        words
+                          .filter(
+                            (f) => !!kanjis.find((w) => w.kanji === f.kanji),
+                          )
+                          .map((w) => w.word),
+                      ).size
+                    }
+                    )
                   </div>
                 </div>
               </div>

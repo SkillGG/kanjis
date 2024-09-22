@@ -1,4 +1,3 @@
-import { type Settings } from "@/pages";
 import { err } from "@/utils/utils";
 import { create } from "zustand";
 import {
@@ -46,12 +45,26 @@ export type TagInfo = {
   bg?: string;
 };
 
+export type Settings = {
+  autoChangeIME: boolean;
+  wordBankAutoFilter: boolean;
+  kanjiRowCount: number;
+  autoMarkAsCompleted: boolean;
+  showMax: number;
+  markKanjiAsCompletedOnSessionClose: boolean;
+  markKanjisAsLearningOnSessionStart: boolean;
+  showSessionProgress: boolean;
+};
+
 export const DEFAULT_SETTINGS: Settings = {
   autoChangeIME: false,
   wordBankAutoFilter: true,
   kanjiRowCount: 8,
-  autoMarkAsCompleted: false,
+  autoMarkAsCompleted: true,
   showMax: 1000,
+  markKanjiAsCompletedOnSessionClose: false,
+  markKanjisAsLearningOnSessionStart: false,
+  showSessionProgress: true,
 };
 
 export const defaultDBSchema: DBInit<AppDBSchema> = {

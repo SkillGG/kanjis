@@ -9,14 +9,19 @@ import {
 } from "@/components/draw/quizWords";
 import { KanjiTile } from "@/components/list/kanjiTile";
 import { usePopup } from "@/components/usePopup";
-import { useAppStore } from "@/appStore";
+import { dbPutMultiple, type Kanji, useAppStore } from "@/appStore";
 import { log, noop } from "@/utils/utils";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import SettingBox from "@/components/settingBox";
+import { getMergedKanjis } from "@/components/list/kanjiStorage";
+import { useLocalStorage } from "@/components/localStorageProvider";
 
 export default function DrawSession() {
   const router = useRouter();
+
+  const LS = useLocalStorage();
 
   const { id } = router.query;
 
@@ -30,10 +35,29 @@ export default function DrawSession() {
 
   const [disableAnswering, setDisableAnswering] = useState(false);
 
-  const [autoComplete, setAutoComplete] = useAppStore((s) => [
-    s.settings.autoMarkAsCompleted,
-    (v: boolean) => s.setSettings("autoMarkAsCompleted", v),
-  ]);
+  const setSettings = useAppStore((s) => s.setSettings);
+  const mutateKanji = useAppStore((s) => s.mutateKanjis);
+
+  const showSessionProgress = useAppStore(
+    (s) => s.settings.showSessionProgress,
+  );
+  const autoComplete = useAppStore((s) => s.settings.autoMarkAsCompleted);
+  const autoMarkAsCompletedOnClose = useAppStore(
+    (s) => s.settings.markKanjiAsCompletedOnSessionClose,
+  );
+
+  const setAutoComplete = useCallback(
+    (v: boolean) => setSettings("autoMarkAsCompleted", v),
+    [setSettings],
+  );
+  const setAutoMarkAsCompletedOnClose = useCallback(
+    (p: (b: boolean) => boolean) =>
+      setSettings(
+        "markKanjiAsCompletedOnSessionClose",
+        p(autoMarkAsCompletedOnClose),
+      ),
+    [autoMarkAsCompletedOnClose, setSettings],
+  );
 
   const idb = useAppStore((s) => s.getIDB());
 
@@ -84,6 +108,33 @@ export default function DrawSession() {
     }
   }, [sessionData, words]);
 
+  const closeTheSession = useCallback(async () => {
+    if (!sessionData) return;
+    const newSession = { ...sessionData, open: false };
+    await idb.put("draw", newSession);
+    setSessionData((p) => (p ? newSession : p));
+
+    if (autoMarkAsCompletedOnClose) {
+      // mark as compl. on close
+      const listKanji = await idb.getAll("kanji");
+      const sessionKanji = listKanji.filter((f) =>
+        newSession.sessionKanjis.includes(f.kanji),
+      );
+
+      const completedKanjis = sessionKanji.map<Kanji>((k) => ({
+        ...k,
+        status: "completed",
+      }));
+
+      await dbPutMultiple(idb, "kanji", completedKanjis);
+
+      const mergedKanji = await getMergedKanjis(LS, idb, completedKanjis, "m");
+
+      mutateKanji(() => mergedKanji.kanji);
+    }
+    await Router.push("/draw");
+  }, [LS, autoMarkAsCompletedOnClose, idb, mutateKanji, sessionData]);
+
   const askForEndingSession = useCallback(() => {
     if (!sessionData) return;
     setDisableAnswering(true);
@@ -95,30 +146,33 @@ export default function DrawSession() {
         setShowCanClose(true);
       },
       text: (close) => (
-        <div className="flex flex-col text-center text-xl">
+        <div className="flex flex-col gap-2 text-center text-xl">
           You&apos;ve done everything!
           <br />
-          <div className="flex gap-2 text-center">
-            <button
-              onClick={async () => {
-                const newSession = { ...sessionData, open: false };
-                await idb.put("draw", newSession);
-                setSessionData((p) => (p ? newSession : p));
-                close();
-                await Router.replace("/draw");
-              }}
-            >
-              Close the session!
-            </button>
-            <button
-              onClick={async () => {
-                setShowCanClose(true);
-                close(true);
-              }}
-            >
-              Keep going
-            </button>
-          </div>
+          <label>
+            Mark kanjis as completed in the list{" "}
+            <input
+              type="checkbox"
+              checked={autoMarkAsCompletedOnClose}
+              onChange={() => setAutoMarkAsCompletedOnClose((p) => !p)}
+            />
+          </label>
+          <button
+            className="w-full py-2 hover:bg-[#fff2]"
+            onClick={async () => {
+              await closeTheSession();
+            }}
+          >
+            End the session!
+          </button>
+          <button
+            className="w-full py-2 hover:bg-[#fff2]"
+            onClick={async () => {
+              close(true);
+            }}
+          >
+            Keep going
+          </button>
         </div>
       ),
       time: "user",
@@ -130,7 +184,13 @@ export default function DrawSession() {
         },
       },
     });
-  }, [idb, sessionData, setPopup]);
+  }, [
+    autoMarkAsCompletedOnClose,
+    closeTheSession,
+    sessionData,
+    setAutoMarkAsCompletedOnClose,
+    setPopup,
+  ]);
 
   useEffect(() => {
     if (sessionData) {
@@ -184,6 +244,7 @@ export default function DrawSession() {
     <>
       <Link
         href="/draw"
+        shallow={false}
         className="block w-fit bg-transparent p-2 underline sm:fixed sm:left-0 sm:top-0"
       >
         Go back
@@ -193,19 +254,57 @@ export default function DrawSession() {
           {sessionData.sessionID}(
           {sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE})
           {canClose && showCanClose && (
-            <div className="mr-2 block">
-              <button
-                onClick={async () => {
-                  const newSession = { ...sessionData, open: false };
-                  await idb.put("draw", newSession);
-                  setSessionData((p) => (p ? newSession : p));
-                  await Router.push("/draw");
-                }}
-              >
-                Close
-              </button>
-            </div>
+            <>
+              <div className="mr-2 block">
+                <button
+                  onClick={async () => {
+                    await closeTheSession();
+                  }}
+                >
+                  End the session
+                </button>
+              </div>
+            </>
           )}
+          <div>
+            <button
+              onClick={async () => {
+                setPopup({
+                  modal: true,
+                  modalStyle: {
+                    styles: { "--backdrop": "#fff5" },
+                  },
+                  contentStyle: {
+                    className: "px-8",
+                  },
+                  text(close) {
+                    return (
+                      <div className="text-center">
+                        <SettingBox
+                          name="Draw settings"
+                          wordbank={false}
+                          draw={true}
+                          global={false}
+                          list={false}
+                        />
+                        <button
+                          onClick={() => {
+                            close();
+                          }}
+                          className="absolute right-[2px] top-[5px] border-none text-[red]"
+                        >
+                          X
+                        </button>
+                      </div>
+                    );
+                  },
+                  time: "user",
+                });
+              }}
+            >
+              Settings
+            </button>
+          </div>
         </div>
         {popup}
         <Quizlet
@@ -332,7 +431,7 @@ export default function DrawSession() {
             return newSession;
           }}
         />
-        {side === "answer" && (
+        {showSessionProgress && side === "answer" && (
           <div className="mx-auto mt-3 flex flex-wrap justify-center gap-1 text-center sm:max-w-[50%]">
             {words &&
               sessionData.sessionKanjis.map((kanji) => {

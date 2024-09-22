@@ -7,14 +7,6 @@ import { useEffect } from "react";
 
 // import { api } from "@/utils/api";
 
-export type Settings = {
-  autoChangeIME: boolean;
-  wordBankAutoFilter: boolean;
-  kanjiRowCount: number;
-  autoMarkAsCompleted: boolean;
-  showMax: number;
-};
-
 export default function Home() {
   // const hello = api.post.hello.useQuery({ text: "from tRPC" });
 

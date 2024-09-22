@@ -72,19 +72,46 @@ export default function SettingBox({
           {draw === undefined && <div className="text-2xl">/draw</div>}
           <div className="mb-2">
             <label className="block text-balance">
-              Automatically mark as completed
+              Show session progress
               <input
                 type="checkbox"
-                checked={settings.autoMarkAsCompleted}
+                checked={settings.showSessionProgress}
                 onChange={() => {
                   setSettings(
-                    "autoMarkAsCompleted",
-                    !settings.autoMarkAsCompleted,
+                    "showSessionProgress",
+                    !settings.showSessionProgress,
+                  );
+                }}
+              />
+            </label>
+            <label className="block text-balance">
+              Auto-mark kanjis as learning when starting a session
+              <input
+                type="checkbox"
+                checked={settings.markKanjisAsLearningOnSessionStart}
+                onChange={() => {
+                  setSettings(
+                    "markKanjisAsLearningOnSessionStart",
+                    !settings.markKanjisAsLearningOnSessionStart,
+                  );
+                }}
+              />
+            </label>
+            <label className="block text-balance">
+              Auto-mark kanjis as completed when ending a session
+              <input
+                type="checkbox"
+                checked={settings.markKanjiAsCompletedOnSessionClose}
+                onChange={() => {
+                  setSettings(
+                    "markKanjiAsCompletedOnSessionClose",
+                    !settings.markKanjiAsCompletedOnSessionClose,
                   );
                 }}
               />
             </label>
           </div>
+          <hr />
           <hr />
         </>
       )}

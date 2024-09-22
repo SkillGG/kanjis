@@ -1,10 +1,16 @@
 {
-  "version": "0.2.10",
+  "version": "0.2.11",
   "tags": {
     "BKB_vol1": {
-      "description": "",
+      "description": "Basic Kanji Book vol.1",
       "bg": "transparent",
       "border": "#fb0d13",
+      "color": "#ffffff"
+    },
+    "BKB_vol2": {
+      "description": "Basic Kanji Book vol.2",
+      "bg": "transparent",
+      "border": "#5bfffb",
       "color": "#ffffff"
     }
   },
@@ -883,6 +889,24 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇映",
+      "kanji": "上",
+      "meaning": "to show (a movie)",
+      "readings": ["じょう", "えい"],
+      "special": 0,
+      "word": "上映",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "上〇",
+      "kanji": "映",
+      "meaning": "to show (a movie)",
+      "readings": ["じょう", "えい"],
+      "special": 1,
+      "word": "上映",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇",
       "kanji": "下",
       "meaning": "under",
@@ -1596,18 +1620,9 @@
     {
       "blanked": "〇つ",
       "kanji": "五",
-      "meaning": "May",
-      "readings": ["いつ", "つ"],
+      "meaning": "five (things)",
+      "readings": ["いつ", ""],
       "special": 0,
-      "word": "五つ",
-      "tags": ["BKB_vol1"]
-    },
-    {
-      "blanked": "五〇",
-      "kanji": "つ",
-      "meaning": "May",
-      "readings": ["いつ", "つ"],
-      "special": 1,
       "word": "五つ",
       "tags": ["BKB_vol1"]
     },
@@ -1691,6 +1706,24 @@
       "special": 1,
       "word": "五日",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇月",
+      "kanji": "五",
+      "meaning": "May",
+      "readings": ["ご", "がつ"],
+      "special": 0,
+      "word": "五月",
+      "tags": []
+    },
+    {
+      "blanked": "五〇",
+      "kanji": "月",
+      "meaning": "May",
+      "readings": ["ご", "がつ"],
+      "special": 1,
+      "word": "五月",
+      "tags": []
     },
     {
       "blanked": "〇上",
@@ -3467,6 +3500,42 @@
     },
     {
       "blanked": "〇す",
+      "kanji": "写",
+      "meaning": "to take (pictures), to copy, to imitate",
+      "readings": ["うつ", ""],
+      "special": 0,
+      "word": "写す",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇る",
+      "kanji": "写",
+      "meaning": "to be photographed, to be projected",
+      "readings": ["うつ", ""],
+      "special": 0,
+      "word": "写る",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇真",
+      "kanji": "写",
+      "meaning": "a photograph",
+      "readings": ["しゃ", "しん"],
+      "special": 0,
+      "word": "写真",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "写〇",
+      "kanji": "真",
+      "meaning": "a photograph",
+      "readings": ["しゃ", "しん"],
+      "special": 1,
+      "word": "写真",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇す",
       "kanji": "出",
       "meaning": "to take out",
       "readings": ["だ", ""],
@@ -4436,6 +4505,42 @@
       "special": 1,
       "word": "南米",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇料",
+      "kanji": "原",
+      "meaning": "raw material",
+      "readings": ["げん", "りょう"],
+      "special": 0,
+      "word": "原料",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "原〇",
+      "kanji": "料",
+      "meaning": "raw material",
+      "readings": ["げん", "りょう"],
+      "special": 1,
+      "word": "原料",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇色",
+      "kanji": "原",
+      "meaning": "primary colors",
+      "readings": ["げん", "しょく"],
+      "special": 0,
+      "word": "原色",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "原〇",
+      "kanji": "色",
+      "meaning": "primary colors",
+      "readings": ["げん", "しょく"],
+      "special": 1,
+      "word": "原色",
+      "tags": ["BKB_vol2"]
     },
     {
       "blanked": "〇年",
@@ -8146,6 +8251,78 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇い出",
+      "kanji": "思",
+      "meaning": "a memory",
+      "readings": ["おも", "", "で"],
+      "special": 0,
+      "word": "思い出",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "思い〇",
+      "kanji": "出",
+      "meaning": "a memory",
+      "readings": ["おも", "", "で"],
+      "special": 2,
+      "word": "思い出",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇い出す",
+      "kanji": "思",
+      "meaning": "to recall, to remember",
+      "readings": ["おも", "", "だ", ""],
+      "special": 0,
+      "word": "思い出す",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "思い〇す",
+      "kanji": "出",
+      "meaning": "to recall, to remember",
+      "readings": ["おも", "", "だ", ""],
+      "special": 2,
+      "word": "思い出す",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇う",
+      "kanji": "思",
+      "meaning": "to think",
+      "readings": ["おも", ""],
+      "special": 0,
+      "word": "思う",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇考力",
+      "kanji": "思",
+      "meaning": "thinking power",
+      "readings": ["し", "こう", "りょく"],
+      "special": 0,
+      "word": "思考力",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "思〇力",
+      "kanji": "考",
+      "meaning": "thinking power",
+      "readings": ["し", "こう", "りょく"],
+      "special": 1,
+      "word": "思考力",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "思考〇",
+      "kanji": "力",
+      "meaning": "thinking power",
+      "readings": ["し", "こう", "りょく"],
+      "special": 2,
+      "word": "思考力",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇質",
       "kanji": "性",
       "meaning": "quality, nature",
@@ -8749,6 +8926,24 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇金",
+      "kanji": "料",
+      "meaning": "a fee, a charge",
+      "readings": ["りょう", "きん"],
+      "special": 0,
+      "word": "料金",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "料〇",
+      "kanji": "金",
+      "meaning": "a fee, a charge",
+      "readings": ["りょう", "きん"],
+      "special": 1,
+      "word": "料金",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇しい",
       "kanji": "新",
       "meaning": "new",
@@ -9082,6 +9277,33 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇本画",
+      "kanji": "日",
+      "meaning": "a Japanese-style painting",
+      "readings": ["に", "ほん", "が"],
+      "special": 0,
+      "word": "日本画",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "日〇画",
+      "kanji": "本",
+      "meaning": "a Japanese-style painting",
+      "readings": ["に", "ほん", "が"],
+      "special": 1,
+      "word": "日本画",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "日本〇",
+      "kanji": "画",
+      "meaning": "a Japanese-style painting",
+      "readings": ["に", "ほん", "が"],
+      "special": 2,
+      "word": "日本画",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇本茶",
       "kanji": "日",
       "meaning": "green tea",
@@ -9262,13 +9484,31 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇す",
+      "kanji": "映",
+      "meaning": "to reflect, to cast (a shadow)",
+      "readings": ["うつ", ""],
+      "special": 0,
+      "word": "映す",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇る",
+      "kanji": "映",
+      "meaning": "to be reflected, to come out (photo), to be displayed (on a screen)",
+      "readings": ["うつ", ""],
+      "special": 0,
+      "word": "映る",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇画",
       "kanji": "映",
       "meaning": "movie",
       "readings": ["えい", "が"],
       "special": 0,
       "word": "映画",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "BKB_vol2"]
     },
     {
       "blanked": "映〇",
@@ -9991,6 +10231,24 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇料",
+      "kanji": "材",
+      "meaning": "ingredients",
+      "readings": ["ざい", "りょう"],
+      "special": 0,
+      "word": "材料",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "材〇",
+      "kanji": "料",
+      "meaning": "ingredients",
+      "readings": ["ざい", "りょう"],
+      "special": 1,
+      "word": "材料",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇",
       "kanji": "村",
       "meaning": "a village",
@@ -10457,6 +10715,33 @@
       "special": 1,
       "word": "植物",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇",
+      "kanji": "楽",
+      "meaning": "easy, comfortable",
+      "readings": ["らく"],
+      "special": 0,
+      "word": "楽",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇しい",
+      "kanji": "楽",
+      "meaning": "enjoyable",
+      "readings": ["たの", "", ""],
+      "special": 0,
+      "word": "楽しい",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇しむ",
+      "kanji": "楽",
+      "meaning": "to enjoy, to look forward to",
+      "readings": ["たの", "", ""],
+      "special": 0,
+      "word": "楽しむ",
+      "tags": ["BKB_vol2"]
     },
     {
       "blanked": "〇々",
@@ -11015,6 +11300,24 @@
       "special": 1,
       "word": "水田",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇色",
+      "kanji": "水",
+      "meaning": "light blue, aqua",
+      "readings": ["みず", "いろ"],
+      "special": 0,
+      "word": "水色",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "水〇",
+      "kanji": "色",
+      "meaning": "light blue, aqua",
+      "readings": ["みず", "いろ"],
+      "special": 1,
+      "word": "水色",
+      "tags": ["BKB_vol2"]
     },
     {
       "blanked": "〇道",
@@ -11611,6 +11914,24 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇色",
+      "kanji": "特",
+      "meaning": "a characteristic, personal color, feature",
+      "readings": ["とく", "しょく"],
+      "special": 0,
+      "word": "特色",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "特〇",
+      "kanji": "色",
+      "meaning": "a characteristic, personal color, feature",
+      "readings": ["とく", "しょく"],
+      "special": 1,
+      "word": "特色",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇",
       "kanji": "犬",
       "meaning": "a dog",
@@ -12025,6 +12346,60 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇家",
+      "kanji": "画",
+      "meaning": "a painter",
+      "readings": ["が", "か"],
+      "special": 0,
+      "word": "画家",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "画〇",
+      "kanji": "家",
+      "meaning": "a painter",
+      "readings": ["が", "か"],
+      "special": 1,
+      "word": "画家",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇数",
+      "kanji": "画",
+      "meaning": "stroke count",
+      "readings": ["かく", "すう"],
+      "special": 0,
+      "word": "画数",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "画〇",
+      "kanji": "数",
+      "meaning": "stroke count",
+      "readings": ["かく", "すう"],
+      "special": 1,
+      "word": "画数",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇面",
+      "kanji": "画",
+      "meaning": "a (TV/PC/phone) screen",
+      "readings": ["が", "めん"],
+      "special": 0,
+      "word": "画面",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "画〇",
+      "kanji": "面",
+      "meaning": "a (TV/PC/phone) screen",
+      "readings": ["が", "めん"],
+      "special": 1,
+      "word": "画面",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇",
       "kanji": "畑",
       "meaning": "cultivated field",
@@ -12259,6 +12634,60 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇音",
+      "kanji": "発",
+      "meaning": "pronunciation",
+      "readings": ["はつ", "おん"],
+      "special": 0,
+      "word": "発音",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "発〇",
+      "kanji": "音",
+      "meaning": "pronunciation",
+      "readings": ["はつ", "おん"],
+      "special": 1,
+      "word": "発音",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇",
+      "kanji": "白",
+      "meaning": "white color",
+      "readings": ["しろ"],
+      "special": 0,
+      "word": "白",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "白",
+      "meaning": "white",
+      "readings": ["しろ", ""],
+      "special": 0,
+      "word": "白い",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇紙",
+      "kanji": "白",
+      "meaning": "blank paper, flyleaf, clean slate",
+      "readings": ["はく", "し"],
+      "special": 0,
+      "word": "白紙",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "白〇",
+      "kanji": "紙",
+      "meaning": "blank paper, flyleaf, clean slate",
+      "readings": ["はく", "し"],
+      "special": 1,
+      "word": "白紙",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇鳥",
       "kanji": "白",
       "meaning": "a swan",
@@ -12473,6 +12902,87 @@
       "special": 2,
       "word": "県知事",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇っ白",
+      "kanji": "真",
+      "meaning": "pure white, blank",
+      "readings": ["ま", "", "しろ"],
+      "special": 0,
+      "word": "真っ白",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "真っ〇",
+      "kanji": "白",
+      "meaning": "pure white, blank",
+      "readings": ["ま", "", "しろ"],
+      "special": 2,
+      "word": "真っ白",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇剣",
+      "kanji": "真",
+      "meaning": "serious, earnest",
+      "readings": ["しん", "けん"],
+      "special": 0,
+      "word": "真剣",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "真〇",
+      "kanji": "剣",
+      "meaning": "serious, earnest",
+      "readings": ["しん", "けん"],
+      "special": 1,
+      "word": "真剣",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇夜中",
+      "kanji": "真",
+      "meaning": "midnight",
+      "readings": ["ま", "よ", "なか"],
+      "special": 0,
+      "word": "真夜中",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "真〇中",
+      "kanji": "夜",
+      "meaning": "midnight",
+      "readings": ["ま", "よ", "なか"],
+      "special": 1,
+      "word": "真夜中",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "真夜〇",
+      "kanji": "中",
+      "meaning": "midnight",
+      "readings": ["ま", "よ", "なか"],
+      "special": 2,
+      "word": "真夜中",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇理",
+      "kanji": "真",
+      "meaning": "truth",
+      "readings": ["しん", "り"],
+      "special": 0,
+      "word": "真理",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "真〇",
+      "kanji": "理",
+      "meaning": "truth",
+      "readings": ["しん", "り"],
+      "special": 1,
+      "word": "真理",
+      "tags": ["BKB_vol2"]
     },
     {
       "blanked": "〇科",
@@ -13168,6 +13678,51 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇",
+      "kanji": "組",
+      "meaning": "a group, a set",
+      "readings": ["くみ"],
+      "special": 0,
+      "word": "組",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇み合わせ",
+      "kanji": "組",
+      "meaning": "a combination, a pairing",
+      "readings": ["く", "", "あ", "", ""],
+      "special": 0,
+      "word": "組み合わせ",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "組み〇わせ",
+      "kanji": "合",
+      "meaning": "a combination, a pairing",
+      "readings": ["く", "", "あ", "", ""],
+      "special": 2,
+      "word": "組み合わせ",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇織",
+      "kanji": "組",
+      "meaning": "organization, structure",
+      "readings": ["そ", "しき"],
+      "special": 0,
+      "word": "組織",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "組〇",
+      "kanji": "織",
+      "meaning": "organization, structure",
+      "readings": ["そ", "しき"],
+      "special": 1,
+      "word": "組織",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇る",
       "kanji": "経",
       "meaning": "to pass through",
@@ -13589,6 +14144,15 @@
       "special": 1,
       "word": "船便",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇",
+      "kanji": "色",
+      "meaning": "color",
+      "readings": ["いろ"],
+      "special": 0,
+      "word": "色",
+      "tags": ["BKB_vol2"]
     },
     {
       "blanked": "〇紙",
@@ -14409,6 +14973,24 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇書",
+      "kanji": "読",
+      "meaning": "reading (books)",
+      "readings": ["どく", "しょ"],
+      "special": 0,
+      "word": "読書",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "読〇",
+      "kanji": "書",
+      "meaning": "reading (books)",
+      "readings": ["どく", "しょ"],
+      "special": 1,
+      "word": "読書",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇者",
       "kanji": "読",
       "meaning": "a reader",
@@ -14625,6 +15207,24 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇味",
+      "kanji": "趣",
+      "meaning": "a hobby",
+      "readings": ["しゅ", "み"],
+      "special": 0,
+      "word": "趣味",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "趣〇",
+      "kanji": "味",
+      "meaning": "a hobby",
+      "readings": ["しゅ", "み"],
+      "special": 1,
+      "word": "趣味",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇",
       "kanji": "足",
       "meaning": "a leg",
@@ -14650,6 +15250,24 @@
       "special": 0,
       "word": "足りる",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇音",
+      "kanji": "足",
+      "meaning": "footsteps",
+      "readings": ["あし", "おと"],
+      "special": 0,
+      "word": "足音",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "足〇",
+      "kanji": "音",
+      "meaning": "footsteps",
+      "readings": ["あし", "おと"],
+      "special": 1,
+      "word": "足音",
+      "tags": ["BKB_vol2"]
     },
     {
       "blanked": "〇",
@@ -16245,13 +16863,22 @@
       "tags": ["BKB_vol1"]
     },
     {
+      "blanked": "〇",
+      "kanji": "音",
+      "meaning": "sound, noise",
+      "readings": ["おと"],
+      "special": 0,
+      "word": "音",
+      "tags": ["BKB_vol2"]
+    },
+    {
       "blanked": "〇楽",
       "kanji": "音",
       "meaning": "music",
       "readings": ["おん", "がく"],
       "special": 0,
       "word": "音楽",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "BKB_vol2"]
     },
     {
       "blanked": "音〇",
@@ -16288,6 +16915,24 @@
       "special": 2,
       "word": "音楽家",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇読み",
+      "kanji": "音",
+      "meaning": "'ON' reading",
+      "readings": ["おん", "よ", ""],
+      "special": 0,
+      "word": "音読み",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "音〇み",
+      "kanji": "読",
+      "meaning": "'ON' reading",
+      "readings": ["おん", "よ", ""],
+      "special": 1,
+      "word": "音読み",
+      "tags": ["BKB_vol2"]
     },
     {
       "blanked": "〇収証",
@@ -16810,6 +17455,60 @@
       "special": 1,
       "word": "鳥肉",
       "tags": ["BKB_vol1"]
+    },
+    {
+      "blanked": "〇",
+      "kanji": "黒",
+      "meaning": "black color",
+      "readings": ["くろ"],
+      "special": 0,
+      "word": "黒",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇い",
+      "kanji": "黒",
+      "meaning": "black",
+      "readings": ["くろ", ""],
+      "special": 0,
+      "word": "黒い",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇字",
+      "kanji": "黒",
+      "meaning": "a profit, surplus",
+      "readings": ["くろ", "じ"],
+      "special": 0,
+      "word": "黒字",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "黒〇",
+      "kanji": "字",
+      "meaning": "a profit, surplus",
+      "readings": ["くろ", "じ"],
+      "special": 1,
+      "word": "黒字",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "〇板",
+      "kanji": "黒",
+      "meaning": "a blackboard",
+      "readings": ["こく", "ばん"],
+      "special": 0,
+      "word": "黒板",
+      "tags": ["BKB_vol2"]
+    },
+    {
+      "blanked": "黒〇",
+      "kanji": "板",
+      "meaning": "a blackboard",
+      "readings": ["こく", "ばん"],
+      "special": 1,
+      "word": "黒板",
+      "tags": ["BKB_vol2"]
     }
   ]
 }
