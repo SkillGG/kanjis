@@ -28,9 +28,9 @@ You can see the published version [here](https://mykanji.vercel.app)
 
 ##### TODO
 
-- [ ] Add tags for custom filterings
-- [ ] Add the official [Joyou kanji list](https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/pdf/joyokanjihyo_20101130.pdf)
+- [ ] Add Kanji-specific tags
 - [ ] Add "preview" mode so that sharing lists doesn't destroy the local list
+- [ ] Add the official [Joyou kanji list](https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/pdf/joyokanjihyo_20101130.pdf)
 
 ### Wordbank
 
@@ -39,9 +39,11 @@ You can see the published version [here](https://mykanji.vercel.app)
 - [x] A working wordbank with meanings and per-kanji meanings
 - [x] Ease of adding new words!
 - [x] Opt-in updating the wordbank to newest server version (w/o overrides)
+- [ ] Word tags (can add, can filter by only in /draw)
 
 ##### TODO
 
+- [ ] Add word tag filtering working in other parts of the app
 - [ ] Add the words from Jotou kanji list
 - [ ] Add ability to share wordbanks
 
@@ -51,11 +53,10 @@ You can see the published version [here](https://mykanji.vercel.app)
 
 - [x] Anki-like flashcard system for scoring
 - [x] Showing stroke order after every word, to show you how it should be done correctly
+- [x] Ability to change kanji status after an amount of points for given kanji is reached
 
 ###### Stroke order display using: [Kanji Stroke Order Font](https://www.nihilist.org.uk/)
 
 ##### TODO
 
-- [ ] Ability to change kanji status after an amount of points for given kanji is reached
-- [ ] Switch to a better selection algorightm (spaced repetition, etc.)
 - [ ] Actually make users draw the kanjis in-app
