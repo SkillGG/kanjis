@@ -1,5 +1,5 @@
 {
-  "version": "0.2.18",
+  "version": "0.3.0",
   "tags": {
     "BKB_vol1": {
       "description": "Basic Kanji Book vol.1",
@@ -12646,7 +12646,7 @@
       "readings": ["ど", "ぼく"],
       "special": 0,
       "word": "土木",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "土〇",
@@ -12655,7 +12655,7 @@
       "readings": ["ど", "ぼく"],
       "special": 1,
       "word": "土木",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇曜日",
@@ -12691,7 +12691,7 @@
       "readings": ["ない", "か"],
       "special": 0,
       "word": "内科",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "内〇",
@@ -12700,7 +12700,7 @@
       "readings": ["ない", "か"],
       "special": 1,
       "word": "内科",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇す",
@@ -12718,7 +12718,7 @@
       "readings": ["なか"],
       "special": 0,
       "word": "中",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇ば",
@@ -12727,7 +12727,7 @@
       "readings": ["なか", ""],
       "special": 0,
       "word": "半ば",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇い",
@@ -12736,7 +12736,7 @@
       "readings": ["なが", ""],
       "special": 0,
       "word": "長い",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容詞"]
     },
     {
       "blanked": "〇野県",
@@ -12745,7 +12745,7 @@
       "readings": ["なが", "の", "けん"],
       "special": 0,
       "word": "長野県",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "長〇県",
@@ -12754,7 +12754,7 @@
       "readings": ["なが", "の", "けん"],
       "special": 1,
       "word": "長野県",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "長野〇",
@@ -12763,7 +12763,7 @@
       "readings": ["なが", "の", "けん"],
       "special": 2,
       "word": "長野県",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "〇古屋市",
@@ -12772,7 +12772,7 @@
       "readings": ["な", "ご", "や", "し"],
       "special": 0,
       "word": "名古屋市",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "名〇屋市",
@@ -12781,7 +12781,7 @@
       "readings": ["な", "ご", "や", "し"],
       "special": 1,
       "word": "名古屋市",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "名古〇市",
@@ -12790,7 +12790,7 @@
       "readings": ["な", "ご", "や", "し"],
       "special": 2,
       "word": "名古屋市",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "名古屋〇",
@@ -12799,7 +12799,7 @@
       "readings": ["な", "ご", "や", "し"],
       "special": 3,
       "word": "名古屋市",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "〇残惜しい",
@@ -12808,7 +12808,7 @@
       "readings": ["な", "ごり", "お", "", ""],
       "special": 0,
       "word": "名残惜しい",
-      "tags": []
+      "tags": ["形容詞"]
     },
     {
       "blanked": "名〇惜しい",
@@ -12817,7 +12817,7 @@
       "readings": ["な", "ごり", "お", "", ""],
       "special": 1,
       "word": "名残惜しい",
-      "tags": []
+      "tags": ["形容詞"]
     },
     {
       "blanked": "名残〇しい",
@@ -12826,7 +12826,7 @@
       "readings": ["な", "ごり", "お", "", ""],
       "special": 2,
       "word": "名残惜しい",
-      "tags": []
+      "tags": ["形容詞"]
     },
     {
       "blanked": "〇つ",
@@ -12835,7 +12835,7 @@
       "readings": ["なな", "つ"],
       "special": 0,
       "word": "七つ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "数詞"]
     },
     {
       "blanked": "〇分",
@@ -12862,7 +12862,7 @@
       "readings": ["なに"],
       "special": 0,
       "word": "何",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "代名詞"]
     },
     {
       "blanked": "〇日",
@@ -12871,7 +12871,7 @@
       "readings": ["なの", "か"],
       "special": 0,
       "word": "七日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "七〇",
@@ -12880,7 +12880,7 @@
       "readings": ["なの", "か"],
       "special": 1,
       "word": "七日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇前",
@@ -12889,7 +12889,7 @@
       "readings": ["な", "まえ"],
       "special": 0,
       "word": "名前",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "名〇",
@@ -12898,7 +12898,7 @@
       "readings": ["な", "まえ"],
       "special": 1,
       "word": "名前",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇物",
@@ -12907,7 +12907,7 @@
       "readings": ["なま", "もの"],
       "special": 0,
       "word": "生物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "生〇",
@@ -12916,7 +12916,7 @@
       "readings": ["なま", "もの"],
       "special": 1,
       "word": "生物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇う",
@@ -12934,7 +12934,7 @@
       "readings": ["なん", "じ"],
       "special": 0,
       "word": "何時",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "何〇",
@@ -12943,7 +12943,7 @@
       "readings": ["なん", "じ"],
       "special": 1,
       "word": "何時",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇人",
@@ -12952,7 +12952,7 @@
       "readings": ["なん", "にん"],
       "special": 0,
       "word": "何人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "何〇",
@@ -12961,7 +12961,7 @@
       "readings": ["なん", "にん"],
       "special": 1,
       "word": "何人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇年",
@@ -12970,7 +12970,7 @@
       "readings": ["なん", "ねん"],
       "special": 0,
       "word": "何年",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "何〇",
@@ -12979,7 +12979,7 @@
       "readings": ["なん", "ねん"],
       "special": 1,
       "word": "何年",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇米",
@@ -12988,7 +12988,7 @@
       "readings": ["なん", "べい"],
       "special": 0,
       "word": "南米",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "南〇",
@@ -12997,7 +12997,7 @@
       "readings": ["なん", "べい"],
       "special": 1,
       "word": "南米",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇北",
@@ -13006,7 +13006,7 @@
       "readings": ["なん", "ぼく"],
       "special": 0,
       "word": "南北",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "南〇",
@@ -13015,7 +13015,7 @@
       "readings": ["なん", "ぼく"],
       "special": 1,
       "word": "南北",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇ヶ国語",
@@ -13024,7 +13024,7 @@
       "readings": ["に", "か", "こく", "ご"],
       "special": 0,
       "word": "二ヶ国語",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "二〇国語",
@@ -13033,7 +13033,7 @@
       "readings": ["に", "か", "こく", "ご"],
       "special": 1,
       "word": "二ヶ国語",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "二ヶ〇語",
@@ -13042,7 +13042,7 @@
       "readings": ["に", "か", "こく", "ご"],
       "special": 2,
       "word": "二ヶ国語",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "二ヶ国〇",
@@ -13051,7 +13051,7 @@
       "readings": ["に", "か", "こく", "ご"],
       "special": 3,
       "word": "二ヶ国語",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "〇",
@@ -13060,7 +13060,7 @@
       "readings": ["にく"],
       "special": 0,
       "word": "肉",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇体",
@@ -13069,7 +13069,7 @@
       "readings": ["にく", "たい"],
       "special": 0,
       "word": "肉体",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "肉〇",
@@ -13078,7 +13078,7 @@
       "readings": ["にく", "たい"],
       "special": 1,
       "word": "肉体",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇屋",
@@ -13087,7 +13087,7 @@
       "readings": ["にく", "や"],
       "special": 0,
       "word": "肉屋",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "肉〇",
@@ -13096,7 +13096,7 @@
       "readings": ["にく", "や"],
       "special": 1,
       "word": "肉屋",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇月",
@@ -13123,7 +13123,7 @@
       "readings": ["にし"],
       "special": 0,
       "word": "西",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇口",
@@ -13132,7 +13132,7 @@
       "readings": ["にし", "ぐち"],
       "special": 0,
       "word": "西口",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "西〇",
@@ -13141,7 +13141,7 @@
       "readings": ["にし", "ぐち"],
       "special": 1,
       "word": "西口",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇曜日",
@@ -13195,7 +13195,7 @@
       "readings": ["に", "ねん"],
       "special": 0,
       "word": "二年",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "二〇",
@@ -13204,7 +13204,7 @@
       "readings": ["に", "ねん"],
       "special": 1,
       "word": "二年",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇年間",
@@ -13213,7 +13213,7 @@
       "readings": ["に", "ねん", "かん"],
       "special": 0,
       "word": "二年間",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "二〇間",
@@ -13222,7 +13222,7 @@
       "readings": ["に", "ねん", "かん"],
       "special": 1,
       "word": "二年間",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "二年〇",
@@ -13231,7 +13231,7 @@
       "readings": ["に", "ねん", "かん"],
       "special": 2,
       "word": "二年間",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇分",
@@ -13258,7 +13258,7 @@
       "readings": ["に", "ほん"],
       "special": 0,
       "word": "日本",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日〇",
@@ -13267,7 +13267,7 @@
       "readings": ["に", "ほん"],
       "special": 1,
       "word": "日本",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇本海",
@@ -13276,7 +13276,7 @@
       "readings": ["に", "ほん", "かい"],
       "special": 0,
       "word": "日本海",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日〇海",
@@ -13285,7 +13285,7 @@
       "readings": ["に", "ほん", "かい"],
       "special": 1,
       "word": "日本海",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日本〇",
@@ -13294,7 +13294,7 @@
       "readings": ["に", "ほん", "かい"],
       "special": 2,
       "word": "日本海",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇本画",
@@ -13303,7 +13303,7 @@
       "readings": ["に", "ほん", "が"],
       "special": 0,
       "word": "日本画",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "日〇画",
@@ -13312,7 +13312,7 @@
       "readings": ["に", "ほん", "が"],
       "special": 1,
       "word": "日本画",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "日本〇",
@@ -13321,7 +13321,7 @@
       "readings": ["に", "ほん", "が"],
       "special": 2,
       "word": "日本画",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "〇本酒",
@@ -13330,7 +13330,7 @@
       "readings": ["に", "ほん", "しゅ"],
       "special": 0,
       "word": "日本酒",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日〇酒",
@@ -13339,7 +13339,7 @@
       "readings": ["に", "ほん", "しゅ"],
       "special": 1,
       "word": "日本酒",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日本〇",
@@ -13348,7 +13348,7 @@
       "readings": ["に", "ほん", "しゅ"],
       "special": 2,
       "word": "日本酒",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇本人",
@@ -13357,7 +13357,7 @@
       "readings": ["に", "ほん", "じん"],
       "special": 0,
       "word": "日本人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日〇人",
@@ -13366,7 +13366,7 @@
       "readings": ["に", "ほん", "じん"],
       "special": 1,
       "word": "日本人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日本〇",
@@ -13375,7 +13375,7 @@
       "readings": ["に", "ほん", "じん"],
       "special": 2,
       "word": "日本人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇本茶",
@@ -13384,7 +13384,7 @@
       "readings": ["に", "ほん", "ちゃ"],
       "special": 0,
       "word": "日本茶",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日〇茶",
@@ -13393,7 +13393,7 @@
       "readings": ["に", "ほん", "ちゃ"],
       "special": 1,
       "word": "日本茶",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "日本〇",
@@ -13402,7 +13402,7 @@
       "readings": ["に", "ほん", "ちゃ"],
       "special": 2,
       "word": "日本茶",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇分",
@@ -13429,7 +13429,7 @@
       "readings": ["に", "もつ"],
       "special": 0,
       "word": "荷物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "荷〇",
@@ -13438,7 +13438,7 @@
       "readings": ["に", "もつ"],
       "special": 1,
       "word": "荷物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇院する",
@@ -13465,7 +13465,7 @@
       "readings": ["にゅう", "こく"],
       "special": 0,
       "word": "入国",
-      "tags": ["BKB_vol1", "自動詞"]
+      "tags": ["BKB_vol1", "名詞", "自動詞"]
     },
     {
       "blanked": "入〇",
@@ -13474,7 +13474,7 @@
       "readings": ["にゅう", "こく"],
       "special": 1,
       "word": "入国",
-      "tags": ["BKB_vol1", "自動詞"]
+      "tags": ["BKB_vol1", "名詞", "自動詞"]
     },
     {
       "blanked": "〇学",
@@ -13483,7 +13483,7 @@
       "readings": ["にゅう", "がく"],
       "special": 0,
       "word": "入学",
-      "tags": ["BKB_vol1", "自動詞"]
+      "tags": ["BKB_vol1", "名詞", "自動詞"]
     },
     {
       "blanked": "入〇",
@@ -13492,7 +13492,7 @@
       "readings": ["にゅう", "がく"],
       "special": 1,
       "word": "入学",
-      "tags": ["BKB_vol1", "自動詞"]
+      "tags": ["BKB_vol1", "名詞", "自動詞"]
     },
     {
       "blanked": "〇気",
@@ -13501,7 +13501,7 @@
       "readings": ["にん", "き"],
       "special": 0,
       "word": "人気",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "人〇",
@@ -13510,7 +13510,7 @@
       "readings": ["にん", "き"],
       "special": 1,
       "word": "人気",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇間関係",
@@ -13519,7 +13519,7 @@
       "readings": ["にん", "げん", "かん", "けい"],
       "special": 0,
       "word": "人間関係",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "人〇関係",
@@ -13528,7 +13528,7 @@
       "readings": ["にん", "げん", "かん", "けい"],
       "special": 1,
       "word": "人間関係",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "人間〇係",
@@ -13537,7 +13537,7 @@
       "readings": ["にん", "げん", "かん", "けい"],
       "special": 2,
       "word": "人間関係",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "人間関〇",
@@ -13546,7 +13546,7 @@
       "readings": ["にん", "げん", "かん", "けい"],
       "special": 3,
       "word": "人間関係",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇かす",
@@ -13564,7 +13564,7 @@
       "readings": ["ねこ"],
       "special": 0,
       "word": "猫",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇る",
@@ -13591,7 +13591,7 @@
       "readings": ["のう", "そん"],
       "special": 0,
       "word": "農村",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "農〇",
@@ -13600,7 +13600,7 @@
       "readings": ["のう", "そん"],
       "special": 1,
       "word": "農村",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇る",
@@ -13627,7 +13627,7 @@
       "readings": ["の"],
       "special": 0,
       "word": "野",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇み物",
@@ -13636,7 +13636,7 @@
       "readings": ["の", "", "もの"],
       "special": 0,
       "word": "飲み物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "飲み〇",
@@ -13645,7 +13645,7 @@
       "readings": ["の", "", "もの"],
       "special": 2,
       "word": "飲み物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇む",
@@ -13672,7 +13672,7 @@
       "readings": ["はく", "し"],
       "special": 0,
       "word": "白紙",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "白〇",
@@ -13681,7 +13681,7 @@
       "readings": ["はく", "し"],
       "special": 1,
       "word": "白紙",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "〇鳥",
@@ -13690,7 +13690,7 @@
       "readings": ["はく", "ちょう"],
       "special": 0,
       "word": "白鳥",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "白〇",
@@ -13699,7 +13699,7 @@
       "readings": ["はく", "ちょう"],
       "special": 1,
       "word": "白鳥",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇る",
@@ -13735,7 +13735,7 @@
       "readings": ["はたけ"],
       "special": 0,
       "word": "畑",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇く",
@@ -13789,7 +13789,7 @@
       "readings": ["はつ", "おん"],
       "special": 0,
       "word": "発音",
-      "tags": ["BKB_vol2", "他動詞"]
+      "tags": ["BKB_vol2", "他動詞", "名詞"]
     },
     {
       "blanked": "発〇",
@@ -13798,7 +13798,7 @@
       "readings": ["はつ", "おん"],
       "special": 1,
       "word": "発音",
-      "tags": ["BKB_vol2", "他動詞"]
+      "tags": ["BKB_vol2", "他動詞", "名詞"]
     },
     {
       "blanked": "〇",
@@ -13807,7 +13807,7 @@
       "readings": ["はな"],
       "special": 0,
       "word": "花",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -13816,7 +13816,7 @@
       "readings": ["はなし"],
       "special": 0,
       "word": "話",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇す",
@@ -13834,7 +13834,7 @@
       "readings": ["はな", "び"],
       "special": 0,
       "word": "花火",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "花〇",
@@ -13843,7 +13843,7 @@
       "readings": ["はな", "び"],
       "special": 1,
       "word": "花火",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇屋",
@@ -13852,7 +13852,7 @@
       "readings": ["はな", "や"],
       "special": 0,
       "word": "花屋",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "花〇",
@@ -13861,7 +13861,7 @@
       "readings": ["はな", "や"],
       "special": 1,
       "word": "花屋",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -13870,7 +13870,7 @@
       "readings": ["はは"],
       "special": 0,
       "word": "母",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇親",
@@ -13879,7 +13879,7 @@
       "readings": ["はは", "おや"],
       "special": 0,
       "word": "母親",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "母〇",
@@ -13888,7 +13888,7 @@
       "readings": ["はは", "おや"],
       "special": 1,
       "word": "母親",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇百",
@@ -13933,7 +13933,7 @@
       "readings": ["はや", ""],
       "special": 0,
       "word": "早い",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容詞"]
     },
     {
       "blanked": "〇い",
@@ -13942,7 +13942,7 @@
       "readings": ["はや", ""],
       "special": 0,
       "word": "速い",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容詞"]
     },
     {
       "blanked": "〇",
@@ -13951,7 +13951,7 @@
       "readings": ["はやし"],
       "special": 0,
       "word": "林",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇る",
@@ -13978,7 +13978,7 @@
       "readings": ["はれ", ""],
       "special": 0,
       "word": "晴れ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇対",
@@ -13987,7 +13987,7 @@
       "readings": ["はん", "たい"],
       "special": 0,
       "word": "反対",
-      "tags": ["BKB_vol2", "自動詞"]
+      "tags": ["BKB_vol2", "名詞", "形容動詞", "自動詞"]
     },
     {
       "blanked": "反〇",
@@ -13996,7 +13996,7 @@
       "readings": ["はん", "たい"],
       "special": 1,
       "word": "反対",
-      "tags": ["BKB_vol2", "自動詞"]
+      "tags": ["BKB_vol2", "名詞", "形容動詞", "自動詞"]
     },
     {
       "blanked": "〇島",
@@ -14005,7 +14005,7 @@
       "readings": ["はん", "とう"],
       "special": 0,
       "word": "半島",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "半〇",
@@ -14014,7 +14014,7 @@
       "readings": ["はん", "とう"],
       "special": 1,
       "word": "半島",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇年",
@@ -14023,7 +14023,7 @@
       "readings": ["はん", "とし"],
       "special": 0,
       "word": "半年",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "半〇",
@@ -14032,7 +14032,7 @@
       "readings": ["はん", "とし"],
       "special": 1,
       "word": "半年",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇分",
@@ -14059,7 +14059,7 @@
       "readings": ["ひく", ""],
       "special": 0,
       "word": "低い",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容詞"]
     },
     {
       "blanked": "〇要",
@@ -14068,7 +14068,7 @@
       "readings": ["ひつ", "よう"],
       "special": 0,
       "word": "必要",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "必〇",
@@ -14077,7 +14077,7 @@
       "readings": ["ひつ", "よう"],
       "special": 1,
       "word": "必要",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇足",
@@ -14104,7 +14104,7 @@
       "readings": ["ひと", "き", ""],
       "special": 0,
       "word": "一切れ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "一〇れ",
@@ -14113,7 +14113,7 @@
       "readings": ["ひと", "き", ""],
       "special": 1,
       "word": "一切れ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇つ",
@@ -14122,7 +14122,7 @@
       "readings": ["ひと", ""],
       "special": 0,
       "word": "一つ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "数詞"]
     },
     {
       "blanked": "〇人",
@@ -14131,7 +14131,7 @@
       "readings": ["ひと", "り"],
       "special": 0,
       "word": "一人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "一〇",
@@ -14140,7 +14140,7 @@
       "readings": ["ひと", "り"],
       "special": 1,
       "word": "一人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -14149,7 +14149,7 @@
       "readings": ["ひと"],
       "special": 0,
       "word": "人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -14158,7 +14158,7 @@
       "readings": ["ひだり"],
       "special": 0,
       "word": "左",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇利き",
@@ -14167,7 +14167,7 @@
       "readings": ["ひだり", "き", ""],
       "special": 0,
       "word": "左利き",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "左〇き",
@@ -14176,7 +14176,7 @@
       "readings": ["ひだり", "き", ""],
       "special": 1,
       "word": "左利き",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇側",
@@ -14185,7 +14185,7 @@
       "readings": ["ひだり", "がわ"],
       "special": 0,
       "word": "左側",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "左〇",
@@ -14194,7 +14194,7 @@
       "readings": ["ひだり", "がわ"],
       "special": 1,
       "word": "左側",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇手",
@@ -14203,7 +14203,7 @@
       "readings": ["ひだり", "て"],
       "special": 0,
       "word": "左手",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "左〇",
@@ -14212,7 +14212,7 @@
       "readings": ["ひだり", "て"],
       "special": 1,
       "word": "左手",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇い",
@@ -14221,7 +14221,7 @@
       "readings": ["ひろ", ""],
       "special": 0,
       "word": "広い",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容詞"]
     },
     {
       "blanked": "〇さ",
@@ -14230,7 +14230,7 @@
       "readings": ["ひろ", ""],
       "special": 0,
       "word": "広さ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇島",
@@ -14239,7 +14239,7 @@
       "readings": ["ひろ", "しま"],
       "special": 0,
       "word": "広島",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "広〇",
@@ -14248,7 +14248,7 @@
       "readings": ["ひろ", "しま"],
       "special": 1,
       "word": "広島",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇場",
@@ -14257,7 +14257,7 @@
       "readings": ["ひろ", "ば"],
       "special": 0,
       "word": "広場",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "広〇",
@@ -14266,7 +14266,7 @@
       "readings": ["ひろ", "ば"],
       "special": 1,
       "word": "広場",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -14275,7 +14275,7 @@
       "readings": ["ひ"],
       "special": 0,
       "word": "日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -14284,7 +14284,7 @@
       "readings": ["ひがし"],
       "special": 0,
       "word": "東",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇口",
@@ -14293,7 +14293,7 @@
       "readings": ["ひがし", "ぐち"],
       "special": 0,
       "word": "東口",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "東〇",
@@ -14302,7 +14302,7 @@
       "readings": ["ひがし", "ぐち"],
       "special": 1,
       "word": "東口",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -14311,7 +14311,7 @@
       "readings": ["ひげ"],
       "special": 0,
       "word": "髭",
-      "tags": []
+      "tags": ["名詞"]
     },
     {
       "blanked": "〇",
@@ -14320,7 +14320,7 @@
       "readings": ["ひつじ"],
       "special": 0,
       "word": "羊",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇識",
@@ -14329,7 +14329,7 @@
       "readings": ["ひょう", "しき"],
       "special": 0,
       "word": "標識",
-      "tags": ["BKB_vol1"]
+      "tags": ["名詞"]
     },
     {
       "blanked": "標〇",
@@ -14338,7 +14338,7 @@
       "readings": ["ひょう", "しき"],
       "special": 1,
       "word": "標識",
-      "tags": ["BKB_vol1"]
+      "tags": ["名詞"]
     },
     {
       "blanked": "〇く",
@@ -14356,7 +14356,7 @@
       "readings": ["ひる", "", "はん"],
       "special": 0,
       "word": "昼ご飯",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "昼ご〇",
@@ -14365,7 +14365,7 @@
       "readings": ["ひる", "", "はん"],
       "special": 2,
       "word": "昼ご飯",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇寝",
@@ -14374,7 +14374,7 @@
       "readings": ["ひる", "ね"],
       "special": 0,
       "word": "昼寝",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "昼〇",
@@ -14383,7 +14383,7 @@
       "readings": ["ひる", "ね"],
       "special": 1,
       "word": "昼寝",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇休み",
@@ -14392,7 +14392,7 @@
       "readings": ["ひる", "やす", ""],
       "special": 0,
       "word": "昼休み",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "昼〇み",
@@ -14401,7 +14401,7 @@
       "readings": ["ひる", "やす", ""],
       "special": 1,
       "word": "昼休み",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇",
@@ -14410,7 +14410,7 @@
       "readings": ["ひ"],
       "special": 0,
       "word": "火",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇花",
@@ -14419,7 +14419,7 @@
       "readings": ["ひ", "ばな"],
       "special": 0,
       "word": "火花",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "火〇",
@@ -14428,7 +14428,7 @@
       "readings": ["ひ", "ばな"],
       "special": 1,
       "word": "火花",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -14446,7 +14446,7 @@
       "readings": ["ふう", "とう"],
       "special": 0,
       "word": "封筒",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "封〇",
@@ -14455,7 +14455,7 @@
       "readings": ["ふう", "とう"],
       "special": 1,
       "word": "封筒",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇婦",
@@ -14464,7 +14464,7 @@
       "readings": ["ふう", "ふ"],
       "special": 0,
       "word": "夫婦",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "夫〇",
@@ -14473,7 +14473,7 @@
       "readings": ["ふう", "ふ"],
       "special": 1,
       "word": "夫婦",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇運",
@@ -14482,7 +14482,7 @@
       "readings": ["ふ", "うん"],
       "special": 0,
       "word": "不運",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "不〇",
@@ -14491,7 +14491,7 @@
       "readings": ["ふ", "うん"],
       "special": 1,
       "word": "不運",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇習",
@@ -14500,7 +14500,7 @@
       "readings": ["ふく", "しゅう"],
       "special": 0,
       "word": "復習",
-      "tags": ["BKB_vol1", "他動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "復〇",
@@ -14509,7 +14509,7 @@
       "readings": ["ふく", "しゅう"],
       "special": 1,
       "word": "復習",
-      "tags": ["BKB_vol1", "他動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "〇用",
@@ -14518,7 +14518,7 @@
       "readings": ["ふく", "よう"],
       "special": 0,
       "word": "服用",
-      "tags": ["BKB_vol1", "他動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "服〇",
@@ -14527,7 +14527,7 @@
       "readings": ["ふく", "よう"],
       "special": 1,
       "word": "服用",
-      "tags": ["BKB_vol1", "他動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "〇兄",
@@ -14536,7 +14536,7 @@
       "readings": ["ふ", "けい"],
       "special": 0,
       "word": "父兄",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "父〇",
@@ -14545,7 +14545,7 @@
       "readings": ["ふ", "けい"],
       "special": 1,
       "word": "父兄",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇妻",
@@ -14554,7 +14554,7 @@
       "readings": ["ふ", "さい"],
       "special": 0,
       "word": "夫妻",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "夫〇",
@@ -14563,7 +14563,7 @@
       "readings": ["ふ", "さい"],
       "special": 1,
       "word": "夫妻",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇親切",
@@ -14572,7 +14572,7 @@
       "readings": ["ふ", "しん", "せつ"],
       "special": 0,
       "word": "不親切",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "不〇切",
@@ -14581,7 +14581,7 @@
       "readings": ["ふ", "しん", "せつ"],
       "special": 1,
       "word": "不親切",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "不親〇",
@@ -14590,7 +14590,7 @@
       "readings": ["ふ", "しん", "せつ"],
       "special": 2,
       "word": "不親切",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇足",
@@ -14599,7 +14599,7 @@
       "readings": ["ふ", "そく"],
       "special": 0,
       "word": "不足",
-      "tags": ["BKB_vol1", "自動詞"]
+      "tags": ["BKB_vol1", "名詞", "自動詞"]
     },
     {
       "blanked": "不〇",
@@ -14608,7 +14608,7 @@
       "readings": ["ふ", "そく"],
       "special": 1,
       "word": "不足",
-      "tags": ["BKB_vol1", "自動詞"]
+      "tags": ["BKB_vol1", "名詞", "自動詞"]
     },
     {
       "blanked": "〇士山",
@@ -14617,7 +14617,7 @@
       "readings": ["ふ", "じ", "さん"],
       "special": 0,
       "word": "富士山",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "富〇山",
@@ -14626,7 +14626,7 @@
       "readings": ["ふ", "じ", "さん"],
       "special": 1,
       "word": "富士山",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "富士〇",
@@ -14635,7 +14635,7 @@
       "readings": ["ふ", "じ", "さん"],
       "special": 2,
       "word": "富士山",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "〇つ",
@@ -14644,7 +14644,7 @@
       "readings": ["ふた", ""],
       "special": 0,
       "word": "二つ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "数詞"]
     },
     {
       "blanked": "〇人",
@@ -14653,7 +14653,7 @@
       "readings": ["ふた", "り"],
       "special": 0,
       "word": "二人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "二〇",
@@ -14662,7 +14662,7 @@
       "readings": ["ふた", "り"],
       "special": 1,
       "word": "二人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇便",
@@ -14671,7 +14671,7 @@
       "readings": ["ふな", "びん"],
       "special": 0,
       "word": "船便",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "船〇",
@@ -14680,7 +14680,7 @@
       "readings": ["ふな", "びん"],
       "special": 1,
       "word": "船便",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇人気",
@@ -14689,7 +14689,7 @@
       "readings": ["ふ", "にん", "き"],
       "special": 0,
       "word": "不人気",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "不〇気",
@@ -14698,7 +14698,7 @@
       "readings": ["ふ", "にん", "き"],
       "special": 1,
       "word": "不人気",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "不人〇",
@@ -14707,7 +14707,7 @@
       "readings": ["ふ", "にん", "き"],
       "special": 2,
       "word": "不人気",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇便",
@@ -14716,7 +14716,7 @@
       "readings": ["ふ", "べん"],
       "special": 0,
       "word": "不便",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "不〇",
@@ -14725,7 +14725,7 @@
       "readings": ["ふ", "べん"],
       "special": 1,
       "word": "不便",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇母",
@@ -14734,7 +14734,7 @@
       "readings": ["ふ", "ぼ"],
       "special": 0,
       "word": "父母",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "父〇",
@@ -14743,7 +14743,7 @@
       "readings": ["ふ", "ぼ"],
       "special": 1,
       "word": "父母",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇い",
@@ -14752,7 +14752,7 @@
       "readings": ["ふる", ""],
       "special": 0,
       "word": "古い",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容詞"]
     },
     {
       "blanked": "〇本",
@@ -14761,7 +14761,7 @@
       "readings": ["ふる", "ほん"],
       "special": 0,
       "word": "古本",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "古〇",
@@ -14770,7 +14770,7 @@
       "readings": ["ふる", "ほん"],
       "special": 1,
       "word": "古本",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇会",
@@ -14779,7 +14779,7 @@
       "readings": ["へい", "かい"],
       "special": 0,
       "word": "閉会",
-      "tags": ["BKB_vol1", "他動詞", "自動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞", "自動詞"]
     },
     {
       "blanked": "閉〇",
@@ -14788,7 +14788,7 @@
       "readings": ["へい", "かい"],
       "special": 1,
       "word": "閉会",
-      "tags": ["BKB_vol1", "他動詞", "自動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞", "自動詞"]
     },
     {
       "blanked": "〇店",
@@ -14797,7 +14797,7 @@
       "readings": ["へい", "てん"],
       "special": 0,
       "word": "閉店",
-      "tags": ["BKB_vol1", "他動詞", "自動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞", "自動詞"]
     },
     {
       "blanked": "閉〇",
@@ -14806,7 +14806,7 @@
       "readings": ["へい", "てん"],
       "special": 1,
       "word": "閉店",
-      "tags": ["BKB_vol1", "他動詞", "自動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞", "自動詞"]
     },
     {
       "blanked": "〇手",
@@ -14815,7 +14815,7 @@
       "readings": ["へ", "た"],
       "special": 0,
       "word": "下手",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容動詞"]
     },
     {
       "blanked": "下〇",
@@ -14824,7 +14824,7 @@
       "readings": ["へ", "た"],
       "special": 1,
       "word": "下手",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容動詞"]
     },
     {
       "blanked": "〇屋",
@@ -14833,7 +14833,7 @@
       "readings": ["へ", "や"],
       "special": 0,
       "word": "部屋",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "部〇",
@@ -14842,7 +14842,7 @@
       "readings": ["へ", "や"],
       "special": 1,
       "word": "部屋",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇る",
@@ -14860,7 +14860,7 @@
       "readings": ["へん", "さい"],
       "special": 0,
       "word": "返済",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "返〇",
@@ -14869,7 +14869,7 @@
       "readings": ["へん", "さい"],
       "special": 1,
       "word": "返済",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "〇答",
@@ -14878,7 +14878,7 @@
       "readings": ["へん", "とう"],
       "special": 0,
       "word": "返答",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "返〇",
@@ -14887,7 +14887,7 @@
       "readings": ["へん", "とう"],
       "special": 1,
       "word": "返答",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "〇法",
@@ -14896,7 +14896,7 @@
       "readings": ["ほう", "ほう"],
       "special": 0,
       "word": "方法",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "方〇",
@@ -14905,7 +14905,7 @@
       "readings": ["ほう", "ほう"],
       "special": 1,
       "word": "方法",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇問",
@@ -14914,7 +14914,7 @@
       "readings": ["ほう", "もん"],
       "special": 0,
       "word": "訪問",
-      "tags": ["BKB_vol1", "他動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "訪〇",
@@ -14923,7 +14923,7 @@
       "readings": ["ほう", "もん"],
       "special": 1,
       "word": "訪問",
-      "tags": ["BKB_vol1", "他動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "〇",
@@ -14932,7 +14932,7 @@
       "readings": ["ほお"],
       "special": 0,
       "word": "頬",
-      "tags": []
+      "tags": ["名詞"]
     },
     {
       "blanked": "〇海道",
@@ -14941,7 +14941,7 @@
       "readings": ["ほっ", "かい", "どう"],
       "special": 0,
       "word": "北海道",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "北〇道",
@@ -14950,7 +14950,7 @@
       "readings": ["ほっ", "かい", "どう"],
       "special": 1,
       "word": "北海道",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "北海〇",
@@ -14959,7 +14959,7 @@
       "readings": ["ほっ", "かい", "どう"],
       "special": 2,
       "word": "北海道",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "〇行者",
@@ -14995,7 +14995,7 @@
       "readings": ["ほ", "どう"],
       "special": 0,
       "word": "歩道",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "歩〇",
@@ -15004,7 +15004,7 @@
       "readings": ["ほ", "どう"],
       "special": 1,
       "word": "歩道",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -15013,7 +15013,7 @@
       "readings": ["ほん"],
       "special": 0,
       "word": "本",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇日",
@@ -15022,7 +15022,7 @@
       "readings": ["ほん", "じつ"],
       "special": 0,
       "word": "本日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "本〇",
@@ -15031,7 +15031,7 @@
       "readings": ["ほん", "じつ"],
       "special": 1,
       "word": "本日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇店",
@@ -15040,7 +15040,7 @@
       "readings": ["ほん", "てん"],
       "special": 0,
       "word": "本店",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "本〇",
@@ -15049,7 +15049,7 @@
       "readings": ["ほん", "てん"],
       "special": 1,
       "word": "本店",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇物",
@@ -15058,7 +15058,7 @@
       "readings": ["ほん", "もの"],
       "special": 0,
       "word": "本物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "本〇",
@@ -15067,7 +15067,7 @@
       "readings": ["ほん", "もの"],
       "special": 1,
       "word": "本物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇屋",
@@ -15076,7 +15076,7 @@
       "readings": ["ほん", "や"],
       "special": 0,
       "word": "本屋",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "本〇",
@@ -15085,7 +15085,7 @@
       "readings": ["ほん", "や"],
       "special": 1,
       "word": "本屋",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇合",
@@ -15094,7 +15094,7 @@
       "readings": ["ば", "あい"],
       "special": 0,
       "word": "場合",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "場〇",
@@ -15103,7 +15103,7 @@
       "readings": ["ば", "あい"],
       "special": 1,
       "word": "場合",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇店",
@@ -15112,7 +15112,7 @@
       "readings": ["ばい", "てん"],
       "special": 0,
       "word": "売店",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "売〇",
@@ -15121,7 +15121,7 @@
       "readings": ["ばい", "てん"],
       "special": 1,
       "word": "売店",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇買",
@@ -15130,7 +15130,7 @@
       "readings": ["ばい", "ばい"],
       "special": 0,
       "word": "売買",
-      "tags": ["BKB_vol1", "他動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "売〇",
@@ -15139,7 +15139,7 @@
       "readings": ["ばい", "ばい"],
       "special": 1,
       "word": "売買",
-      "tags": ["BKB_vol1", "他動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞"]
     },
     {
       "blanked": "〇車",
@@ -15148,7 +15148,7 @@
       "readings": ["ば", "しゃ"],
       "special": 0,
       "word": "馬車",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "馬〇",
@@ -15157,7 +15157,7 @@
       "readings": ["ば", "しゃ"],
       "special": 1,
       "word": "馬車",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇所",
@@ -15166,7 +15166,7 @@
       "readings": ["ば", "しょ"],
       "special": 0,
       "word": "場所",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "場〇",
@@ -15175,7 +15175,7 @@
       "readings": ["ば", "しょ"],
       "special": 1,
       "word": "場所",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇肉",
@@ -15184,7 +15184,7 @@
       "readings": ["ば", "にく"],
       "special": 0,
       "word": "馬肉",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "馬〇",
@@ -15193,7 +15193,7 @@
       "readings": ["ば", "にく"],
       "special": 1,
       "word": "馬肉",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇力",
@@ -15202,7 +15202,7 @@
       "readings": ["ば", "りき"],
       "special": 0,
       "word": "馬力",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "馬〇",
@@ -15211,7 +15211,7 @@
       "readings": ["ば", "りき"],
       "special": 1,
       "word": "馬力",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇国",
@@ -15220,7 +15220,7 @@
       "readings": ["ばん", "こく"],
       "special": 0,
       "word": "万国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "万〇",
@@ -15229,7 +15229,7 @@
       "readings": ["ばん", "こく"],
       "special": 1,
       "word": "万国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇歳",
@@ -15238,7 +15238,7 @@
       "readings": ["ばん", "ざい"],
       "special": 0,
       "word": "万歳",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "自動詞"]
     },
     {
       "blanked": "万〇",
@@ -15247,7 +15247,7 @@
       "readings": ["ばん", "ざい"],
       "special": 1,
       "word": "万歳",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "自動詞"]
     },
     {
       "blanked": "〇",
@@ -15256,7 +15256,7 @@
       "readings": ["ばん"],
       "special": 0,
       "word": "晩",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇組",
@@ -15265,7 +15265,7 @@
       "readings": ["ばん", "ぐみ"],
       "special": 0,
       "word": "番組",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "番〇",
@@ -15274,7 +15274,7 @@
       "readings": ["ばん", "ぐみ"],
       "special": 1,
       "word": "番組",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇組表",
@@ -15283,7 +15283,7 @@
       "readings": ["ばん", "ぐみ", "ひょう"],
       "special": 0,
       "word": "番組表",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "番〇表",
@@ -15292,7 +15292,7 @@
       "readings": ["ばん", "ぐみ", "ひょう"],
       "special": 1,
       "word": "番組表",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "番組〇",
@@ -15301,7 +15301,7 @@
       "readings": ["ばん", "ぐみ", "ひょう"],
       "special": 2,
       "word": "番組表",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "〇号",
@@ -15310,7 +15310,7 @@
       "readings": ["ばん", "ごう"],
       "special": 0,
       "word": "番号",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "番〇",
@@ -15319,7 +15319,7 @@
       "readings": ["ばん", "ごう"],
       "special": 1,
       "word": "番号",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇御飯",
@@ -15328,7 +15328,7 @@
       "readings": ["ばん", "ご", "はん"],
       "special": 0,
       "word": "晩御飯",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "晩〇飯",
@@ -15337,7 +15337,7 @@
       "readings": ["ばん", "ご", "はん"],
       "special": 1,
       "word": "晩御飯",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "晩御〇",
@@ -15346,7 +15346,7 @@
       "readings": ["ばん", "ご", "はん"],
       "special": 2,
       "word": "晩御飯",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇院",
@@ -15355,7 +15355,7 @@
       "readings": ["びょう", "いん"],
       "special": 0,
       "word": "病院",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "病〇",
@@ -15364,7 +15364,7 @@
       "readings": ["びょう", "いん"],
       "special": 1,
       "word": "病院",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇気",
@@ -15373,7 +15373,7 @@
       "readings": ["びょう", "き"],
       "special": 0,
       "word": "病気",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "病〇",
@@ -15382,7 +15382,7 @@
       "readings": ["びょう", "き"],
       "special": 1,
       "word": "病気",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇人",
@@ -15391,7 +15391,7 @@
       "readings": ["びょう", "にん"],
       "special": 0,
       "word": "病人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "病〇",
@@ -15400,7 +15400,7 @@
       "readings": ["びょう", "にん"],
       "special": 1,
       "word": "病人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "テニス〇",
@@ -15409,7 +15409,7 @@
       "readings": ["", "", "", "ぶ"],
       "special": 3,
       "word": "テニス部",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -15418,7 +15418,7 @@
       "readings": ["ぶた"],
       "special": 0,
       "word": "豚",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇肉",
@@ -15427,7 +15427,7 @@
       "readings": ["ぶた", "にく"],
       "special": 0,
       "word": "豚肉",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "豚〇",
@@ -15436,7 +15436,7 @@
       "readings": ["ぶた", "にく"],
       "special": 1,
       "word": "豚肉",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇理",
@@ -15445,7 +15445,7 @@
       "readings": ["ぶつ", "り"],
       "special": 0,
       "word": "物理",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "物〇",
@@ -15454,7 +15454,7 @@
       "readings": ["ぶつ", "り"],
       "special": 1,
       "word": "物理",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇分",
@@ -15481,7 +15481,7 @@
       "readings": ["ぶん"],
       "special": 0,
       "word": "文",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇化",
@@ -15490,7 +15490,7 @@
       "readings": ["ぶん", "か"],
       "special": 0,
       "word": "文化",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "文〇",
@@ -15499,7 +15499,7 @@
       "readings": ["ぶん", "か"],
       "special": 1,
       "word": "文化",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇学",
@@ -15508,7 +15508,7 @@
       "readings": ["ぶん", "がく"],
       "special": 0,
       "word": "文学",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "文〇",
@@ -15517,7 +15517,7 @@
       "readings": ["ぶん", "がく"],
       "special": 1,
       "word": "文学",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇国",
@@ -15526,7 +15526,7 @@
       "readings": ["べい", "こく"],
       "special": 0,
       "word": "米国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "米〇",
@@ -15535,7 +15535,7 @@
       "readings": ["べい", "こく"],
       "special": 1,
       "word": "米国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇強",
@@ -15544,7 +15544,7 @@
       "readings": ["べん", "きょう"],
       "special": 0,
       "word": "勉強",
-      "tags": ["BKB_vol1", "他動詞", "自動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞", "自動詞"]
     },
     {
       "blanked": "勉〇",
@@ -15553,7 +15553,7 @@
       "readings": ["べん", "きょう"],
       "special": 1,
       "word": "勉強",
-      "tags": ["BKB_vol1", "他動詞", "自動詞"]
+      "tags": ["BKB_vol1", "他動詞", "名詞", "自動詞"]
     },
     {
       "blanked": "〇所",
@@ -15562,7 +15562,7 @@
       "readings": ["べん", "じょ"],
       "special": 0,
       "word": "便所",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "便〇",
@@ -15571,7 +15571,7 @@
       "readings": ["べん", "じょ"],
       "special": 1,
       "word": "便所",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇利",
@@ -15580,7 +15580,7 @@
       "readings": ["べん", "り"],
       "special": 0,
       "word": "便利",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容動詞"]
     },
     {
       "blanked": "便〇",
@@ -15589,7 +15589,7 @@
       "readings": ["べん", "り"],
       "special": 1,
       "word": "便利",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容動詞"]
     },
     {
       "blanked": "〇国",
@@ -15598,7 +15598,7 @@
       "readings": ["ぼ", "こく"],
       "special": 0,
       "word": "母国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "母〇",
@@ -15607,7 +15607,7 @@
       "readings": ["ぼ", "こく"],
       "special": 1,
       "word": "母国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇回",
@@ -15616,7 +15616,7 @@
       "readings": ["まい", "かい"],
       "special": 0,
       "word": "毎回",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "毎〇",
@@ -15625,7 +15625,7 @@
       "readings": ["まい", "かい"],
       "special": 1,
       "word": "毎回",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇月",
@@ -15652,7 +15652,7 @@
       "readings": ["まい", "しゅう"],
       "special": 0,
       "word": "毎週",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "毎〇",
@@ -15661,7 +15661,7 @@
       "readings": ["まい", "しゅう"],
       "special": 1,
       "word": "毎週",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇日",
@@ -15670,7 +15670,7 @@
       "readings": ["まい", "にち"],
       "special": 0,
       "word": "毎日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "毎〇",
@@ -15679,7 +15679,7 @@
       "readings": ["まい", "にち"],
       "special": 1,
       "word": "毎日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇年",
@@ -15688,7 +15688,7 @@
       "readings": ["まい", "ねん"],
       "special": 0,
       "word": "毎年",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "毎〇",
@@ -15697,7 +15697,7 @@
       "readings": ["まい", "ねん"],
       "special": 1,
       "word": "毎年",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇",
@@ -15706,7 +15706,7 @@
       "readings": ["まえ"],
       "special": 0,
       "word": "前",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇がる",
@@ -15733,7 +15733,7 @@
       "readings": ["ま", "", "しろ"],
       "special": 0,
       "word": "真っ白",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞", "形容動詞"]
     },
     {
       "blanked": "真っ〇",
@@ -15742,7 +15742,7 @@
       "readings": ["ま", "", "しろ"],
       "special": 2,
       "word": "真っ白",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇合室",
@@ -15751,7 +15751,7 @@
       "readings": ["まち", "あい", "しつ"],
       "special": 0,
       "word": "待合室",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "待〇室",
@@ -15760,7 +15760,7 @@
       "readings": ["まち", "あい", "しつ"],
       "special": 1,
       "word": "待合室",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "待合〇",
@@ -15769,7 +15769,7 @@
       "readings": ["まち", "あい", "しつ"],
       "special": 2,
       "word": "待合室",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -15778,7 +15778,7 @@
       "readings": ["まち"],
       "special": 0,
       "word": "町",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇つ",
@@ -15796,7 +15796,7 @@
       "readings": ["ま", "ぢか"],
       "special": 0,
       "word": "間近",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "間〇",
@@ -15805,7 +15805,7 @@
       "readings": ["ま", "ぢか"],
       "special": 1,
       "word": "間近",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇に合う",
@@ -15832,7 +15832,7 @@
       "readings": ["ま", "よ", "なか"],
       "special": 0,
       "word": "真夜中",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "副詞", "名詞"]
     },
     {
       "blanked": "真〇中",
@@ -15841,7 +15841,7 @@
       "readings": ["ま", "よ", "なか"],
       "special": 1,
       "word": "真夜中",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "副詞", "名詞"]
     },
     {
       "blanked": "真夜〇",
@@ -15850,7 +15850,7 @@
       "readings": ["ま", "よ", "なか"],
       "special": 2,
       "word": "真夜中",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "副詞", "名詞"]
     },
     {
       "blanked": "〇す",
@@ -15877,7 +15877,7 @@
       "readings": ["みっ", "か"],
       "special": 0,
       "word": "三日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "三〇",
@@ -15886,7 +15886,7 @@
       "readings": ["みっ", "か"],
       "special": 1,
       "word": "三日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇く",
@@ -15904,7 +15904,7 @@
       "readings": ["みぎ"],
       "special": 0,
       "word": "右",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇利き",
@@ -15913,7 +15913,7 @@
       "readings": ["みぎ", "き", ""],
       "special": 0,
       "word": "右利き",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "右〇き",
@@ -15922,7 +15922,7 @@
       "readings": ["みぎ", "き", ""],
       "special": 1,
       "word": "右利き",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇側",
@@ -15931,7 +15931,7 @@
       "readings": ["みぎ", "がわ"],
       "special": 0,
       "word": "右側",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "右〇",
@@ -15940,7 +15940,7 @@
       "readings": ["みぎ", "がわ"],
       "special": 1,
       "word": "右側",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇手",
@@ -15949,7 +15949,7 @@
       "readings": ["みぎ", "て"],
       "special": 0,
       "word": "右手",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "右〇",
@@ -15958,7 +15958,7 @@
       "readings": ["みぎ", "て"],
       "special": 1,
       "word": "右手",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -15967,7 +15967,7 @@
       "readings": ["みせ"],
       "special": 0,
       "word": "店",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇せる",
@@ -15985,7 +15985,7 @@
       "readings": ["みじか", ""],
       "special": 0,
       "word": "短い",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容詞"]
     },
     {
       "blanked": "〇",
@@ -15994,7 +15994,7 @@
       "readings": ["みず"],
       "special": 0,
       "word": "水",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇色",
@@ -16003,7 +16003,7 @@
       "readings": ["みず", "いろ"],
       "special": 0,
       "word": "水色",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "水〇",
@@ -16012,7 +16012,7 @@
       "readings": ["みず", "いろ"],
       "special": 1,
       "word": "水色",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "〇",
@@ -16021,7 +16021,7 @@
       "readings": ["みち"],
       "special": 0,
       "word": "道",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇つ",
@@ -16030,7 +16030,7 @@
       "readings": ["みっ", ""],
       "special": 0,
       "word": "三つ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "数詞"]
     },
     {
       "blanked": "〇",
@@ -16039,7 +16039,7 @@
       "readings": ["みなみ"],
       "special": 0,
       "word": "南",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇口",
@@ -16048,7 +16048,7 @@
       "readings": ["みなみ", "ぐち"],
       "special": 0,
       "word": "南口",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "南〇",
@@ -16057,7 +16057,7 @@
       "readings": ["みなみ", "ぐち"],
       "special": 1,
       "word": "南口",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -16066,7 +16066,7 @@
       "readings": ["みみ"],
       "special": 0,
       "word": "耳",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇る",
@@ -16084,7 +16084,7 @@
       "readings": ["むい", "か"],
       "special": 0,
       "word": "六日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "六〇",
@@ -16093,7 +16093,7 @@
       "readings": ["むい", "か"],
       "special": 1,
       "word": "六日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇つ",
@@ -16102,7 +16102,7 @@
       "readings": ["むっ", ""],
       "special": 0,
       "word": "六つ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "数詞"]
     },
     {
       "blanked": "〇",
@@ -16111,7 +16111,7 @@
       "readings": ["むら"],
       "special": 0,
       "word": "村",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇役場",
@@ -16120,7 +16120,7 @@
       "readings": ["むら", "やく", "ば"],
       "special": 0,
       "word": "村役場",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "村〇場",
@@ -16129,7 +16129,7 @@
       "readings": ["むら", "やく", "ば"],
       "special": 1,
       "word": "村役場",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "村役〇",
@@ -16138,7 +16138,7 @@
       "readings": ["むら", "やく", "ば"],
       "special": 2,
       "word": "村役場",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇刺",
@@ -16147,7 +16147,7 @@
       "readings": ["めい", "し"],
       "special": 0,
       "word": "名刺",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "名〇",
@@ -16156,7 +16156,7 @@
       "readings": ["めい", "し"],
       "special": 1,
       "word": "名刺",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇所",
@@ -16165,7 +16165,7 @@
       "readings": ["めい", "しょ"],
       "special": 0,
       "word": "名所",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "名〇",
@@ -16174,7 +16174,7 @@
       "readings": ["めい", "しょ"],
       "special": 1,
       "word": "名所",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇治",
@@ -16183,7 +16183,7 @@
       "readings": ["めい", "じ"],
       "special": 0,
       "word": "明治",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "明〇",
@@ -16192,7 +16192,7 @@
       "readings": ["めい", "じ"],
       "special": 1,
       "word": "明治",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "〇物",
@@ -16201,7 +16201,7 @@
       "readings": ["めい", "ぶつ"],
       "special": 0,
       "word": "名物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "名〇",
@@ -16210,7 +16210,7 @@
       "readings": ["めい", "ぶつ"],
       "special": 1,
       "word": "名物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -16219,7 +16219,7 @@
       "readings": ["め"],
       "special": 0,
       "word": "目",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇上",
@@ -16228,7 +16228,7 @@
       "readings": ["め", "うえ"],
       "special": 0,
       "word": "目上",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "目〇",
@@ -16237,7 +16237,7 @@
       "readings": ["め", "うえ"],
       "special": 1,
       "word": "目上",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇薬",
@@ -16246,7 +16246,7 @@
       "readings": ["め", "ぐすり"],
       "special": 0,
       "word": "目薬",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "目〇",
@@ -16255,7 +16255,7 @@
       "readings": ["め", "ぐすり"],
       "special": 1,
       "word": "目薬",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇下",
@@ -16264,7 +16264,7 @@
       "readings": ["め", "した"],
       "special": 0,
       "word": "目下",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "目〇",
@@ -16273,7 +16273,7 @@
       "readings": ["め", "した"],
       "special": 1,
       "word": "目下",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -16282,7 +16282,7 @@
       "readings": ["めし"],
       "special": 0,
       "word": "飯",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇を瞑る",
@@ -16309,7 +16309,7 @@
       "readings": ["もっ", "か"],
       "special": 0,
       "word": "目下",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "目〇",
@@ -16318,7 +16318,7 @@
       "readings": ["もっ", "か"],
       "special": 1,
       "word": "目下",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇次",
@@ -16327,7 +16327,7 @@
       "readings": ["もく", "じ"],
       "special": 0,
       "word": "目次",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "目〇",
@@ -16336,7 +16336,7 @@
       "readings": ["もく", "じ"],
       "special": 1,
       "word": "目次",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇的",
@@ -16345,7 +16345,7 @@
       "readings": ["もく", "てき"],
       "special": 0,
       "word": "目的",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "目〇",
@@ -16354,7 +16354,7 @@
       "readings": ["もく", "てき"],
       "special": 1,
       "word": "目的",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇曜日",
@@ -16390,7 +16390,7 @@
       "readings": ["も", "じ"],
       "special": 0,
       "word": "文字",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "文〇",
@@ -16399,7 +16399,7 @@
       "readings": ["も", "じ"],
       "special": 1,
       "word": "文字",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇字放送",
@@ -16408,7 +16408,7 @@
       "readings": ["も", "じ", "ほう", "そう"],
       "special": 0,
       "word": "文字放送",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "文〇放送",
@@ -16417,7 +16417,7 @@
       "readings": ["も", "じ", "ほう", "そう"],
       "special": 1,
       "word": "文字放送",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "文字〇送",
@@ -16426,7 +16426,7 @@
       "readings": ["も", "じ", "ほう", "そう"],
       "special": 2,
       "word": "文字放送",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "文字放〇",
@@ -16435,7 +16435,7 @@
       "readings": ["も", "じ", "ほう", "そう"],
       "special": 3,
       "word": "文字放送",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "〇ち主",
@@ -16444,7 +16444,7 @@
       "readings": ["も", "", "ぬし"],
       "special": 0,
       "word": "持ち主",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "持ち〇",
@@ -16453,7 +16453,7 @@
       "readings": ["も", "", "ぬし"],
       "special": 2,
       "word": "持ち主",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇ち物",
@@ -16462,7 +16462,7 @@
       "readings": ["も", "", "もの"],
       "special": 0,
       "word": "持ち物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "持ち〇",
@@ -16471,7 +16471,7 @@
       "readings": ["も", "", "もの"],
       "special": 2,
       "word": "持ち物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇つ",
@@ -16489,7 +16489,7 @@
       "readings": ["もと"],
       "special": 0,
       "word": "元",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "助数詞", "名詞"]
     },
     {
       "blanked": "〇彼氏",
@@ -16498,7 +16498,7 @@
       "readings": ["もと", "かれ", "し"],
       "special": 0,
       "word": "元彼氏",
-      "tags": ["BKB_vol1"]
+      "tags": ["名詞"]
     },
     {
       "blanked": "元〇氏",
@@ -16507,7 +16507,7 @@
       "readings": ["もと", "かれ", "し"],
       "special": 1,
       "word": "元彼氏",
-      "tags": ["BKB_vol1"]
+      "tags": ["名詞"]
     },
     {
       "blanked": "元彼〇",
@@ -16516,7 +16516,7 @@
       "readings": ["もと", "かれ", "し"],
       "special": 2,
       "word": "元彼氏",
-      "tags": ["BKB_vol1"]
+      "tags": ["名詞"]
     },
     {
       "blanked": "〇",
@@ -16525,7 +16525,7 @@
       "readings": ["もの"],
       "special": 0,
       "word": "物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇語",
@@ -16534,7 +16534,7 @@
       "readings": ["もの", "がたり"],
       "special": 0,
       "word": "物語",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "物〇",
@@ -16543,7 +16543,7 @@
       "readings": ["もの", "がたり"],
       "special": 1,
       "word": "物語",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -16552,7 +16552,7 @@
       "readings": ["もり"],
       "special": 0,
       "word": "森",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇田",
@@ -16561,7 +16561,7 @@
       "readings": ["もり", "た"],
       "special": 0,
       "word": "森田",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "森〇",
@@ -16570,7 +16570,7 @@
       "readings": ["もり", "た"],
       "special": 1,
       "word": "森田",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "〇題",
@@ -16579,7 +16579,7 @@
       "readings": ["もん", "だい"],
       "special": 0,
       "word": "問題",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "問〇",
@@ -16588,7 +16588,7 @@
       "readings": ["もん", "だい"],
       "special": 1,
       "word": "問題",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇部省",
@@ -16597,7 +16597,7 @@
       "readings": ["もん", "ぶ", "しょう"],
       "special": 0,
       "word": "文部省",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "文〇省",
@@ -16606,7 +16606,7 @@
       "readings": ["もん", "ぶ", "しょう"],
       "special": 1,
       "word": "文部省",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "文部〇",
@@ -16615,7 +16615,7 @@
       "readings": ["もん", "ぶ", "しょう"],
       "special": 2,
       "word": "文部省",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前", "名詞"]
     },
     {
       "blanked": "〇",
@@ -16624,7 +16624,7 @@
       "readings": ["もん"],
       "special": 0,
       "word": "門",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇百屋",
@@ -16660,16 +16660,7 @@
       "readings": ["やき", "き", "にく"],
       "special": 0,
       "word": "焼き肉",
-      "tags": ["BKB_vol1"]
-    },
-    {
-      "blanked": "焼〇肉",
-      "kanji": "き",
-      "meaning": "roast meat",
-      "readings": ["やき", "き", "にく"],
-      "special": 1,
-      "word": "焼き肉",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "焼き〇",
@@ -16678,7 +16669,7 @@
       "readings": ["やき", "き", "にく"],
       "special": 2,
       "word": "焼き肉",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇き鳥",
@@ -16687,7 +16678,7 @@
       "readings": ["や", "", "とり"],
       "special": 0,
       "word": "焼き鳥",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "焼き〇",
@@ -16696,7 +16687,7 @@
       "readings": ["や", "", "とり"],
       "special": 2,
       "word": "焼き鳥",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇球場",
@@ -16705,7 +16696,7 @@
       "readings": ["や", "きゅう", "じょう"],
       "special": 0,
       "word": "野球場",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "野〇場",
@@ -16714,7 +16705,7 @@
       "readings": ["や", "きゅう", "じょう"],
       "special": 1,
       "word": "野球場",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "野球〇",
@@ -16723,7 +16714,7 @@
       "readings": ["や", "きゅう", "じょう"],
       "special": 2,
       "word": "野球場",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇局",
@@ -16732,7 +16723,7 @@
       "readings": ["やっ", "きょく"],
       "special": 0,
       "word": "薬局",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "薬〇",
@@ -16741,7 +16732,7 @@
       "readings": ["やっ", "きょく"],
       "special": 1,
       "word": "薬局",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇に立つ",
@@ -16768,7 +16759,7 @@
       "readings": ["や", "しょく"],
       "special": 0,
       "word": "夜食",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "夜〇",
@@ -16777,7 +16768,7 @@
       "readings": ["や", "しょく"],
       "special": 1,
       "word": "夜食",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇い",
@@ -16786,7 +16777,7 @@
       "readings": ["やす", ""],
       "special": 0,
       "word": "安い",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容詞"]
     },
     {
       "blanked": "〇売り",
@@ -16795,7 +16786,7 @@
       "readings": ["やす", "う", ""],
       "special": 0,
       "word": "安売り",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "安〇り",
@@ -16804,7 +16795,7 @@
       "readings": ["やす", "う", ""],
       "special": 1,
       "word": "安売り",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇む",
@@ -16822,7 +16813,7 @@
       "readings": ["やす", "もの"],
       "special": 0,
       "word": "安物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "安〇",
@@ -16831,7 +16822,7 @@
       "readings": ["やす", "もの"],
       "special": 1,
       "word": "安物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇鳥",
@@ -16840,7 +16831,7 @@
       "readings": ["や", "ちょう"],
       "special": 0,
       "word": "野鳥",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "野〇",
@@ -16849,7 +16840,7 @@
       "readings": ["や", "ちょう"],
       "special": 1,
       "word": "野鳥",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇賃",
@@ -16858,7 +16849,7 @@
       "readings": ["や", "ちん"],
       "special": 0,
       "word": "家賃",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "家〇",
@@ -16867,7 +16858,7 @@
       "readings": ["や", "ちん"],
       "special": 1,
       "word": "家賃",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇つ",
@@ -16876,7 +16867,7 @@
       "readings": ["やっ", "つ"],
       "special": 0,
       "word": "八つ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "数詞"]
     },
     {
       "blanked": "〇",
@@ -16885,7 +16876,7 @@
       "readings": ["やど"],
       "special": 0,
       "word": "宿",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇根",
@@ -16894,7 +16885,7 @@
       "readings": ["や", "ね"],
       "special": 0,
       "word": "屋根",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "屋〇",
@@ -16903,7 +16894,7 @@
       "readings": ["や", "ね"],
       "special": 1,
       "word": "屋根",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -16912,7 +16903,7 @@
       "readings": ["やま"],
       "special": 0,
       "word": "山",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇",
@@ -16921,7 +16912,7 @@
       "readings": ["やまい"],
       "special": 0,
       "word": "病",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇下",
@@ -16930,7 +16921,7 @@
       "readings": ["やま", "した"],
       "special": 0,
       "word": "山下",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前"]
     },
     {
       "blanked": "山〇",
@@ -16939,7 +16930,7 @@
       "readings": ["やま", "した"],
       "special": 1,
       "word": "山下",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前"]
     },
     {
       "blanked": "〇田",
@@ -16948,7 +16939,7 @@
       "readings": ["やま", "だ"],
       "special": 0,
       "word": "山田",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前"]
     },
     {
       "blanked": "山〇",
@@ -16957,7 +16948,7 @@
       "readings": ["やま", "だ"],
       "special": 1,
       "word": "山田",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前"]
     },
     {
       "blanked": "〇本",
@@ -16966,7 +16957,7 @@
       "readings": ["やま", "もと"],
       "special": 0,
       "word": "山本",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前"]
     },
     {
       "blanked": "山〇",
@@ -16975,7 +16966,7 @@
       "readings": ["やま", "もと"],
       "special": 1,
       "word": "山本",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名前"]
     },
     {
       "blanked": "山本〇妻",
@@ -16984,7 +16975,7 @@
       "readings": ["やま", "もと", "ふ", "さい"],
       "special": 2,
       "word": "山本夫妻",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "山本夫〇",
@@ -16993,7 +16984,7 @@
       "readings": ["やま", "もと", "ふ", "さい"],
       "special": 3,
       "word": "山本夫妻",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇園地",
@@ -17002,7 +16993,7 @@
       "readings": ["ゆう", "えん", "ち"],
       "special": 0,
       "word": "遊園地",
-      "tags": ["BKB_vol2"]
+      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "遊〇地",
@@ -17011,7 +17002,7 @@
       "readings": ["ゆう", "えん", "ち"],
       "special": 1,
       "word": "遊園地",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "遊園〇",
@@ -17020,7 +17011,7 @@
       "readings": ["ゆう", "えん", "ち"],
       "special": 2,
       "word": "遊園地",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇方",
@@ -17029,7 +17020,7 @@
       "readings": ["ゆう", "がた"],
       "special": 0,
       "word": "夕方",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "夕〇",
@@ -17038,7 +17029,7 @@
       "readings": ["ゆう", "がた"],
       "special": 1,
       "word": "夕方",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇ご飯",
@@ -17047,7 +17038,7 @@
       "readings": ["ゆう", "", "はん"],
       "special": 0,
       "word": "夕ご飯",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "夕ご〇",
@@ -17056,7 +17047,7 @@
       "readings": ["ゆう", "", "はん"],
       "special": 2,
       "word": "夕ご飯",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇食",
@@ -17065,7 +17056,7 @@
       "readings": ["ゆう", "しょく"],
       "special": 0,
       "word": "夕食",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "夕〇",
@@ -17074,7 +17065,7 @@
       "readings": ["ゆう", "しょく"],
       "special": 1,
       "word": "夕食",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇情",
@@ -17083,7 +17074,7 @@
       "readings": ["ゆう", "じょう"],
       "special": 0,
       "word": "友情",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "友〇",
@@ -17092,7 +17083,7 @@
       "readings": ["ゆう", "じょう"],
       "special": 1,
       "word": "友情",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇人",
@@ -17101,7 +17092,7 @@
       "readings": ["ゆう", "じん"],
       "special": 0,
       "word": "友人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "友〇",
@@ -17110,7 +17101,7 @@
       "readings": ["ゆう", "じん"],
       "special": 1,
       "word": "友人",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇便",
@@ -17119,7 +17110,7 @@
       "readings": ["ゆう", "びん"],
       "special": 0,
       "word": "郵便",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "郵〇",
@@ -17128,7 +17119,7 @@
       "readings": ["ゆう", "びん"],
       "special": 1,
       "word": "郵便",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇便局",
@@ -17137,7 +17128,7 @@
       "readings": ["ゆう", "びん", "きょく"],
       "special": 0,
       "word": "郵便局",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "郵〇局",
@@ -17146,7 +17137,7 @@
       "readings": ["ゆう", "びん", "きょく"],
       "special": 1,
       "word": "郵便局",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "郵便〇",
@@ -17155,7 +17146,7 @@
       "readings": ["ゆう", "びん", "きょく"],
       "special": 2,
       "word": "郵便局",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇便番号",
@@ -17164,7 +17155,7 @@
       "readings": ["ゆう", "びん", "ばん", "ごう"],
       "special": 0,
       "word": "郵便番号",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "郵〇番号",
@@ -17173,7 +17164,7 @@
       "readings": ["ゆう", "びん", "ばん", "ごう"],
       "special": 1,
       "word": "郵便番号",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "郵便〇号",
@@ -17182,7 +17173,7 @@
       "readings": ["ゆう", "びん", "ばん", "ごう"],
       "special": 2,
       "word": "郵便番号",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "郵便番〇",
@@ -17191,7 +17182,7 @@
       "readings": ["ゆう", "びん", "ばん", "ごう"],
       "special": 3,
       "word": "郵便番号",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇べ",
@@ -17200,7 +17191,7 @@
       "readings": ["ゆう", ""],
       "special": 0,
       "word": "夕べ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇夜",
@@ -17209,7 +17200,7 @@
       "readings": ["ゆう", "べ"],
       "special": 0,
       "word": "昨夜",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "昨〇",
@@ -17218,7 +17209,7 @@
       "readings": ["ゆう", "べ"],
       "special": 1,
       "word": "昨夜",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "副詞", "名詞"]
     },
     {
       "blanked": "〇名",
@@ -17227,7 +17218,7 @@
       "readings": ["ゆう", "めい"],
       "special": 0,
       "word": "有名",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容動詞"]
     },
     {
       "blanked": "有〇",
@@ -17236,7 +17227,7 @@
       "readings": ["ゆう", "めい"],
       "special": 1,
       "word": "有名",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "形容動詞"]
     },
     {
       "blanked": "〇利",
@@ -17245,7 +17236,7 @@
       "readings": ["ゆう", "り"],
       "special": 0,
       "word": "有利",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "有〇",
@@ -17254,7 +17245,7 @@
       "readings": ["ゆう", "り"],
       "special": 1,
       "word": "有利",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇力",
@@ -17263,7 +17254,7 @@
       "readings": ["ゆう", "りょく"],
       "special": 0,
       "word": "有力",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "有〇",
@@ -17272,7 +17263,7 @@
       "readings": ["ゆう", "りょく"],
       "special": 1,
       "word": "有力",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞", "形容動詞"]
     },
     {
       "blanked": "〇",
@@ -17281,7 +17272,7 @@
       "readings": ["ゆき"],
       "special": 0,
       "word": "雪",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇国",
@@ -17290,7 +17281,7 @@
       "readings": ["ゆき", "ぐに"],
       "special": 0,
       "word": "雪国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "雪〇",
@@ -17299,7 +17290,7 @@
       "readings": ["ゆき", "ぐに"],
       "special": 1,
       "word": "雪国",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇雲",
@@ -17308,7 +17299,7 @@
       "readings": ["ゆき", "ぐも"],
       "special": 0,
       "word": "雪雲",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "雪〇",
@@ -17317,7 +17308,7 @@
       "readings": ["ゆき", "ぐも"],
       "special": 1,
       "word": "雪雲",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇方",
@@ -17326,7 +17317,7 @@
       "readings": ["ゆく", "え"],
       "special": 0,
       "word": "行方",
-      "tags": []
+      "tags": ["名詞"]
     },
     {
       "blanked": "行〇",
@@ -17335,7 +17326,7 @@
       "readings": ["ゆく", "え"],
       "special": 1,
       "word": "行方",
-      "tags": []
+      "tags": ["名詞"]
     },
     {
       "blanked": "〇日",
@@ -17344,7 +17335,7 @@
       "readings": ["よう", "か"],
       "special": 0,
       "word": "八日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "八〇",
@@ -17353,7 +17344,7 @@
       "readings": ["よう", "か"],
       "special": 1,
       "word": "八日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇式",
@@ -17362,7 +17353,7 @@
       "readings": ["よう", "しき"],
       "special": 0,
       "word": "様式",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "様〇",
@@ -17371,7 +17362,7 @@
       "readings": ["よう", "しき"],
       "special": 1,
       "word": "様式",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇酒",
@@ -17380,7 +17371,7 @@
       "readings": ["よう", "しゅ"],
       "special": 0,
       "word": "洋酒",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "洋〇",
@@ -17389,7 +17380,7 @@
       "readings": ["よう", "しゅ"],
       "special": 1,
       "word": "洋酒",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇子",
@@ -17398,7 +17389,7 @@
       "readings": ["よう", "す"],
       "special": 0,
       "word": "様子",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "様〇",
@@ -17407,7 +17398,7 @@
       "readings": ["よう", "す"],
       "special": 1,
       "word": "様子",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇痛",
@@ -17416,7 +17407,7 @@
       "readings": ["よう", "つう"],
       "special": 0,
       "word": "腰痛",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "腰〇",
@@ -17425,7 +17416,7 @@
       "readings": ["よう", "つう"],
       "special": 1,
       "word": "腰痛",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇法",
@@ -17434,7 +17425,7 @@
       "readings": ["よう", "ほう"],
       "special": 0,
       "word": "用法",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "用〇",
@@ -17443,7 +17434,7 @@
       "readings": ["よう", "ほう"],
       "special": 1,
       "word": "用法",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇日",
@@ -17452,7 +17443,7 @@
       "readings": ["よっ", "か"],
       "special": 0,
       "word": "四日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "四〇",
@@ -17461,7 +17452,7 @@
       "readings": ["よっ", "か"],
       "special": 1,
       "word": "四日",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇室",
@@ -17470,7 +17461,7 @@
       "readings": ["よく", "しつ"],
       "special": 0,
       "word": "浴室",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "浴〇",
@@ -17479,7 +17470,7 @@
       "readings": ["よく", "しつ"],
       "special": 1,
       "word": "浴室",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇つ",
@@ -17488,7 +17479,7 @@
       "readings": ["よっ", ""],
       "special": 0,
       "word": "四つ",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "数詞"]
     },
     {
       "blanked": "〇み物",
@@ -17497,7 +17488,7 @@
       "readings": ["よ", "", "もの"],
       "special": 0,
       "word": "読み物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "読み〇",
@@ -17506,7 +17497,7 @@
       "readings": ["よ", "", "もの"],
       "special": 2,
       "word": "読み物",
-      "tags": ["BKB_vol1"]
+      "tags": ["BKB_vol1", "名詞"]
     },
     {
       "blanked": "〇む",

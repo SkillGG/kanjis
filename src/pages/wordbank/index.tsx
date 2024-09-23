@@ -846,7 +846,7 @@ export default function KanjiCardCreator() {
             ) : (
               shownWords
                 .slice(
-                  page * showLimit,
+                  showLimit > shownWordCount ? 0 : page * showLimit,
                   Math.min((page + 1) * showLimit, shownWordCount),
                 )
                 .map((q) => {
@@ -951,6 +951,29 @@ export default function KanjiCardCreator() {
                                       modal: true,
                                       modalStyle: {
                                         styles: { "--backdrop": "#fff6" },
+                                      },
+                                      onOpen(d) {
+                                        d?.focus();
+                                      },
+                                      onKeyDown(e, d) {
+                                        const num = keyboradEventToNumber(e);
+                                        if (num === -1) return;
+                                        const buttons =
+                                          d?.querySelectorAll("button");
+                                        if (!buttons) return;
+                                        if (!tagColors) return;
+                                        const btn = [...buttons].find(
+                                          (b) =>
+                                            Object.keys(tagColors).indexOf(
+                                              b.innerText.trim(),
+                                            ) ===
+                                            num - 1,
+                                        );
+                                        if (document.activeElement === btn) {
+                                          btn?.click();
+                                        } else {
+                                          btn?.focus();
+                                        }
                                       },
                                       text(close) {
                                         if (!tagColors) {
