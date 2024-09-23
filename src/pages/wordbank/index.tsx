@@ -823,8 +823,8 @@ export default function KanjiCardCreator() {
                                     color={tagColors?.[t]?.color}
                                     bgColor={tagColors?.[t]?.bg}
                                     border={tagColors?.[t]?.border}
-                                    onClick={() => {
-                                      void editTags(
+                                    onClick={async () => {
+                                      await editTags(
                                         q.tags?.filter((f) => f !== t) ?? [],
                                       );
                                     }}
@@ -869,12 +869,12 @@ export default function KanjiCardCreator() {
                                                       bgColor={tc[1].bg}
                                                       border={tc[1].border}
                                                       color={tc[1].color}
-                                                      onClick={() => {
-                                                        void editTags([
+                                                      onClick={async () => {
+                                                        close();
+                                                        await editTags([
                                                           ...(q.tags ?? []),
                                                           tc[0],
                                                         ]);
-                                                        close();
                                                       }}
                                                     />
                                                   </div>
