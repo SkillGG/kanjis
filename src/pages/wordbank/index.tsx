@@ -686,7 +686,11 @@ export default function KanjiCardCreator() {
                               ) ===
                               num - 1,
                           );
-                          btn?.focus();
+                          if (document.activeElement === btn) {
+                            btn?.click();
+                          } else {
+                            btn?.focus();
+                          }
                         }}
                         tag={t}
                         color={tagColors?.[t]?.color}
@@ -721,7 +725,12 @@ export default function KanjiCardCreator() {
                           Object.keys(tagColors).indexOf(b.innerText.trim()) ===
                           num - 1,
                       );
-                      btn?.focus();
+
+                      if (document.activeElement === btn) {
+                        btn?.click();
+                      } else {
+                        btn?.focus();
+                      }
                     }}
                   >
                     <TagLabel
@@ -749,7 +758,12 @@ export default function KanjiCardCreator() {
                                 ) ===
                                 num - 1,
                             );
-                            btn?.focus();
+
+                            if (document.activeElement === btn) {
+                              btn?.click();
+                            } else {
+                              btn?.focus();
+                            }
                           },
                           text(close) {
                             if (!tagColors) {
