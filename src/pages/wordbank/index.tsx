@@ -672,6 +672,7 @@ export default function KanjiCardCreator() {
                       <TagLabel
                         className="addWithTagsTag"
                         onKeyDown={(e) => {
+                          // remove on double keyboard input
                           const num = keyboradEventToNumber(e);
                           if (num === -1) return;
                           const allBtns =
@@ -688,6 +689,9 @@ export default function KanjiCardCreator() {
                           );
                           if (document.activeElement === btn) {
                             btn?.click();
+                            setTimeout(() => {
+                              meaningInput.current?.focus();
+                            }, 200);
                           } else {
                             btn?.focus();
                           }
@@ -713,6 +717,7 @@ export default function KanjiCardCreator() {
                     className="h-fit"
                     tabIndex={new Set(addWithTags).size > 0 ? 0 : undefined}
                     onKeyDown={(e) => {
+                      // move focus from "Add tag" button to button the user pressed
                       const num = keyboradEventToNumber(e);
                       if (num === -1) return;
                       const allBtns =
@@ -727,6 +732,9 @@ export default function KanjiCardCreator() {
                       );
 
                       if (document.activeElement === btn) {
+                        setTimeout(() => {
+                          meaningInput.current?.focus();
+                        }, 200);
                         btn?.click();
                       } else {
                         btn?.focus();
@@ -746,6 +754,7 @@ export default function KanjiCardCreator() {
                             d?.focus();
                           },
                           onKeyDown(e, d) {
+                            // add tag on double press
                             const num = keyboradEventToNumber(e);
                             if (num === -1) return;
                             const buttons = d?.querySelectorAll("button");
@@ -760,6 +769,9 @@ export default function KanjiCardCreator() {
                             );
 
                             if (document.activeElement === btn) {
+                              setTimeout(() => {
+                                meaningInput.current?.focus();
+                              }, 200);
                               btn?.click();
                             } else {
                               btn?.focus();
@@ -774,7 +786,7 @@ export default function KanjiCardCreator() {
                               setAddWithTags((p) => [...p, t]);
                               close();
                               setTimeout(() => {
-                                mainInput.current?.focus();
+                                meaningInput.current?.focus();
                               }, 100);
                             };
                             return (
