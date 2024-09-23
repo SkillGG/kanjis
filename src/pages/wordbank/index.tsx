@@ -6,6 +6,8 @@ import {
   type QuizWord,
   type ReactQuizWord,
   toRQW,
+  type MultiRQW,
+  fromMRQWToQW,
 } from "@/components/draw/quizWords";
 import { asyncNoop, log } from "@/utils/utils";
 import React, {
@@ -19,9 +21,7 @@ import React, {
 import creatorCSS from "./creator.module.css";
 import { LS_KEYS, useLocalStorage } from "@/components/localStorageProvider";
 
-type MultiRQW = ReactQuizWord & { multiSpecial?: number[] };
-
-const alphabet = `あいうえおかきくけこがぎぐげごさしすせそざじずぜぞたちつてとだぢづでどなにぬねのはひふへほばびぶべぼぱぴぷぺぽまみむめもやゆよらりるれろわをん`;
+const alphabet = `あいうえおかきくけこがぎぐげごさしすせそざじずぜぞたちつてとだぢづでどなにぬねのはひふへほばびぶべぼぱぴぷぺぽまみむめもやゆよゃゅょらりるれろわをん`;
 
 const compareReadings = (
   a: QuizWord,
@@ -37,16 +37,27 @@ const compareReadings = (
     .map((k, i) => `${k}${b.readings[i]}`)
     .join("");
 
-  const firstA = aWord.split("").find((q) => alphabet.includes(q));
-  const firstB = bWord.split("").find((q) => alphabet.includes(q));
+  const aAlpha = aWord.split("").filter((q) => alphabet.includes(q));
+  const bAlpha = bWord.split("").filter((q) => alphabet.includes(q));
 
-  if (!firstB) return 1;
-  if (!firstA) return -1;
+  if (bAlpha.length === 0) {
+    log`FailedWord ${bWord}`;
+    return 1;
+  }
+  if (aAlpha.length === 0) {
+    log`FailedWord ${aWord}`;
+    return -1;
+  }
 
-  const ixA = alphabet.indexOf(firstA);
-  const ixB = alphabet.indexOf(firstB);
-
-  return comp(ixA, ixB);
+  for (let i = 0; i < Math.min(aAlpha.length, bAlpha.length); i++) {
+    if (aAlpha[i] === bAlpha[i]) continue;
+    const aLetter = aAlpha[i];
+    const bLetter = bAlpha[i];
+    if (!aLetter) return comp(1, 0);
+    if (!bLetter) return comp(0, 1);
+    return comp(alphabet.indexOf(aLetter), alphabet.indexOf(bLetter));
+  }
+  return 0;
 };
 
 import defaultWordBank from "./wordbank.json";
@@ -57,7 +68,23 @@ import TagLabel from "@/components/draw/tagBadge";
 import { TagEditor } from "@/components/wordbank/tagEditor";
 import SettingBox from "@/components/settingBox";
 import { dbPutMultiple, useAppStore } from "@/appStore";
-import { env } from "@/env";
+
+const keyboradEventToNumber = (e: React.KeyboardEvent<HTMLElement>) => {
+  const clickedDigit = /digit([1-5])/i.exec(e.code);
+
+  if (!clickedDigit) return -1;
+  const num =
+    parseInt(clickedDigit[1] ?? "a") -
+    1 +
+    (e.shiftKey ? 5 : 0) +
+    (e.altKey ? 10 : 0) +
+    (e.ctrlKey ? 20 : 0);
+
+  if (e.ctrlKey) e.preventDefault();
+
+  if (!isNaN(num)) return num;
+  return -1;
+};
 
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
@@ -97,64 +124,65 @@ export default function KanjiCardCreator() {
 
   const [addWithTags, setAddWithTags] = useState<string[]>([]);
 
+  const [editing, setEditing] = useState<null | MultiRQW>(null);
+
   const autoIMEChange = useAppStore((s) => s.settings.autoChangeIME);
 
   const allRef = useRef<HTMLButtonElement>(null);
   const addRef = useRef<HTMLButtonElement>(null);
+  const addTagRef = useRef<HTMLButtonElement>(null);
   const mainInput = useRef<HTMLInputElement>(null);
   const meaningInput = useRef<HTMLInputElement>(null);
 
-  const shownWords = useMemo(
-    () =>
-      [...(words ?? [])]
-        ?.filter((q) =>
-          autoFilter
-            ? (q.word.includes(wordVal) || q.meaning.includes(wordVal)) &&
-              (addWithTags.length === 0
-                ? true
-                : !!q.tags?.some((t) => addWithTags.includes(t)) ||
-                  (addWithTags.includes("UNTAGGED") &&
-                    (!q.tags || q.tags.length == 0)))
-            : true,
-        )
-        ?.reduce<MultiRQW[]>((p, n) => {
-          const areReadingsTheSame = (a: QuizWord, b: QuizWord) =>
-            a.readings.join("_") === b.readings.join("_");
-          const areTagsTheSame = (a: QuizWord, b: QuizWord) =>
-            a.tags?.sort().join("_") === b.tags?.sort().join("_");
+  const shownWords = useMemo(() => {
+    const sortedWords = words?.sort((a, b) => compareReadings(a, b));
+    return [...(sortedWords ?? [])]
+      ?.filter((q) =>
+        autoFilter
+          ? (q.word.includes(wordVal) || q.meaning.includes(wordVal)) &&
+            (addWithTags.length === 0
+              ? true
+              : !!q.tags?.some((t) => addWithTags.includes(t)) ||
+                (addWithTags.includes("UNTAGGED") &&
+                  (!q.tags || q.tags.length == 0)))
+          : true,
+      )
+      ?.reduce<MultiRQW[]>((p, n) => {
+        const areReadingsTheSame = (a: QuizWord, b: QuizWord) =>
+          a.readings.join("_") === b.readings.join("_");
+        const areTagsTheSame = (a: QuizWord, b: QuizWord) =>
+          a.tags?.sort().join("_") === b.tags?.sort().join("_");
 
-          const prevInArr = p.find(
-            (z) =>
-              z.word === n.word &&
-              areReadingsTheSame(z, n) &&
-              areTagsTheSame(z, n),
-          );
+        const prevInArr = p.find(
+          (z) =>
+            z.word === n.word &&
+            areReadingsTheSame(z, n) &&
+            areTagsTheSame(z, n),
+        );
 
-          if (prevInArr) {
-            const newMS = [
-              ...(prevInArr.multiSpecial ?? [prevInArr.special]),
-              n.special,
-            ];
-            return [
-              ...p.filter(
-                (x) =>
-                  !(
-                    areTagsTheSame(x, prevInArr) &&
-                    areReadingsTheSame(x, prevInArr) &&
-                    x.word === prevInArr.word
-                  ),
-              ),
-              {
-                ...toRQW({ ...prevInArr }, {}, newMS),
-                multiSpecial: newMS,
-              },
-            ];
-          }
-          return [...p, { ...n, multiSpecial: [n.special] }];
-        }, [])
-        .sort((a, b) => compareReadings(a, b)),
-    [words, autoFilter, wordVal, addWithTags],
-  );
+        if (prevInArr) {
+          const newMS = [
+            ...(prevInArr.multiSpecial ?? [prevInArr.special]),
+            n.special,
+          ];
+          return [
+            ...p.filter(
+              (x) =>
+                !(
+                  areTagsTheSame(x, prevInArr) &&
+                  areReadingsTheSame(x, prevInArr) &&
+                  x.word === prevInArr.word
+                ),
+            ),
+            {
+              ...toRQW({ ...prevInArr }, {}, newMS),
+              multiSpecial: newMS,
+            },
+          ];
+        }
+        return [...p, { ...n, multiSpecial: [n.special] }];
+      }, []);
+  }, [words, autoFilter, wordVal, addWithTags]);
 
   useEffect(() => {
     void (async () => {
@@ -180,8 +208,15 @@ export default function KanjiCardCreator() {
     function handlekeydown(e: KeyboardEvent) {
       const num = /Digit(\d)/.exec(e.code);
       if (e.code === "KeyW" && e.altKey) {
-        log`${wordVal.split("").map((_, i) => i)}`;
         setSpecial(wordVal.split("").map((_, i) => i));
+      }
+      if (e.code === "KeyQ" && e.altKey && !e.shiftKey) {
+        e.preventDefault();
+        addTagRef.current?.click();
+      }
+      if (e.code === "KeyQ" && e.altKey && e.shiftKey) {
+        e.preventDefault();
+        addTagRef.current?.focus();
       }
       if (num && e.altKey) {
         const special = parseInt(num[1] ?? "a");
@@ -269,6 +304,13 @@ export default function KanjiCardCreator() {
     ) ?? [],
   ).size;
 
+  const clearWord = useCallback(async () => {
+    setWordVal("");
+    setMeaning("");
+    setAddWithTags([]);
+    setEditing(null);
+  }, []);
+
   return (
     <>
       {popup}
@@ -298,67 +340,123 @@ export default function KanjiCardCreator() {
           word into the main field, the green kanji will be made
           &quot;guessable&quot;.
         </div>
-        {env.NEXT_PUBLIC_DEV === "development" && (
+        <div className="flex justify-center gap-x-2">
+          <button onClick={() => setOpenTagEditor(true)}>Edit tags</button>
           <button
-            className="mr-2"
             onClick={() => {
-              const newWBWords = defaultWordBank.words.map((w) => {
-                return getWordWithout(
-                  w.word,
-                  w.special,
-                  w.meaning,
-                  w.readings,
-                  w.tags,
+              if (words) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                const newVer = inc(defaultWordBank.version, "patch", true);
+                if (!newVer) return;
+                void navigator.clipboard.writeText(
+                  JSON.stringify({
+                    version: newVer,
+                    tags: tagColors,
+                    words: words.map((w) => fromRQW(w)),
+                  }),
                 );
-              });
-              void navigator.clipboard.writeText(
-                JSON.stringify({ ...defaultWordBank, words: newWBWords }),
-              );
+                setCopied(true);
+              }
             }}
           >
-            Fix wordbank
+            {copied ? (
+              <span className="text-green-500">DONE</span>
+            ) : (
+              "COPY BANK"
+            )}
           </button>
-        )}
-        <button className="mr-2" onClick={() => setOpenTagEditor(true)}>
-          Edit tags
-        </button>
-        <button
-          onClick={() => {
-            setPopup({
-              modal: true,
-              modalStyle: {
-                styles: { "--backdrop": "#fff5" },
-              },
-              contentStyle: {
-                className: "px-8",
-              },
-              text(close) {
-                return (
+          <button
+            onClick={async () => {
+              setPopup({
+                text: (close) => (
                   <div className="text-center">
-                    <SettingBox
-                      name="Worbank settings"
-                      wordbank={true}
-                      draw={false}
-                      global={false}
-                      list={false}
-                    />
+                    Are yo usure you want to restore the wordbank to default (v
+                    {defaultWordBank.version})?
+                    <br />
+                    <button
+                      className="text-[red]"
+                      onClick={async () => {
+                        if (!idb) return;
+                        log`Restoring...`;
+                        await idb.clear("wordbank");
+                        await dbPutMultiple(
+                          idb,
+                          "wordbank",
+                          defaultWordBank.words,
+                        );
+                        setWords(() =>
+                          defaultWordBank.words.map((w) => toRQW(w)),
+                        );
+                        close();
+                      }}
+                    >
+                      YES
+                    </button>
                     <button
                       onClick={() => {
                         close();
                       }}
-                      className="absolute right-[2px] top-[5px] border-none text-[red]"
                     >
-                      X
+                      NO
                     </button>
                   </div>
-                );
-              },
-              time: "user",
-            });
-          }}
-        >
-          Settings
-        </button>
+                ),
+                time: "user",
+                borderColor: "red",
+              });
+            }}
+          >
+            RESTORE TO DEFAULT
+          </button>
+          {canUpdateBank && (
+            <button
+              className="ml-2 p-3"
+              onClick={() => {
+                void updateBank();
+              }}
+            >
+              Update ({LS.getString(LS_KEYS.wordbank_ver) ?? "0.0.1"} =&gt;{" "}
+              {defaultWordBank.version})
+            </button>
+          )}
+          <button
+            onClick={() => {
+              setPopup({
+                modal: true,
+                modalStyle: {
+                  styles: { "--backdrop": "#fff5" },
+                },
+                contentStyle: {
+                  className: "px-8",
+                },
+                text(close) {
+                  return (
+                    <div className="text-center">
+                      <SettingBox
+                        name="Worbank settings"
+                        wordbank={true}
+                        draw={false}
+                        global={false}
+                        list={false}
+                      />
+                      <button
+                        onClick={() => {
+                          close();
+                        }}
+                        className="absolute right-[2px] top-[5px] border-none text-[red]"
+                      >
+                        X
+                      </button>
+                    </div>
+                  );
+                },
+                time: "user",
+              });
+            }}
+          >
+            Settings
+          </button>
+        </div>
         <div>You can use enter to quickly focus next fields!</div>
         <div className="flex w-full max-w-[100%] flex-wrap sm:max-w-[100%]">
           {readings.map((a, i) => (
@@ -373,11 +471,7 @@ export default function KanjiCardCreator() {
                 value={a}
                 onChange={(e) => {
                   const val = e.target.value;
-                  setReadings((p) => {
-                    const v = [...p];
-                    v[i] = val;
-                    return v;
-                  });
+                  setReadings((p) => p.map((q, xi) => (xi === i ? val : q)));
                 }}
                 onDoubleClick={() => {
                   setSpecial((p) =>
@@ -385,6 +479,12 @@ export default function KanjiCardCreator() {
                   );
                 }}
                 onKeyDown={(e) => {
+                  log`read.${e}`;
+                  if (e.code === "Escape") {
+                    setSpecial((p) =>
+                      p.includes(i) ? p.filter((q) => q !== i) : [...p, i],
+                    );
+                  }
                   if (e.code === "Enter" || e.keyCode === 13) {
                     const next =
                       e.currentTarget.parentElement?.nextElementSibling?.querySelector(
@@ -431,10 +531,14 @@ export default function KanjiCardCreator() {
             </>
           )}
         </div>
-        <div className="mx-auto mt-1 w-full">
-          <div className="mb-1 grid w-full grid-rows-2 sm:grid-cols-2 sm:grid-rows-1">
+        <div className="mx-auto mt-1 flex w-full flex-wrap justify-center">
+          <div className="mb-1 grid w-full flex-grow basis-[70%] grid-rows-2 sm:grid-cols-2 sm:grid-rows-1">
             <input
               onKeyDown={(e) => {
+                log`main.${e}`;
+                if (e.code === "Escape") {
+                  void clearWord();
+                }
                 if (e.code === "Enter" || e.keyCode === 13) {
                   const next =
                     document.querySelector<HTMLInputElement>(
@@ -460,7 +564,7 @@ export default function KanjiCardCreator() {
               onChange={(e) => {
                 setSureIfAdd(false);
                 setWordVal(e.target.value);
-                setPage(0);
+                if (!editing) setPage(0);
               }}
             />
             <input
@@ -491,64 +595,59 @@ export default function KanjiCardCreator() {
               }}
             />
           </div>
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-shrink-0 flex-wrap justify-center gap-2">
             <button
               className="ml-2 p-3"
               ref={addRef}
-              onClick={() => {
+              onClick={async () => {
                 if (!meaning && !sureIfAdd) {
                   return setSureIfAdd(true);
                 }
-                void (async () => {
-                  const couldntAdd = [];
-                  for (const sp of special) {
-                    const kanji = wordVal[sp];
-                    if (kanji) {
-                      const newW: QuizWord = getWordWithout(
-                        wordVal,
-                        sp,
-                        meaning,
-                        readings,
-                        addWithTags,
-                      );
+                const couldntAdd = [];
+                for (const sp of special) {
+                  const kanji = wordVal[sp];
+                  if (kanji) {
+                    const newW: QuizWord = getWordWithout(
+                      wordVal,
+                      sp,
+                      meaning,
+                      readings,
+                      addWithTags,
+                    );
 
-                      if (words?.find((w) => areWordsTheSame(w, newW))) {
-                        couldntAdd.push(newW);
-                        continue;
-                      }
-
-                      setWords((p) =>
-                        !p ? [toRQW(newW)] : [...p, toRQW(newW)],
-                      );
-                      await idb?.put("wordbank", newW);
-                      setSureIfAdd(false);
+                    if (words?.find((w) => areWordsTheSame(w, newW))) {
+                      couldntAdd.push(newW);
+                      continue;
                     }
+
+                    setWords((p) => (!p ? [toRQW(newW)] : [...p, toRQW(newW)]));
+                    await idb?.put("wordbank", newW);
+                    setSureIfAdd(false);
                   }
-                  if (couldntAdd.length > 0) {
-                    setPopup({
-                      text: (
-                        <div>
-                          Could not create words for:
-                          <div className="text-center">
-                            {couldntAdd.map((p) => (
-                              <div
-                                className="mb-2 border-2 text-xl"
-                                key={`${p.word},${p.special}`}
-                              >
-                                {toRQW(p).hint}
-                              </div>
-                            ))}
-                          </div>
+                }
+                if (couldntAdd.length > 0) {
+                  setPopup({
+                    text: (
+                      <div>
+                        Could not create words for:
+                        <div className="text-center">
+                          {couldntAdd.map((p) => (
+                            <div
+                              className="mb-2 border-2 text-xl"
+                              key={`${p.word},${p.special}`}
+                            >
+                              {toRQW(p).hint}
+                            </div>
+                          ))}
                         </div>
-                      ),
-                      borderColor: "red",
-                      time: 2000,
-                    });
-                  }
-                  setMeaning("");
-                  setWordVal("");
-                  setTimeout(() => mainInput.current?.focus(), 20);
-                })();
+                      </div>
+                    ),
+                    borderColor: "red",
+                    time: 2000,
+                  });
+                }
+                void clearWord();
+                setTimeout(() => mainInput.current?.focus(), 20);
               }}
             >
               {sureIfAdd ? (
@@ -560,93 +659,35 @@ export default function KanjiCardCreator() {
             <button
               className="ml-2 p-3"
               onClick={() => {
-                setWordVal("");
-                setMeaning("");
+                void clearWord();
               }}
             >
-              CLEAR
+              {editing ? "CANCEL" : "CLEAR"}
             </button>
-            <button
-              className="ml-2 p-3"
-              onClick={() => {
-                if (words) {
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                  const newVer = inc(defaultWordBank.version, "patch", true);
-                  if (!newVer) return;
-                  void navigator.clipboard.writeText(
-                    JSON.stringify({
-                      version: newVer,
-                      tags: tagColors,
-                      words: words.map((w) => fromRQW(w)),
-                    }),
-                  );
-                  setCopied(true);
-                }
-              }}
-            >
-              {copied ? <span className="text-green-500">DONE</span> : "COPY"}
-            </button>
-            <button
-              className="ml-2 p-3"
-              onClick={async () => {
-                setPopup({
-                  text: (close) => (
-                    <div className="text-center">
-                      Are yo usure you want to restore the wordbank to default
-                      (v{defaultWordBank.version})?
-                      <br />
-                      <button
-                        className="text-[red]"
-                        onClick={async () => {
-                          if (!idb) return;
-                          log`Restoring...`;
-                          await idb.clear("wordbank");
-                          await dbPutMultiple(
-                            idb,
-                            "wordbank",
-                            defaultWordBank.words,
-                          );
-                          setWords(() =>
-                            defaultWordBank.words.map((w) => toRQW(w)),
-                          );
-                          close();
-                        }}
-                      >
-                        YES
-                      </button>
-                      <button
-                        onClick={() => {
-                          close();
-                        }}
-                      >
-                        NO
-                      </button>
-                    </div>
-                  ),
-                  time: "user",
-                  borderColor: "red",
-                });
-              }}
-            >
-              RESTORE TO DEFAULT
-            </button>
-            {canUpdateBank && (
-              <button
-                className="ml-2 p-3"
-                onClick={() => {
-                  void updateBank();
-                }}
-              >
-                Update ({LS.getString(LS_KEYS.wordbank_ver) ?? "0.0.1"} =&gt;{" "}
-                {defaultWordBank.version})
-              </button>
-            )}
             <div>
               <div className="flex h-full flex-wrap content-center gap-2">
                 {[...new Set(addWithTags)].map((t) => {
                   return (
                     <div key={t} className="h-fit">
                       <TagLabel
+                        className="addWithTagsTag"
+                        onKeyDown={(e) => {
+                          const num = keyboradEventToNumber(e);
+                          if (num === -1) return;
+                          const allBtns =
+                            document.querySelectorAll<HTMLButtonElement>(
+                              "button.addWithTagsTag",
+                            );
+                          if (!tagColors) return;
+                          const btn = [...allBtns].find(
+                            (b) =>
+                              Object.keys(tagColors).indexOf(
+                                b.innerText.trim(),
+                              ) ===
+                              num - 1,
+                          );
+                          btn?.focus();
+                        }}
                         tag={t}
                         color={tagColors?.[t]?.color}
                         bgColor={tagColors?.[t]?.bg}
@@ -658,13 +699,33 @@ export default function KanjiCardCreator() {
                     </div>
                   );
                 })}
-                {(!tagColors ||
+                {(!tagColors || // no tagColors defined
                   !Object.keys(tagColors).reduce(
+                    // no more available tags
                     (p, n) => (!p ? p : addWithTags.includes(n)),
                     true,
                   )) && (
-                  <div className="h-fit">
+                  <div
+                    className="h-fit"
+                    tabIndex={new Set(addWithTags).size > 0 ? 0 : undefined}
+                    onKeyDown={(e) => {
+                      const num = keyboradEventToNumber(e);
+                      if (num === -1) return;
+                      const allBtns =
+                        document.querySelectorAll<HTMLButtonElement>(
+                          "button.addWithTagsTag",
+                        );
+                      if (!tagColors) return;
+                      const btn = [...allBtns].find(
+                        (b) =>
+                          Object.keys(tagColors).indexOf(b.innerText.trim()) ===
+                          num - 1,
+                      );
+                      btn?.focus();
+                    }}
+                  >
                     <TagLabel
+                      ref={addTagRef}
                       tag={"Add tag"}
                       onClick={() => {
                         setPopup({
@@ -672,11 +733,36 @@ export default function KanjiCardCreator() {
                           modalStyle: {
                             styles: { "--backdrop": "#fff6" },
                           },
+                          onOpen(d) {
+                            d?.focus();
+                          },
+                          onKeyDown(e, d) {
+                            const num = keyboradEventToNumber(e);
+                            if (num === -1) return;
+                            const buttons = d?.querySelectorAll("button");
+                            if (!buttons) return;
+                            if (!tagColors) return;
+                            const btn = [...buttons].find(
+                              (b) =>
+                                Object.keys(tagColors).indexOf(
+                                  b.innerText.trim(),
+                                ) ===
+                                num - 1,
+                            );
+                            btn?.focus();
+                          },
                           text(close) {
                             if (!tagColors) {
                               close(true);
                               return <></>;
                             }
+                            const addTag = (t: string) => {
+                              setAddWithTags((p) => [...p, t]);
+                              close();
+                              setTimeout(() => {
+                                mainInput.current?.focus();
+                              }, 100);
+                            };
                             return (
                               <>
                                 <div className="text-xl">Choose a tag</div>
@@ -686,11 +772,7 @@ export default function KanjiCardCreator() {
                                       <TagLabel
                                         tag={"UNTAGGED"}
                                         onClick={() => {
-                                          setAddWithTags((p) => [
-                                            ...p,
-                                            "UNTAGGED",
-                                          ]);
-                                          close();
+                                          addTag("UNTAGGED");
                                         }}
                                       />
                                     </div>
@@ -705,11 +787,7 @@ export default function KanjiCardCreator() {
                                           border={tc[1].border}
                                           color={tc[1].color}
                                           onClick={() => {
-                                            setAddWithTags((p) => [
-                                              ...p,
-                                              tc[0],
-                                            ]);
-                                            close();
+                                            addTag(tc[0]);
                                           }}
                                         />
                                       </div>
@@ -776,28 +854,16 @@ export default function KanjiCardCreator() {
                     if (!idb || !words) return;
                     log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
 
-                    const specials = q.multiSpecial ?? [q.special];
+                    const nWords = fromMRQWToQW(q).map((s) => ({ ...s, tags }));
 
-                    const disjoinedQs = specials.map((special) =>
-                      getWordWithout(
-                        q.word,
-                        special,
-                        q.meaning,
-                        q.readings,
-                        tags,
-                      ),
-                    );
-                    await dbPutMultiple(idb, "wordbank", disjoinedQs);
+                    await dbPutMultiple(idb, "wordbank", nWords);
                     setWords((prev) => {
                       if (!prev) return prev;
-                      log`disjoinedQ ${disjoinedQs}`;
-                      return prev
-                        .map(
-                          (p) =>
-                            disjoinedQs.find((dq) => areWordsTheSame(dq, p)) ??
-                            p,
-                        )
-                        .map((p) => ({ ...p, full: q.full, hint: q.hint }));
+                      return prev.map((p) => {
+                        const w = nWords.find((dq) => areWordsTheSame(dq, p));
+                        if (!w) return p;
+                        else return { ...w, full: q.full, hint: q.hint };
+                      });
                     });
                   };
                   return (
@@ -805,6 +871,19 @@ export default function KanjiCardCreator() {
                       key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
                       className="relative w-fit flex-grow"
                     >
+                      <button
+                        className="absolute left-2 top-1 border-none text-[red]"
+                        onClick={async () => {
+                          setWordVal(q.word);
+                          setReadings(q.readings);
+                          setMeaning(q.meaning);
+                          setSpecial(q.multiSpecial ?? [q.special]);
+                          setAddWithTags(q.tags ?? []);
+                          setEditing(q);
+                        }}
+                      >
+                        Edit
+                      </button>
                       <button
                         className="absolute right-2 top-1 border-none text-[red]"
                         onClick={async () => {

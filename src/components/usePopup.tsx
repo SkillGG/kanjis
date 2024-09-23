@@ -1,4 +1,4 @@
-import { type CSSProperties, useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 
 import popupCSS from "./popup.module.css";
 import { twMerge } from "tailwind-merge";
@@ -16,6 +16,11 @@ export const usePopup = () => {
         color?: string;
         modal?: boolean;
         onCancel?: () => void;
+        onKeyDown?: (
+          k: React.KeyboardEvent<HTMLDivElement>,
+          d?: HTMLDivElement,
+        ) => void;
+        onOpen?: (d?: HTMLDivElement) => void;
         contentStyle?: { className?: string; styles?: CSSProperties };
         modalStyle?: { className?: string; styles?: CSSProperties };
       } & (
@@ -32,9 +37,12 @@ export const usePopup = () => {
   >(null);
   const [popupOpen, setPopupOpen] = useState(false);
 
+  const divRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (popup === null) return;
     const spO = setTimeout(() => {
+      popup?.onOpen?.(divRef.current ?? undefined);
       setPopupOpen(true);
     }, 0);
 
@@ -70,6 +78,11 @@ export const usePopup = () => {
       <>
         {popup && (
           <div
+            tabIndex={popup.onKeyDown ? 0 : undefined}
+            ref={divRef}
+            onKeyDown={(e) =>
+              popup?.onKeyDown?.(e, divRef.current ?? undefined)
+            }
             className={twMerge(
               popupCSS.popup,
               popup.modal && popupCSS.popupModal,

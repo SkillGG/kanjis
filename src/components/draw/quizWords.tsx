@@ -178,6 +178,34 @@ export const getWordWithout = (
   } as QuizWord;
 };
 
+export type MultiRQW = ReactQuizWord & { multiSpecial?: number[] };
+
+export const fromMRQWToQW = (mrqw: MultiRQW): QuizWord[] => {
+  const specials = mrqw.multiSpecial ?? [mrqw.special];
+
+  const disjoinedQs = specials.map((special) =>
+    getWordWithout(mrqw.word, special, mrqw.meaning, mrqw.readings, mrqw.tags),
+  );
+  return disjoinedQs;
+};
+
+export const fromMRQWToRQW = (mrqw: MultiRQW): ReactQuizWord[] => {
+  const specials = mrqw.multiSpecial ?? [mrqw.special];
+
+  const disjoinedQs = specials.map<ReactQuizWord>((special) => ({
+    ...getWordWithout(
+      mrqw.word,
+      special,
+      mrqw.meaning,
+      mrqw.readings,
+      mrqw.tags,
+    ),
+    full: mrqw.full,
+    hint: mrqw.hint,
+  }));
+  return disjoinedQs;
+};
+
 export const fromRQW = ({
   blanked,
   kanji,

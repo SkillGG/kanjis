@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { type TagInfo } from "../../appStore";
-import { log } from "@/utils/utils";
 
 const TagEdit = ({
   name,
@@ -35,30 +34,38 @@ const TagEdit = ({
     !data.bg || data.bg === "transparent",
   );
 
+  const curBGColor = bgColorTransparent ? "transparent" : bgColor;
+  const curBorderColor = borderColorTransparent ? "transparent" : borderColor;
+  const curTextColor = textColorTransparent ? "transparent" : textColor;
+
   return (
     <React.Fragment>
-      <input
-        className="text-center outline-none"
-        value={label}
-        onChange={(e) => {
-          setLabel(e.currentTarget.value);
-        }}
-      />
-      <input
-        onChange={(e) => {
-          setDesc(e.currentTarget.value);
-        }}
-        className="text-center outline-none"
-        value={desc}
-      />
-      <div className="flex flex-col items-center">
+      <div className="col-[1/span_4] flex flex-wrap gap-x-2 sm:flex-nowrap lg:col-span-2">
+        <input
+          className="span col-span-2 min-w-10 flex-grow text-center outline-none"
+          value={label}
+          style={{ borderBottomStyle: "dotted" }}
+          onChange={(e) => {
+            setLabel(e.currentTarget.value);
+          }}
+        />
+        <input
+          onChange={(e) => {
+            setDesc(e.currentTarget.value);
+          }}
+          style={{ borderBottomStyle: "dotted" }}
+          className="col-span-2 min-w-10 flex-grow text-center outline-none"
+          value={desc}
+        />
+      </div>
+      <div className="flex flex-col items-center lg:col-[3]">
         <input
           type="color"
           disabled={textColorTransparent}
           value={textColor}
           onChange={(e) => setTextColor(e.currentTarget.value)}
         />
-        <label>
+        <label className="text-center">
           Transparent{" "}
           <input
             type="checkbox"
@@ -69,14 +76,14 @@ const TagEdit = ({
           />
         </label>
       </div>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center lg:col-[4]">
         <input
           type="color"
           disabled={borderColorTransparent}
           value={borderColor}
           onChange={(e) => setBorderColor(e.currentTarget.value)}
         />
-        <label>
+        <label className="text-center">
           Transparent{" "}
           <input
             type="checkbox"
@@ -87,14 +94,14 @@ const TagEdit = ({
           />
         </label>
       </div>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center lg:col-[5]">
         <input
           type="color"
           disabled={bgColorTransparent}
           value={bgColor}
           onChange={(e) => setBgColor(e.currentTarget.value)}
         />
-        <label>
+        <label className="text-center">
           Transparent{" "}
           <input
             type="checkbox"
@@ -105,8 +112,17 @@ const TagEdit = ({
           />
         </label>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col justify-center gap-y-2 lg:col-[6]">
         <button
+          disabled={
+            !(
+              name !== label ||
+              data.description !== desc ||
+              data.bg !== curBGColor ||
+              data.border !== curBorderColor ||
+              data.color !== curTextColor
+            )
+          }
           onClick={() => {
             apply({
               name: label,
@@ -117,7 +133,11 @@ const TagEdit = ({
                 color: textColorTransparent ? "transparent" : textColor,
               },
             });
+            if (name !== label) {
+              setLabel(name);
+            }
           }}
+          className="save-tag-btn border-[lime] disabled:border-[gray] disabled:text-[gray]"
         >
           SAVE
         </button>
@@ -125,6 +145,7 @@ const TagEdit = ({
           onClick={() => {
             remove();
           }}
+          className="border-[red]"
         >
           DELETE
         </button>
@@ -157,7 +178,7 @@ export const TagEditor = ({
   return (
     <>
       <dialog
-        className="rounded-xl border-2 border-[white] p-4 backdrop:h-full backdrop:w-full backdrop:bg-slate-900 backdrop:opacity-70"
+        className="relative max-h-[90vh] flex-col rounded-xl border-2 border-[white] p-4 backdrop:h-full backdrop:w-full backdrop:bg-slate-900 backdrop:opacity-70"
         ref={dialogRef}
         onPointerDown={(event) => {
           const dialog = dialogRef.current;
@@ -173,57 +194,67 @@ export const TagEditor = ({
           }
         }}
       >
+        <button
+          className="absolute right-[0.5rem] top-[0.5rem] m-0 flex h-[1.2rem] w-[1.2rem] items-center justify-center rounded-[50%] border-2 border-[red] p-0 text-[red] hover:bg-[red]"
+          onClick={close}
+        ></button>
         <div className="text-xl">Tag Editor</div>
-        <div
-          className="grid gap-2"
-          style={{
-            gridTemplateColumns: "3fr 3fr 1fr 1fr 1fr min-content",
-          }}
-        >
-          <div className="text-center">Name</div>
-          <div className="text-center">Description</div>
-          <div className="text-center">Text color</div>
-          <div className="text-center">Border color</div>
-          <div className="text-center">Background color</div>
-          <div></div>
-          {Object.entries(tags).map(([name, data]) => {
-            return (
-              <TagEdit
-                data={data}
-                name={name}
-                key={name}
-                remove={() => {
-                  log`Removing ${name} from ${tags}`;
-                  const NTags = tags;
-                  delete NTags[name];
-                  log`${NTags}`;
-                  setTags(NTags);
+        <div className="overflow-scroll">
+          <div className="grid grid-cols-[1fr_1fr_1fr_1fr] gap-2 overflow-scroll lg:grid-cols-[3fr_3fr_1fr_1fr_1fr_min-content]">
+            <div className="col-[1/span_4] flex flex-wrap gap-x-2 sm:flex-nowrap lg:col-span-2">
+              <div className="flex-grow basis-[350px] text-center">Name</div>
+              <div className="flex-grow basis-[350px] text-center">
+                Description
+              </div>
+            </div>
+            <div className="flex items-center justify-center text-center">
+              Text color
+            </div>
+            <div className="flex items-center justify-center text-center">
+              Border color
+            </div>
+            <div className="flex items-center justify-center text-center">
+              Background color
+            </div>
+            <hr className="col-[1/span_4] border-2 lg:col-[1/span_6]" />
+            {Object.entries(tags).map(([name, data]) => {
+              return (
+                <React.Fragment key={name}>
+                  <TagEdit
+                    data={data}
+                    name={name}
+                    remove={() => {
+                      const NTags = tags;
+                      delete NTags[name];
+                      setTags(NTags);
+                    }}
+                    apply={(d) => {
+                      if (name === d.name) {
+                        setTags({ ...tags, [name]: d.data });
+                      } else {
+                        const NTags = {
+                          ...tags,
+                          [d.name]: d.data,
+                        };
+                        delete NTags[name];
+                        setTags(NTags);
+                      }
+                    }}
+                  />
+                  <hr className="col-[1/span_4] border-2 lg:col-[1/span_6]" />
+                </React.Fragment>
+              );
+            })}
+            <div className="col-[1/span_4] text-center lg:col-[1/span_6]">
+              <button
+                className="text-xl"
+                onClick={() => {
+                  setTags({ ...tags, newTag: { description: "" } });
                 }}
-                apply={(d) => {
-                  if (name === d.name) {
-                    setTags({ ...tags, [name]: d.data });
-                  } else {
-                    const NTags = {
-                      ...tags,
-                      [d.name]: d.data,
-                    };
-                    delete NTags[name];
-                    log`${NTags}`;
-                    setTags(NTags);
-                  }
-                }}
-              />
-            );
-          })}
-          <div className="text-center" style={{ gridColumn: "1 / span 6" }}>
-            <button
-              className="text-xl"
-              onClick={() => {
-                setTags({ ...tags, newTag: { description: "" } });
-              }}
-            >
-              ADD
-            </button>
+              >
+                ADD
+              </button>
+            </div>
           </div>
         </div>
       </dialog>

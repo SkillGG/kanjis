@@ -200,7 +200,7 @@ export const useAppStore = create<Store>((_set, _get) => {
       return db;
     },
     setTagColors(colors) {
-      _set((prev) => ({ ...prev, tagColors: colors }));
+      _set((prev) => ({ ...prev, tagColors: { ...colors } }));
     },
     setShouldUpdateKanjiList(su) {
       _set((prev) => ({ ...prev, shouldUpdateKanjiList: su }));
@@ -275,8 +275,32 @@ if (typeof window !== "undefined") {
   useAppStore.subscribe((state, prev) => {
     if (state.settings !== prev.settings)
       localStorage.setItem(LS_KEYS.settings, JSON.stringify(state.settings));
-    if (state.tagColors !== prev.tagColors)
+    if (state.tagColors !== prev.tagColors) {
       localStorage.setItem(LS_KEYS.tag_colors, JSON.stringify(state.tagColors));
+      if (state.tagColors != null) {
+        let i = 0;
+        for (const [tag, colors] of Object.entries(defaultWordBank.tags)) {
+          if (!(tag in state.tagColors)) {
+            useAppStore.getState().setTagColors(
+              Object.fromEntries<TagInfo>(
+                Object.entries(state.tagColors).reduce<[string, TagInfo][]>(
+                  (p, v, ix) => {
+                    if (i === ix) {
+                      log`Force adding tag ${tag},${colors} @ ${i}`;
+                      return [...p, [tag, colors], v];
+                    } else {
+                      return [...p, v];
+                    }
+                  },
+                  [],
+                ),
+              ),
+            );
+          }
+          i++;
+        }
+      }
+    }
   });
 
   const fixOldDB = async (db: AppDB) => {
