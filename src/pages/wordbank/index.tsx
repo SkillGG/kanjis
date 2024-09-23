@@ -7,7 +7,7 @@ import {
   type ReactQuizWord,
   toRQW,
 } from "@/components/draw/quizWords";
-import { asyncNoop, es5With, log } from "@/utils/utils";
+import { asyncNoop, log } from "@/utils/utils";
 import React, {
   useCallback,
   useEffect,
@@ -57,6 +57,7 @@ import TagLabel from "@/components/draw/tagBadge";
 import { TagEditor } from "@/components/wordbank/tagEditor";
 import SettingBox from "@/components/settingBox";
 import { dbPutMultiple, useAppStore } from "@/appStore";
+import { env } from "@/env";
 
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
@@ -297,6 +298,27 @@ export default function KanjiCardCreator() {
           word into the main field, the green kanji will be made
           &quot;guessable&quot;.
         </div>
+        {env.NEXT_PUBLIC_DEV === "development" && (
+          <button
+            className="mr-2"
+            onClick={() => {
+              const newWBWords = defaultWordBank.words.map((w) => {
+                return getWordWithout(
+                  w.word,
+                  w.special,
+                  w.meaning,
+                  w.readings,
+                  w.tags,
+                );
+              });
+              void navigator.clipboard.writeText(
+                JSON.stringify({ ...defaultWordBank, words: newWBWords }),
+              );
+            }}
+          >
+            Fix wordbank
+          </button>
+        )}
         <button className="mr-2" onClick={() => setOpenTagEditor(true)}>
           Edit tags
         </button>
@@ -482,15 +504,13 @@ export default function KanjiCardCreator() {
                   for (const sp of special) {
                     const kanji = wordVal[sp];
                     if (kanji) {
-                      const newW: QuizWord = {
-                        kanji: kanji,
-                        readings,
-                        special: sp,
-                        word: wordVal,
+                      const newW: QuizWord = getWordWithout(
+                        wordVal,
+                        sp,
                         meaning,
-                        tags: addWithTags,
-                        blanked: getWordWithout(wordVal, sp),
-                      };
+                        readings,
+                        addWithTags,
+                      );
 
                       if (words?.find((w) => areWordsTheSame(w, newW))) {
                         couldntAdd.push(newW);
@@ -758,21 +778,27 @@ export default function KanjiCardCreator() {
 
                     const specials = q.multiSpecial ?? [q.special];
 
-                    for (const special of specials) {
-                      const disjoinedQ = { ...q, special };
-                      await idb.put("wordbank", {
-                        ...fromRQW({ ...disjoinedQ, special }),
+                    const disjoinedQs = specials.map((special) =>
+                      getWordWithout(
+                        q.word,
+                        special,
+                        q.meaning,
+                        q.readings,
                         tags,
-                      });
-                      setWords((prev) => {
-                        if (!prev) return prev;
-                        return es5With(
-                          prev,
-                          prev.findIndex((w) => areWordsTheSame(disjoinedQ, w)),
-                          { ...disjoinedQ, tags },
-                        );
-                      });
-                    }
+                      ),
+                    );
+                    await dbPutMultiple(idb, "wordbank", disjoinedQs);
+                    setWords((prev) => {
+                      if (!prev) return prev;
+                      log`disjoinedQ ${disjoinedQs}`;
+                      return prev
+                        .map(
+                          (p) =>
+                            disjoinedQs.find((dq) => areWordsTheSame(dq, p)) ??
+                            p,
+                        )
+                        .map((p) => ({ ...p, full: q.full, hint: q.hint }));
+                    });
                   };
                   return (
                     <div

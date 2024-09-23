@@ -157,8 +157,25 @@ export const getReadingsWithout = (
   );
 };
 
-export const getWordWithout = (word: string, special: number): string => {
-  return [...word].map((q, i) => (i === special ? "〇" : q)).join("");
+export const getWordWithout = (
+  word: string,
+  special: number,
+  meaning: string,
+  readings: string[],
+  tags?: string[],
+): QuizWord => {
+  return {
+    word,
+    special,
+    kanji: word.charAt(special),
+    blanked: word
+      .split("")
+      .map((k, i) => (i === special ? "〇" : k))
+      .join(""),
+    meaning: meaning,
+    readings,
+    tags,
+  } as QuizWord;
 };
 
 export const fromRQW = ({

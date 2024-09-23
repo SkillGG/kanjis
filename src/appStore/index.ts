@@ -1,4 +1,4 @@
-import { err } from "@/utils/utils";
+import { err, log } from "@/utils/utils";
 import { create } from "zustand";
 import {
   createLSStore,
@@ -19,7 +19,7 @@ import {
   DEFAULT_KANJI_VERSION,
   DEFAULT_KANJIS,
 } from "../components/list/defaultKanji";
-import { type QuizWord } from "../components/draw/quizWords";
+import { getWordWithout, type QuizWord } from "../components/draw/quizWords";
 import { type DrawSessionData } from "../components/draw/drawSession";
 
 export const KanjiStatus = ["new", "learning", "completed"] as const;
@@ -69,7 +69,7 @@ export const DEFAULT_SETTINGS: Settings = {
 
 export const defaultDBSchema: DBInit<AppDBSchema> = {
   name: "kanjiDB",
-  version: 16,
+  version: 17,
   seed(db) {
     if (db.objectStoreNames.contains("kanji")) {
       void db.count("kanji").then((q) => {
@@ -279,6 +279,19 @@ if (typeof window !== "undefined") {
       localStorage.setItem(LS_KEYS.tag_colors, JSON.stringify(state.tagColors));
   });
 
+  const fixOldDB = async (db: AppDB) => {
+    // fix all word "kanji" fields!
+    const allKanjis = await db.getAll("wordbank");
+    log`Fixing an old database!`;
+    await dbPutMultiple(
+      db,
+      "wordbank",
+      allKanjis.map((k) =>
+        getWordWithout(k.word, k.special, k.meaning, k.readings, k.tags),
+      ),
+    );
+  };
+
   void (async () => {
     const db = await openDB<AppDBSchema>(
       defaultDBSchema.name,
@@ -292,6 +305,7 @@ if (typeof window !== "undefined") {
         },
         upgrade(database, oV, nV, transaction, ev) {
           defaultDBSchema.init?.(database, oV, nV, transaction, ev);
+          if (oV <= 16) setTimeout(() => void fixOldDB(database), 100);
         },
       },
     );
