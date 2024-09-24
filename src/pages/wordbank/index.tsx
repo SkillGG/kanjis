@@ -731,14 +731,7 @@ export default function KanjiCardCreator() {
                           num - 1,
                       );
 
-                      if (document.activeElement === btn) {
-                        setTimeout(() => {
-                          meaningInput.current?.focus();
-                        }, 200);
-                        btn?.click();
-                      } else {
-                        btn?.focus();
-                      }
+                      btn?.focus();
                     }}
                   >
                     <TagLabel
