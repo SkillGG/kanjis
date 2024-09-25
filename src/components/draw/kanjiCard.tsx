@@ -91,7 +91,10 @@ export const KanjiCard = ({
           {!disableButtons && (
             <button
               style={{ ...styles.buttons }}
-              className={classNames.buttons}
+              className={twMerge(
+                classNames.buttons,
+                "min-h-20 min-w-20 sm:min-h-10 sm:min-w-10",
+              )}
               ref={flipRef}
               onClick={() => {
                 setSide("answer");
@@ -131,7 +134,7 @@ export const KanjiCard = ({
                   });
                   setSide("quiz");
                 }}
-                className="border-green-500 px-4 hover:bg-green-950 hover:text-green-300"
+                className="min-h-20 min-w-20 border-green-500 px-4 hover:bg-green-950 hover:text-green-300 sm:min-h-10 sm:min-w-10"
               >
                 Good
               </button>
@@ -145,7 +148,7 @@ export const KanjiCard = ({
                   });
                   setSide("quiz");
                 }}
-                className="border-orange-500 px-4 hover:bg-orange-950 hover:text-orange-300"
+                className="min-h-20 min-w-20 border-orange-500 px-4 hover:bg-orange-950 hover:text-orange-300 sm:min-h-10 sm:min-w-10"
               >
                 OK
               </button>
@@ -159,7 +162,7 @@ export const KanjiCard = ({
                   });
                   setSide("quiz");
                 }}
-                className="border-red-500 px-4 hover:bg-red-950 hover:text-red-300"
+                className="min-h-20 min-w-20 border-red-500 px-4 hover:bg-red-950 hover:text-red-300 sm:min-h-10 sm:min-w-10"
               >
                 Bad
               </button>
