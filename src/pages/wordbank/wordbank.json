@@ -1,5 +1,5 @@
 {
-  "version": "0.3.2",
+  "version": "0.3.3",
   "tags": {
     "BKB_vol1": {
       "description": "Basic Kanji Book vol.1",
@@ -16,7 +16,7 @@
     "自動詞": {
       "description": "Intransitive verb",
       "bg": "transparent",
-      "border": "#ff6fd8",
+      "border": "#6a780c",
       "color": "#ffffff"
     },
     "他動詞": {
@@ -443,24 +443,6 @@
       "special": 1,
       "word": "明日",
       "tags": ["BKB_vol1", "副詞", "名詞"]
-    },
-    {
-      "blanked": "〇び",
-      "kanji": "遊",
-      "meaning": "play, recreation",
-      "readings": ["あそ", ""],
-      "special": 0,
-      "word": "遊び",
-      "tags": ["BKB_vol2", "名詞"]
-    },
-    {
-      "blanked": "遊〇",
-      "kanji": "び",
-      "meaning": "play, recreation",
-      "readings": ["あそ", ""],
-      "special": 1,
-      "word": "遊び",
-      "tags": ["BKB_vol2", "名詞"]
     },
     {
       "blanked": "〇ぶ",
@@ -5950,24 +5932,6 @@
       "readings": ["かん", "れい", "ぜん", "せん"],
       "special": 3,
       "word": "寒冷前線",
-      "tags": ["BKB_vol2", "名詞"]
-    },
-    {
-      "blanked": "〇ェット機",
-      "kanji": "ジ",
-      "meaning": "a jet airplane",
-      "readings": ["", "", "", "", "き"],
-      "special": 0,
-      "word": "ジェット機",
-      "tags": ["BKB_vol2", "名詞"]
-    },
-    {
-      "blanked": "ジェット〇",
-      "kanji": "機",
-      "meaning": "a jet airplane",
-      "readings": ["", "", "", "", "き"],
-      "special": 4,
-      "word": "ジェット機",
       "tags": ["BKB_vol2", "名詞"]
     },
     {
@@ -21433,33 +21397,6 @@
       "tags": ["BKB_vol1", "名詞"]
     },
     {
-      "blanked": "手伝〇",
-      "kanji": "う",
-      "meaning": "to help, to aid",
-      "readings": ["て", "つだ", ""],
-      "special": 2,
-      "word": "手伝う",
-      "tags": ["BKB_vol2", "他動詞"]
-    },
-    {
-      "blanked": "〇伝う",
-      "kanji": "手",
-      "meaning": "to help, to aid",
-      "readings": ["て", "つだ", ""],
-      "special": 0,
-      "word": "手伝う",
-      "tags": ["BKB_vol2", "他動詞"]
-    },
-    {
-      "blanked": "手〇う",
-      "kanji": "伝",
-      "meaning": "to help, to aid",
-      "readings": ["て", "つだ", ""],
-      "special": 1,
-      "word": "手伝う",
-      "tags": ["BKB_vol2", "他動詞"]
-    },
-    {
       "blanked": "〇道",
       "kanji": "鉄",
       "meaning": "a railroad",
@@ -25067,24 +25004,6 @@
       "special": 0,
       "word": "眠い",
       "tags": ["BKB_vol2", "形容詞"]
-    },
-    {
-      "blanked": "〇る",
-      "kanji": "眠",
-      "meaning": "to sleep",
-      "readings": ["ねむ", ""],
-      "special": 0,
-      "word": "眠る",
-      "tags": ["BKB_vol2", "自動詞"]
-    },
-    {
-      "blanked": "眠〇",
-      "kanji": "る",
-      "meaning": "to sleep",
-      "readings": ["ねむ", ""],
-      "special": 1,
-      "word": "眠る",
-      "tags": ["BKB_vol2", "自動詞"]
     },
     {
       "blanked": "〇る",
@@ -34102,6 +34021,51 @@
       "readings": ["わ"],
       "special": 0,
       "word": "和",
+      "tags": ["BKB_vol2", "名詞"]
+    },
+    {
+      "word": "手伝う",
+      "special": 0,
+      "kanji": "手",
+      "blanked": "〇伝う",
+      "meaning": "to help, to aid",
+      "readings": ["て", "つだ", ""],
+      "tags": ["BKB_vol2", "他動詞"]
+    },
+    {
+      "word": "手伝う",
+      "special": 1,
+      "kanji": "伝",
+      "blanked": "手〇う",
+      "meaning": "to help, to aid",
+      "readings": ["て", "つだ", ""],
+      "tags": ["BKB_vol2", "他動詞"]
+    },
+    {
+      "word": "眠る",
+      "special": 0,
+      "kanji": "眠",
+      "blanked": "〇る",
+      "meaning": "to sleep",
+      "readings": ["ねむ", ""],
+      "tags": ["BKB_vol2", "自動詞"]
+    },
+    {
+      "word": "ジェット機",
+      "special": 4,
+      "kanji": "機",
+      "blanked": "ジェット〇",
+      "meaning": "a jet airplane",
+      "readings": ["", "", "", "", "き"],
+      "tags": ["BKB_vol2", "名詞"]
+    },
+    {
+      "word": "遊び",
+      "special": 0,
+      "kanji": "遊",
+      "blanked": "〇び",
+      "meaning": "play, recreation",
+      "readings": ["あそ", ""],
       "tags": ["BKB_vol2", "名詞"]
     }
   ]
