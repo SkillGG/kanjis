@@ -80,7 +80,7 @@ export default function DrawSession() {
 
   useEffect(() => {
     if (!sessionData) return;
-    if (!words) return;
+    if (!areWordsLoaded) return;
     for (const kanji of sessionData.sessionKanjis) {
       if (!words.find((w) => w.kanji === kanji)) {
         setSessionData((prev) =>
@@ -96,7 +96,7 @@ export default function DrawSession() {
         );
       }
     }
-  }, [sessionData, words]);
+  }, [areWordsLoaded, sessionData, words]);
 
   const closeTheSession = useCallback(async () => {
     if (!sessionData) return;
