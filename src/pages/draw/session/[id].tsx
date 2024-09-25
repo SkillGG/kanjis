@@ -36,6 +36,8 @@ export default function DrawSession() {
 
   const words = useAppStore((s) => s.words);
 
+  const kanji = useAppStore((s) => s.kanji);
+
   const [disableAnswering, setDisableAnswering] = useState(false);
 
   const setSettings = useAppStore((s) => s.setSettings);
@@ -297,7 +299,7 @@ export default function DrawSession() {
                   ],
                 }
               : sessionData;
-            await idb.put("draw", newSession);
+            void idb.put("draw", newSession);
             setSessionData(() => newSession);
 
             const allWPoints = allWords?.map((word) => {
@@ -326,7 +328,7 @@ export default function DrawSession() {
                 };
 
                 if (autoMarkKanjiAsCompleted) {
-                  const listKanji = await idb.getAll("kanji");
+                  const listKanji = kanji;
 
                   const curKanji = listKanji.find(
                     (k) => k.kanji === result.kanji,
