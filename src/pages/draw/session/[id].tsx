@@ -299,7 +299,7 @@ export default function DrawSession() {
                   ],
                 }
               : sessionData;
-            void idb.put("draw", newSession);
+            await idb.put("draw", newSession);
             setSessionData(() => newSession);
 
             const allWPoints = allWords?.map((word) => {
