@@ -91,12 +91,44 @@ export const getReadings = (
             <React.Fragment key={`word_reading_${r}_${i}`}>
               <span
                 className={twMerge(
-                  specials?.includes(i) && kanjiCSS["special-kanji"],
                   style?.kanji?.className,
+                  "relative z-[1] block bg-transparent",
                 )}
                 style={style?.kanji?.style}
               >
                 {word[i]}
+                <div className="absolute left-0 top-0 z-[-1] mt-[-0.15em] hidden w-full items-center justify-center bg-transparent sm:flex">
+                  <svg
+                    className="h-full w-full bg-transparent"
+                    viewBox="0,0,100,100"
+                  >
+                    <rect
+                      width="100"
+                      height="100"
+                      strokeWidth={1}
+                      fill="transparent"
+                      stroke="red"
+                    />
+                    <line
+                      x1="50"
+                      x2="50"
+                      y1="0"
+                      y2="100"
+                      stroke="red"
+                      strokeWidth={1}
+                      strokeDasharray="4,4"
+                    />
+                    <line
+                      x1="0"
+                      x2="100"
+                      y1="50"
+                      y2="50"
+                      stroke="red"
+                      strokeWidth={1}
+                      strokeDasharray="4,4"
+                    />
+                  </svg>
+                </div>
               </span>
               <rt
                 style={{
@@ -136,13 +168,16 @@ export const getReadingsWithout = (
       </div>
       <ruby
         style={{ ...style?.ruby?.style }}
-        className={style?.ruby?.className}
+        className={twMerge("z-10", style?.ruby?.className)}
       >
         {readings.map((r, i) => {
           return (
             <React.Fragment key={`word_special_reading_${r}_${i}`}>
               <span
-                className={twMerge(style?.kanji?.className)}
+                className={twMerge(
+                  style?.kanji?.className,
+                  "relative z-[1] block bg-transparent",
+                )}
                 style={style?.kanji?.style}
               >
                 {specials.includes(i) ? "〇" : word[i]}
