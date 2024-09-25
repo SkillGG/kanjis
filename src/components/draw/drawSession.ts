@@ -2,6 +2,7 @@ export type SessionResult = {
   kanji: string;
   word: string;
   result: number;
+  notAnswered?: true;
   completed?: true;
 };
 

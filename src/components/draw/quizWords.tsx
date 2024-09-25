@@ -1,5 +1,5 @@
 import React, { type CSSProperties } from "react";
-import { type SessionResult, type DrawSessionData } from "./drawSession";
+import { type DrawSessionData } from "./drawSession";
 import { log, randomInt, randomStartWeighedInt } from "@/utils/utils";
 import Link from "next/link";
 import Router from "next/router";
@@ -286,7 +286,9 @@ export const getDistanceFromLastKanji = (
 ): number => {
   if (!session.sessionResults.find((q) => q.kanji === kanji)) return Infinity;
   let num = 0;
-  const revSRs = [...session.sessionResults].reverse();
+  const revSRs = [
+    ...session.sessionResults.filter((f) => !f.notAnswered),
+  ].reverse();
   for (const result of revSRs) {
     if (result.kanji === kanji) return num;
     num++;
@@ -300,7 +302,9 @@ export const getDistanceFromLastWord = (
 ): number => {
   if (!session.sessionResults.find((q) => q.word === word)) return Infinity;
   let num = 0;
-  const revSRs = [...session.sessionResults].reverse();
+  const revSRs = [
+    ...session.sessionResults.filter((f) => !f.notAnswered),
+  ].reverse();
   for (const result of revSRs) {
     if (result.word === word) return num;
     num++;
@@ -308,23 +312,19 @@ export const getDistanceFromLastWord = (
   return Infinity;
 };
 
-export const getAllResultsForWord = (
-  session: DrawSessionData,
-  word: string,
-): SessionResult[] => session.sessionResults.filter((f) => f.word === word);
-
 export const getAllWordsWithKanjiAndTags = (
   words: QuizWord[],
   kanji: string,
   tags?: string[],
 ) => {
   const allWords = getAllWordsWithKanji(words, kanji); // get kanji
+  // log`All words: ${allWords}`;
   return allWords.filter(
     (w) =>
       !tags
         ? true
-        : tags.includes("UNTAGGED")
-          ? !w.tags || w.tags.length === 0
+        : !w.tags || w.tags.length === 0
+          ? tags.includes("UNTAGGED")
           : w.tags?.some((t) => tags?.includes(t)), // remove words that don't match the tag group
   );
 };
@@ -339,12 +339,14 @@ export const getAllWordsElligibleForKanji = (
     kanji,
     session.sessionWordTags,
   );
-  return allWords
-    .map((w) => ({
-      ...w,
-      points: getWordPoints(session, w.word, w.kanji),
-      dist: getDistanceFromLastWord(session, w.word),
-    })) // calculate points and distance from last appearance for all words
+  // log`All Words (w/ tags, ${session.sessionWordTags}): ${allWords}`;
+  const wordsWPoints = allWords.map((w) => ({
+    ...w,
+    points: getWordPoints(session, w.word, w.kanji),
+    dist: getDistanceFromLastWord(session, w.word),
+  })); // calculate points and distance from last appearance for all words
+  // log`Words w/ points: ${wordsWPoints}`;
+  return wordsWPoints
     .filter((word) => {
       return (
         word.dist >=
@@ -358,7 +360,7 @@ export const isKanjiCompleted = (
   session: DrawSessionData,
   kanji: string,
 ): boolean =>
-  !!session.sessionResults.find((r) => r.kanji === kanji && r.completed);
+  session.sessionResults.some((r) => r.kanji === kanji && r.completed);
 
 export async function* nextWordGenerator(
   startingData: DrawSessionData,
@@ -404,6 +406,7 @@ export async function* nextWordGenerator(
         dbWords,
         k,
       );
+      // log`${k}: ${words}`;
       return {
         kanji: k,
         words,
@@ -431,6 +434,7 @@ export async function* nextWordGenerator(
 
     const possibleKanji = kanjiWithWords
       .filter((z, _, a) => {
+        // log`${z.kanji}: ${z.dist} > ${minDIST} && ${z.words.length} >= 1`;
         return completed.length === a.length
           ? true
           : (notCompleted.some((k) => k.kanji === z.kanji) ||

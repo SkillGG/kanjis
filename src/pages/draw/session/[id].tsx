@@ -1,8 +1,12 @@
-import { type DrawSessionData } from "@/components/draw/drawSession";
+import {
+  type SessionResult,
+  type DrawSessionData,
+} from "@/components/draw/drawSession";
 import { type KanjiCardSide } from "@/components/draw/kanjiCard";
 import { DEFAULT_POINTS_TO_COMPLETE, Quizlet } from "@/components/draw/Quizlet";
 import {
   getAllWordsWithKanjiAndTags,
+  getDistanceFromLastWord,
   getWordPoints,
   isKanjiCompleted,
 } from "@/components/draw/quizWords";
@@ -260,26 +264,43 @@ export default function DrawSession() {
           onSideChanged={setSide}
           session={sessionData}
           commitResult={async (result) => {
+            const allWords = getAllWordsWithKanjiAndTags(
+              words,
+              result.kanji,
+              sessionData.sessionWordTags,
+            );
+
+            const tweakPoints = allWords.map<SessionResult>((w) =>
+              w.word === result.word
+                ? result
+                : {
+                    kanji: w.kanji,
+                    result: allWords.length / 10,
+                    word: w.word,
+                    notAnswered: true,
+                  },
+            );
+
             if (!sessionData) throw new Error("Session Data not found!");
             const newSession: DrawSessionData = sessionData
               ? {
                   ...sessionData,
-                  sessionResults: [...sessionData?.sessionResults, result],
+                  sessionResults: [
+                    ...sessionData?.sessionResults,
+                    ...tweakPoints,
+                  ],
                 }
               : sessionData;
             await idb.put("draw", newSession);
             setSessionData(() => newSession);
 
-            const allWords = getAllWordsWithKanjiAndTags(
-              words,
-              result.kanji,
-              newSession.sessionWordTags,
-            );
-
             const allWPoints = allWords?.map((word) => {
-              return newSession.sessionResults
-                .filter((r) => r.word === word.word)
-                .reduce((p, n) => p + n.result, 0);
+              const dist = getDistanceFromLastWord(newSession, word.word);
+              return dist === Infinity
+                ? 0
+                : newSession.sessionResults
+                    .filter((r) => r.word === word.word)
+                    .reduce((p, n) => p + n.result, 0);
             });
 
             const PTC =
@@ -400,6 +421,11 @@ export default function DrawSession() {
           <div className="mx-auto mt-3 flex flex-wrap justify-center gap-1 text-center sm:max-w-[50%]">
             {words &&
               sessionData.sessionKanjis.map((kanji) => {
+                const points = getAllWordsWithKanjiAndTags(
+                  words,
+                  kanji,
+                  sessionData.sessionWordTags,
+                );
                 if (isKanjiCompleted(sessionData, kanji)) {
                   return (
                     <div key={kanji}>
@@ -413,6 +439,7 @@ export default function DrawSession() {
                           status: "new",
                           type: "base",
                         }}
+                        overrideTitle={`${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}`, "")}`.trim()}
                         update={noop}
                         disabled
                         lvlBadge=""
@@ -421,11 +448,7 @@ export default function DrawSession() {
                     </div>
                   );
                 }
-                const points = getAllWordsWithKanjiAndTags(
-                  words,
-                  kanji,
-                  sessionData.sessionWordTags,
-                );
+
                 const PTC =
                   sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE;
                 return (
@@ -440,7 +463,7 @@ export default function DrawSession() {
                         status: "new",
                         type: "base",
                       }}
-                      overrideTitle={`${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}`, "")}`.trim()}
+                      overrideTitle={`${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}/${sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE}`, "")}`.trim()}
                       update={noop}
                       lvlBadge={`${points.reduce(
                         (p, w) =>
