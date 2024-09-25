@@ -22,14 +22,16 @@ export const randomStartWeighedInt = (
   const allNums = [...Array<number>(Math.abs(min - max) + 1)]
     .map((_, i) => min + i)
     .reverse();
-  const weightedNums = allNums.map(
-    (_, i) => (i + 1) * weight + i ** weight * weight,
-  );
-  const normalizer = 1 / weightedNums.reduce((p, n) => p + n);
-  const weighted = weightedNums.map((q) => q * normalizer);
-  const rand = Math.random();
-  for (let sum = 0, j = 0; sum < 1; j++) {
-    sum += weighted[j] ?? 0;
+  let wNSum = 0;
+  const weightedNums = allNums.map((_, i) => {
+    const newW = (i + 1) * weight + weight * i;
+    wNSum += newW;
+    return newW;
+  });
+  const rand = Math.random() * (wNSum - 1);
+
+  for (let sum = 0, j = 0; sum < wNSum; j++) {
+    sum += weightedNums[j] ?? 0;
     if (sum >= rand) {
       return allNums[j] ?? -1;
     }
@@ -45,14 +47,16 @@ export const randomEndWeighedInt = (
   const allNums = [...Array<number>(Math.abs(min - max) + 1)].map(
     (_, i) => min + i,
   );
-  const weightedNums = allNums.map(
-    (_, i) => (i + 1) * weight + i ** weight * weight,
-  );
-  const normalizer = 1 / weightedNums.reduce((p, n) => p + n);
-  const weighted = weightedNums.map((q) => q * normalizer);
-  const rand = Math.random();
-  for (let sum = 0, j = 0; sum < 1; j++) {
-    sum += weighted[j] ?? 0;
+  let wNSum = 0;
+  const weightedNums = allNums.map((_, i) => {
+    const newW = (i + 1) * weight + weight * i;
+    wNSum += newW;
+    return newW;
+  });
+  const rand = Math.random() * (wNSum - 1);
+
+  for (let sum = 0, j = 0; sum < wNSum; j++) {
+    sum += weightedNums[j] ?? 0;
     if (sum >= rand) {
       return allNums[j] ?? -1;
     }
