@@ -1,12 +1,12 @@
 import React, { type CSSProperties } from "react";
 import { type SessionResult, type DrawSessionData } from "./drawSession";
-import { log, randomStartWeighedInt } from "@/utils/utils";
+import { log, randomInt, randomStartWeighedInt } from "@/utils/utils";
 import Link from "next/link";
 import Router from "next/router";
 
 import kanjiCSS from "@/components/list/list.module.css";
 import { twMerge } from "tailwind-merge";
-import { type AppDB } from "../../appStore";
+import { useAppStore, type AppDB } from "../../appStore";
 
 export type QuizWord = {
   kanji: string;
@@ -22,6 +22,10 @@ export type ReactQuizWord = QuizWord & {
   full: React.ReactNode;
   hint: React.ReactNode;
 };
+
+export type MultiRQW = ReactQuizWord & { multiSpecial?: number[] };
+
+export type MultiQW = QuizWord & { multiSpecial?: number[] };
 
 export const areWordsTheSame = (
   k1: QuizWord,
@@ -67,7 +71,9 @@ export const getReadings = (
   if (specials)
     for (const special of specials)
       if (special > word.length - 1 || special < 0)
-        throw new Error("The special character is out of bounds!");
+        throw new Error(
+          `The special character is out of bounds! ${special} ${word.length}`,
+        );
   return (
     <>
       <div
@@ -157,13 +163,19 @@ export const getReadingsWithout = (
   );
 };
 
-export const getWordWithout = (
-  word: string,
-  special: number,
-  meaning: string,
-  readings: string[],
-  tags?: string[],
-): QuizWord => {
+export const getWordWithout = ({
+  meaning,
+  readings,
+  special,
+  word,
+  tags,
+}: {
+  word: string;
+  special: number;
+  meaning: string;
+  readings: string[];
+  tags?: string[];
+}): QuizWord => {
   return {
     word,
     special,
@@ -178,35 +190,24 @@ export const getWordWithout = (
   } as QuizWord;
 };
 
-export type MultiRQW = ReactQuizWord & { multiSpecial?: number[] };
-
-export const fromMRQWToQW = (mrqw: MultiRQW): QuizWord[] => {
+export const unfoldMRQW = (mrqw: MultiRQW): QuizWord[] => {
   const specials = mrqw.multiSpecial ?? [mrqw.special];
 
   const disjoinedQs = specials.map((special) =>
-    getWordWithout(mrqw.word, special, mrqw.meaning, mrqw.readings, mrqw.tags),
+    getWordWithout({ ...mrqw, special }),
   );
   return disjoinedQs;
 };
 
-export const fromMRQWToRQW = (mrqw: MultiRQW): ReactQuizWord[] => {
-  const specials = mrqw.multiSpecial ?? [mrqw.special];
-
-  const disjoinedQs = specials.map<ReactQuizWord>((special) => ({
-    ...getWordWithout(
-      mrqw.word,
-      special,
-      mrqw.meaning,
-      mrqw.readings,
-      mrqw.tags,
-    ),
-    full: mrqw.full,
-    hint: mrqw.hint,
-  }));
+export const unfoldQW = (mqw: MultiQW): QuizWord[] => {
+  const specials = mqw.multiSpecial ?? [mqw.special];
+  const disjoinedQs = specials.map((special) =>
+    getWordWithout({ ...mqw, special }),
+  );
   return disjoinedQs;
 };
 
-export const fromRQW = ({
+export const stripRQW = ({
   blanked,
   kanji,
   meaning,
@@ -218,7 +219,7 @@ export const fromRQW = ({
   return { blanked, kanji, meaning, readings, special, word, tags };
 };
 
-export const toRQW = (
+export const generateQWReadings = (
   qw: QuizWord,
   styles?: { full?: RQWStyles; hint?: RQWStyles },
   multipleSpecials?: number[],
@@ -312,21 +313,33 @@ export const getAllResultsForWord = (
   word: string,
 ): SessionResult[] => session.sessionResults.filter((f) => f.word === word);
 
+export const getAllWordsWithKanjiAndTags = (
+  words: QuizWord[],
+  kanji: string,
+  tags?: string[],
+) => {
+  const allWords = getAllWordsWithKanji(words, kanji); // get kanji
+  return allWords.filter(
+    (w) =>
+      !tags
+        ? true
+        : tags.includes("UNTAGGED")
+          ? !w.tags || w.tags.length === 0
+          : w.tags?.some((t) => tags?.includes(t)), // remove words that don't match the tag group
+  );
+};
+
 export const getAllWordsElligibleForKanji = (
   session: DrawSessionData,
   words: QuizWord[],
   kanji: string,
 ): QuizWord[] => {
-  const allWords = getAllWordsWithKanji(words, kanji); // get kanji
+  const allWords = getAllWordsWithKanjiAndTags(
+    words,
+    kanji,
+    session.sessionWordTags,
+  );
   return allWords
-    .filter(
-      (w) =>
-        !session.sessionWordTags
-          ? true
-          : session.sessionWordTags.includes("UNTAGGED")
-            ? !w.tags || w.tags.length === 0
-            : w.tags?.some((t) => session.sessionWordTags?.includes(t)), // remove words that don't match the tag group
-    )
     .map((w) => ({
       ...w,
       points: getWordPoints(session, w.word, w.kanji),
@@ -380,7 +393,7 @@ export async function* nextWordGenerator(
         </>,
       );
     };
-    const dbWords: QuizWord[] = await idb.getAll("wordbank");
+    const dbWords: QuizWord[] = useAppStore.getState().words;
 
     const kanjiWithWords = currentSessionData.sessionKanjis
       .map((k) => {
@@ -410,7 +423,9 @@ export async function* nextWordGenerator(
         const completed = a.filter((k) => k.completed);
         const notCompleted = a.filter((k) => !k.completed);
         const minDIST =
-          completed.length === a.length ? 0 : notCompleted.length - 3;
+          completed.length === a.length
+            ? 0
+            : notCompleted.length - randomInt(3, notCompleted.length / 2);
 
         return completed.length === a.length
           ? true

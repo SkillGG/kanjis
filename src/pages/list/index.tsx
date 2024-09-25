@@ -26,6 +26,7 @@ import shortUUID from "short-uuid";
 import { log, warn } from "@/utils/utils";
 import { usePopup } from "@/components/usePopup";
 import { type Kanji, useAppStore } from "@/appStore";
+import WordbankOnlyKanjiList from "@/components/list/wordbankOnlyKanjiList";
 
 const CHECK_DEDPUE_DELAY = 500;
 
@@ -47,7 +48,7 @@ function App() {
     mutateKanjis,
     idb,
   } = useAppStore((s) => ({
-    kanjis: s.kanjis,
+    kanjis: s.kanji,
     updateKanji: s.updateKanji,
     mutateKanjis: s.mutateKanjis,
     addKanji: s.addKanji,
@@ -219,7 +220,7 @@ function App() {
             time: 3000,
           });
         mutateKanjis(() => mergedKanjis.kanji);
-        await saveToIDB(idb, success ? "r" : "m", mergedKanjis.kanji);
+        await saveToIDB(idb, mergedKanjis.kanji);
       } else if (currURL.searchParams.has("t")) {
         const urlKanji = parseKanjiURI(currURL.searchParams);
         const overrideType = getOverrideType(currURL.searchParams);
@@ -232,7 +233,7 @@ function App() {
 
         mutateKanjis(() => mergedKanjis.kanji);
 
-        await saveToIDB(idb, overrideType, mergedKanjis.kanji);
+        await saveToIDB(idb, mergedKanjis.kanji);
 
         await removeSearchParams(overrideType);
       }
@@ -436,7 +437,7 @@ function App() {
                         );
                         log`${merged.kanji}`;
                         setRestorePopupOpen(false);
-                        await saveToIDB(idb, "r", merged.kanji);
+                        await saveToIDB(idb, merged.kanji);
                         mutateKanjis(() => merged.kanji);
                         await removeSearchParams("r");
                       } else {
@@ -562,6 +563,7 @@ function App() {
               disabled
             />
           </div>
+          <WordbankOnlyKanjiList listKanji={kanjis} />
           <div className={kanjiCSS["setting-menu"]}>
             <button
               className="w-min break-words border-red-600 text-orange-300 sm:break-keep"
@@ -575,7 +577,7 @@ function App() {
                         className="border-red-500"
                         onClick={async () => {
                           close();
-                          await resetDBToDefault(LS, idb, [], "r");
+                          await resetDBToDefault(LS, idb, []);
                         }}
                       >
                         Yes

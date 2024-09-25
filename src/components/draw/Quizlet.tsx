@@ -3,7 +3,7 @@ import { type SessionResult, type DrawSessionData } from "./drawSession";
 import {
   type NextWordGenerator,
   nextWordGenerator,
-  toRQW,
+  generateQWReadings,
   type QuizWord,
 } from "./quizWords";
 import { KanjiCard, type KanjiCardSide } from "./kanjiCard";
@@ -72,7 +72,7 @@ export const Quizlet = ({
         onSideChanged={onSideChanged}
         classNames={{
           border: "text-base sm:text-xl min-w-[50%]",
-          tags: "text-base",
+          tags: "text-base gap-x-2",
           buttons: "text-base sm:text-3xl mb-2 sm:mt-2",
         }}
         disableButtons={disableAnswering}
@@ -80,7 +80,7 @@ export const Quizlet = ({
           const newSession = await commitResult(result);
           await nextWord(newSession);
         }}
-        word={toRQW(currentWord, {
+        word={generateQWReadings(currentWord, {
           full: {
             meaning: {
               className: "text-xl sm:text-5xl sm:leading-[6rem] text-balance",

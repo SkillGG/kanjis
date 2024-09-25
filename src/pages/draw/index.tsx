@@ -9,7 +9,7 @@ import SettingBox from "@/components/settingBox";
 import { usePopup } from "@/components/usePopup";
 import { dbPutMultiple, type Kanji, useAppStore } from "@/appStore";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getMergedKanjis } from "@/components/list/kanjiStorage";
 import { useWindowSize } from "@/utils/useWindowSize";
@@ -39,7 +39,7 @@ export default function Draw() {
   useWindowSize();
 
   const { kanjis, idb, mutateKanji } = useAppStore((s) => ({
-    kanjis: s.kanjis,
+    kanjis: s.kanji,
     idb: s.getIDB(),
     mutateKanji: s.mutateKanjis,
   }));
@@ -67,30 +67,32 @@ export default function Draw() {
   } | null>(null);
   const [sesssions, setSessions] = useState<DrawSessionData[]>([]);
   const [donePoints, setDonePoints] = useState<number | null>(null);
-  const [words, setWords] = useState<QuizWord[]>([]);
+
+  const words = useAppStore((s) => s.words);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const { popup, setPopup } = usePopup();
 
+  const allWordTags = useMemo(
+    () => [...new Set(["UNTAGGED", ...words.map((m) => m.tags ?? []).flat()])],
+    [words],
+  );
+
   useEffect(() => {
     void (async () => {
       const prevSessionIndex = await idb.count("draw");
       if (!sessionName) setSessionName(`Session ${prevSessionIndex + 1}`);
+    })();
+  }, [idb, sessionName]);
 
+  useEffect(() => {
+    void (async () => {
       const openSessions = await idb.getAll("draw");
       setSessions(() => openSessions.filter((s) => s.open));
-      const allWords = await idb.getAll("wordbank");
-      setWords(allWords);
-      setSelectedWordTags(
-        allWords.reduce<string[]>(
-          (p, n) => [...p, ...new Set<string>([...(n.tags ?? [])])],
-          ["UNTAGGED"],
-        ),
-      );
+      setSelectedWordTags(allWordTags);
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [LS]);
+  }, [allWordTags, idb, words]);
 
   useEffect(() => {
     setSessionCreationError(null);
@@ -187,7 +189,7 @@ export default function Draw() {
       mutateKanji(() => newKanjiList.kanji);
     }
 
-    await router.replace(`/draw/session/${sessionData.sessionID}`);
+    await Router.replace(`/draw/session/${sessionData.sessionID}`);
   }, [
     LS,
     donePoints,
@@ -195,7 +197,6 @@ export default function Draw() {
     kanjis,
     markAsLearning,
     mutateKanji,
-    router,
     selectedKanjis,
     selectedWordTags,
     selectedWords,
@@ -272,6 +273,26 @@ export default function Draw() {
           return [
             ...selected,
             ...kanjis.filter((k) => k.status === status).map((k) => k.kanji),
+          ];
+        },
+      })),
+    ...[...new Set<string>(kanjis.map((k) => k.type))]
+      .sort()
+      .map<KanjiSorting>((type) => ({
+        name: type.toUpperCase(),
+        check(kanjis, selected) {
+          return kanjis.reduce(
+            (p, n) => (!p || n.type !== type ? p : selected.includes(n.kanji)),
+            true,
+          );
+        },
+        deselect(k, s) {
+          return s.filter((q) => k.find((x) => x.kanji === q)?.type !== type);
+        },
+        select(kanjis, selected) {
+          return [
+            ...selected,
+            ...kanjis.filter((k) => k.type === type).map((k) => k.kanji),
           ];
         },
       })),
@@ -355,10 +376,14 @@ export default function Draw() {
                           ? "No kanji selected"
                           : s.sessionKanjis.join("").substring(0, 20)}
                         ...
+                        <br />
+                        <div className="bg-transparent text-center text-sm text-[inherit]">
+                          {[...new Set(s.sessionWordTags)].join(", ")}
+                        </div>
                       </div>
                       <button
                         style={{ gridArea: "a" }}
-                        className="rounded-none border-x-0 border-b-2 border-t-0 border-slate-600 hover:bg-slate-300"
+                        className="h-full rounded-none border-x-0 border-b-2 border-t-0 border-slate-600 hover:bg-slate-300"
                         onClick={() => {
                           void router.replace(`/draw/session/${s.sessionID}`);
                         }}
@@ -367,11 +392,12 @@ export default function Draw() {
                       </button>
                       <button
                         style={{ gridArea: "b" }}
-                        className="rounded-none border-none hover:bg-slate-300"
+                        className="h-full rounded-none border-none hover:bg-slate-300"
                         onClick={() => {
                           dialogRef.current?.close();
                           setSelectedKanjis(s.sessionKanjis);
-                          setSessionName(`${s.sessionID} (1)`);
+                          setSessionName(`${s.sessionID}_1`);
+                          setSelectedWordTags(s.sessionWordTags ?? allWordTags);
                         }}
                       >
                         COPY

@@ -98,14 +98,14 @@ export default function SettingBox({
               />
             </label>
             <label className="block text-balance">
-              Auto-mark kanjis as completed when ending a session
+              Auto-mark kanji as completed in the list
               <input
                 type="checkbox"
-                checked={settings.markKanjiAsCompletedOnSessionClose}
+                checked={settings.autoMarkKanjiAsCompleted}
                 onChange={() => {
                   setSettings(
-                    "markKanjiAsCompletedOnSessionClose",
-                    !settings.markKanjiAsCompletedOnSessionClose,
+                    "autoMarkKanjiAsCompleted",
+                    !settings.autoMarkKanjiAsCompleted,
                   );
                 }}
               />

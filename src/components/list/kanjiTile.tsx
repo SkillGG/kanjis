@@ -12,6 +12,7 @@ export const KanjiTile = ({
   style,
   extraBadge,
   lvlBadge,
+  overrideTitle,
 }: {
   kanji: Kanji;
   className?: React.ComponentProps<"button">["className"];
@@ -20,6 +21,7 @@ export const KanjiTile = ({
   extraBadge?: string;
   lvlBadge?: string;
   disabled?: boolean;
+  overrideTitle?: string;
   update: (kanji: string, data: Partial<Omit<Kanji, "kanji">>) => void;
 }) => {
   const { kanji, lvl, status, type } = kanjiData;
@@ -60,7 +62,7 @@ export const KanjiTile = ({
       data-lvl={
         badges % 2 == 0 ? (lvlBadge ?? (disabled ? "L" : lvl)) : undefined
       }
-      title={`${type} kanji lvl ${lvl}`}
+      title={overrideTitle ?? `${type} kanji lvl ${lvl}`}
     >
       {kanji}
     </button>

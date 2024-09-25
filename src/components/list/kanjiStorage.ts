@@ -124,14 +124,7 @@ export const removeSearchParams = async (override: OverrideType) => {
 };
 
 export const getAllKanjisFromDB = async (idb: AppDB) => {
-  const transaction = idb.transaction("kanji");
-  const DBKanjiStore = transaction.store;
-  const DBKanjiCursor = DBKanjiStore.iterate(null, "next");
-  const DBKanjis: Kanji[] = [];
-
-  for await (const kanji of DBKanjiCursor) {
-    DBKanjis.push(kanji.value);
-  }
+  const DBKanjis: Kanji[] = await idb.getAll("kanji");
   DBKanjis.sort((a, b) => a.index - b.index);
   return DBKanjis;
 };
@@ -165,11 +158,7 @@ export const getOverrideType = (search: URLSearchParams): OverrideType => {
   return search.has("q") ? "r" : assertOverrideType(search.get("t"));
 };
 
-export const saveToIDB = async (
-  idb: AppDB,
-  overrideType: OverrideType,
-  kanji: Kanji[],
-) => {
+export const saveToIDB = async (idb: AppDB, kanji: Kanji[]) => {
   await idb.clear("kanji");
   await dbPutMultiple(idb, "kanji", kanji);
 };
@@ -230,12 +219,7 @@ export const useKanjiStorage = () => {
   const utils = api.useUtils();
 
   const resetDBToDefault = useCallback(
-    async (
-      LS: LSStore,
-      idb: AppDB,
-      urlKanjis: Kanji[],
-      override: OverrideType,
-    ) => {
+    async (LS: LSStore, idb: AppDB, urlKanjis: Kanji[]) => {
       const { kanji, updateRequired } = await getMergedKanjis(
         LS,
         idb,
@@ -244,7 +228,7 @@ export const useKanjiStorage = () => {
       );
       setShouldUpdate(updateRequired);
       LS.set(LS_KEYS.kanji_ver, DEFAULT_KANJI_VERSION);
-      await saveToIDB(idb, override, kanji);
+      await saveToIDB(idb, kanji);
       mutateKanjis(() => kanji);
     },
     [mutateKanjis, setShouldUpdate],

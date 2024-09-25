@@ -2,14 +2,13 @@ import { type DrawSessionData } from "@/components/draw/drawSession";
 import { type KanjiCardSide } from "@/components/draw/kanjiCard";
 import { DEFAULT_POINTS_TO_COMPLETE, Quizlet } from "@/components/draw/Quizlet";
 import {
-  getAllWordsWithKanji,
+  getAllWordsWithKanjiAndTags,
   getWordPoints,
   isKanjiCompleted,
-  type QuizWord,
 } from "@/components/draw/quizWords";
 import { KanjiTile } from "@/components/list/kanjiTile";
 import { usePopup } from "@/components/usePopup";
-import { dbPutMultiple, type Kanji, useAppStore } from "@/appStore";
+import { type Kanji, useAppStore } from "@/appStore";
 import { log, noop } from "@/utils/utils";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
@@ -31,7 +30,7 @@ export default function DrawSession() {
 
   const [loadingError, setLoadingError] = useState<string | null>(null);
 
-  const [words, setWords] = useState<QuizWord[] | null>(null);
+  const words = useAppStore((s) => s.words);
 
   const [disableAnswering, setDisableAnswering] = useState(false);
 
@@ -42,31 +41,16 @@ export default function DrawSession() {
     (s) => s.settings.showSessionProgress,
   );
   const autoComplete = useAppStore((s) => s.settings.autoMarkAsCompleted);
-  const autoMarkAsCompletedOnClose = useAppStore(
-    (s) => s.settings.markKanjiAsCompletedOnSessionClose,
+  const autoMarkKanjiAsCompleted = useAppStore(
+    (s) => s.settings.autoMarkKanjiAsCompleted,
   );
 
   const setAutoComplete = useCallback(
     (v: boolean) => setSettings("autoMarkAsCompleted", v),
     [setSettings],
   );
-  const setAutoMarkAsCompletedOnClose = useCallback(
-    (p: (b: boolean) => boolean) =>
-      setSettings(
-        "markKanjiAsCompletedOnSessionClose",
-        p(autoMarkAsCompletedOnClose),
-      ),
-    [autoMarkAsCompletedOnClose, setSettings],
-  );
 
   const idb = useAppStore((s) => s.getIDB());
-
-  useEffect(() => {
-    void (async () => {
-      if (words) return;
-      setWords(await idb.getAll("wordbank"));
-    })();
-  }, [idb, words]);
 
   useEffect(() => {
     void (async () => {
@@ -113,27 +97,8 @@ export default function DrawSession() {
     const newSession = { ...sessionData, open: false };
     await idb.put("draw", newSession);
     setSessionData((p) => (p ? newSession : p));
-
-    if (autoMarkAsCompletedOnClose) {
-      // mark as compl. on close
-      const listKanji = await idb.getAll("kanji");
-      const sessionKanji = listKanji.filter((f) =>
-        newSession.sessionKanjis.includes(f.kanji),
-      );
-
-      const completedKanjis = sessionKanji.map<Kanji>((k) => ({
-        ...k,
-        status: "completed",
-      }));
-
-      await dbPutMultiple(idb, "kanji", completedKanjis);
-
-      const mergedKanji = await getMergedKanjis(LS, idb, completedKanjis, "m");
-
-      mutateKanji(() => mergedKanji.kanji);
-    }
     await Router.push("/draw");
-  }, [LS, autoMarkAsCompletedOnClose, idb, mutateKanji, sessionData]);
+  }, [idb, sessionData]);
 
   const askForEndingSession = useCallback(() => {
     if (!sessionData) return;
@@ -148,15 +113,6 @@ export default function DrawSession() {
       text: (close) => (
         <div className="flex flex-col gap-2 text-center text-xl">
           You&apos;ve done everything!
-          <br />
-          <label>
-            Mark kanjis as completed in the list{" "}
-            <input
-              type="checkbox"
-              checked={autoMarkAsCompletedOnClose}
-              onChange={() => setAutoMarkAsCompletedOnClose((p) => !p)}
-            />
-          </label>
           <button
             className="w-full py-2 hover:bg-[#fff2]"
             onClick={async () => {
@@ -184,13 +140,7 @@ export default function DrawSession() {
         },
       },
     });
-  }, [
-    autoMarkAsCompletedOnClose,
-    closeTheSession,
-    sessionData,
-    setAutoMarkAsCompletedOnClose,
-    setPopup,
-  ]);
+  }, [closeTheSession, sessionData, setPopup]);
 
   useEffect(() => {
     if (sessionData) {
@@ -322,10 +272,10 @@ export default function DrawSession() {
             await idb.put("draw", newSession);
             setSessionData(() => newSession);
 
-            const allWords = await idb?.getAllFromIndex(
-              "wordbank",
-              "kanji",
+            const allWords = getAllWordsWithKanjiAndTags(
+              words,
               result.kanji,
+              newSession.sessionWordTags,
             );
 
             const allWPoints = allWords?.map((word) => {
@@ -341,6 +291,41 @@ export default function DrawSession() {
               !isKanjiCompleted(newSession, result.kanji) &&
               allWPoints?.reduce((p, n) => (!p ? p : n > PTC), true)
             ) {
+              const markAsComplete = async () => {
+                const sessionWithCompleted: DrawSessionData = {
+                  ...newSession,
+                  sessionResults: [
+                    ...newSession.sessionResults,
+                    { ...result, result: 0, completed: true },
+                  ],
+                };
+
+                if (autoMarkKanjiAsCompleted) {
+                  const listKanji = await idb.getAll("kanji");
+
+                  const curKanji = listKanji.find(
+                    (k) => k.kanji === result.kanji,
+                  );
+                  if (curKanji) {
+                    const finishedKanji: Kanji = {
+                      ...curKanji,
+                      status: "completed",
+                    };
+                    await idb.put("kanji", finishedKanji);
+                    const mergedKanji = await getMergedKanjis(
+                      LS,
+                      idb,
+                      [finishedKanji],
+                      "m",
+                    );
+
+                    mutateKanji(() => mergedKanji.kanji);
+                  }
+                }
+
+                await idb?.put("draw", sessionWithCompleted);
+                setSessionData(sessionWithCompleted);
+              };
               if (!autoComplete) {
                 setDisableAnswering(true);
                 setPopup({
@@ -358,16 +343,7 @@ export default function DrawSession() {
                         <button
                           onClick={async () => {
                             close(true);
-                            const sessionWithCompleted: DrawSessionData = {
-                              ...newSession,
-                              sessionResults: [
-                                ...newSession.sessionResults,
-                                { ...result, result: 0, completed: true },
-                              ],
-                            };
-
-                            await idb?.put("draw", sessionWithCompleted);
-                            setSessionData(sessionWithCompleted);
+                            await markAsComplete();
                           }}
                         >
                           Yes
@@ -404,16 +380,7 @@ export default function DrawSession() {
                   borderColor: "green",
                 });
               } else {
-                const sessionWithCompleted: DrawSessionData = {
-                  ...newSession,
-                  sessionResults: [
-                    ...newSession.sessionResults,
-                    { ...result, result: 0, completed: true },
-                  ],
-                };
-
-                await idb?.put("draw", sessionWithCompleted);
-                setSessionData(sessionWithCompleted);
+                await markAsComplete();
               }
             }
             if (
@@ -456,7 +423,11 @@ export default function DrawSession() {
                     </div>
                   );
                 }
-                const points = getAllWordsWithKanji(words, kanji);
+                const points = getAllWordsWithKanjiAndTags(
+                  words,
+                  kanji,
+                  sessionData.sessionWordTags,
+                );
                 const PTC =
                   sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE;
                 return (
@@ -471,6 +442,7 @@ export default function DrawSession() {
                         status: "new",
                         type: "base",
                       }}
+                      overrideTitle={`${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}`, "")}`.trim()}
                       update={noop}
                       lvlBadge={`${points.reduce(
                         (p, w) =>

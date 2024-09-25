@@ -19,8 +19,14 @@ import {
   DEFAULT_KANJI_VERSION,
   DEFAULT_KANJIS,
 } from "../components/list/defaultKanji";
-import { getWordWithout, type QuizWord } from "../components/draw/quizWords";
+import {
+  areWordsTheSame,
+  getWordWithout,
+  type MultiQW,
+  type QuizWord,
+} from "../components/draw/quizWords";
 import { type DrawSessionData } from "../components/draw/drawSession";
+import { subscribeWithSelector } from "zustand/middleware";
 
 export const KanjiStatus = ["new", "learning", "completed"] as const;
 
@@ -51,7 +57,7 @@ export type Settings = {
   kanjiRowCount: number;
   autoMarkAsCompleted: boolean;
   showMax: number;
-  markKanjiAsCompletedOnSessionClose: boolean;
+  autoMarkKanjiAsCompleted: boolean;
   markKanjisAsLearningOnSessionStart: boolean;
   showSessionProgress: boolean;
 };
@@ -62,7 +68,7 @@ export const DEFAULT_SETTINGS: Settings = {
   kanjiRowCount: 8,
   autoMarkAsCompleted: true,
   showMax: 1000,
-  markKanjiAsCompletedOnSessionClose: false,
+  autoMarkKanjiAsCompleted: false,
   markKanjisAsLearningOnSessionStart: false,
   showSessionProgress: true,
 };
@@ -134,10 +140,10 @@ export const defaultDBSchema: DBInit<AppDBSchema> = {
 export type AppDB = IDBPDatabase<AppDBSchema>;
 
 export type Store = {
-  kanjis: Kanji[];
+  kanji: Kanji[];
   shouldUpdateKanjiList: boolean;
   setShouldUpdateKanjiList: (su: boolean) => void;
-  mutateKanjis: (mutation: (k: Store["kanjis"]) => Store["kanjis"]) => void;
+  mutateKanjis: (mutation: (k: Store["kanji"]) => Store["kanji"]) => void;
   updateKanji: (kanji: string, data: Partial<Omit<Kanji, "kanji">>) => void;
   addKanji: (kanji: Kanji) => void;
   removeKanji: (kanji: string) => void;
@@ -148,6 +154,19 @@ export type Store = {
   idb: AppDB | null;
   setIDB: (db: AppDB) => void;
   getIDB: () => AppDB;
+
+  words: QuizWord[];
+  setWords: (
+    setFn: (prev: QuizWord[]) => Promise<QuizWord[]>,
+    updateBank?: boolean,
+  ) => Promise<void>;
+  addWords: (qw: QuizWord[]) => Promise<void>;
+  removeWords: (qw: QuizWord[]) => Promise<void>;
+  updateWord: (qw: QuizWord, data: Partial<QuizWord>) => Promise<void>;
+
+  foldedWords: MultiQW[];
+
+  firstWordLoad: boolean;
 };
 
 export const dbPutMultiple = async <Name extends StoreNames<AppDBSchema>>(
@@ -184,71 +203,240 @@ export type AppDBSchema = DBSchema & {
   };
 };
 
-export const useAppStore = create<Store>((_set, _get) => {
-  return {
-    kanjis: [],
-    shouldUpdateKanjiList: false,
-    tagColors: null,
-    settings: DEFAULT_SETTINGS,
-    idb: null,
-    setIDB(idb) {
-      _set((prev) => ({ ...prev, idb }));
-    },
-    getIDB() {
-      const db = _get().idb;
-      if (!db) throw new Error("No connection to DB open!");
-      return db;
-    },
-    setTagColors(colors) {
-      _set((prev) => ({ ...prev, tagColors: { ...colors } }));
-    },
-    setShouldUpdateKanjiList(su) {
-      _set((prev) => ({ ...prev, shouldUpdateKanjiList: su }));
-    },
-    mutateKanjis: (mut: (k: Store["kanjis"]) => Store["kanjis"]) => {
-      _set((prev) => {
-        const kanjis = mut(prev.kanjis);
-        return { ...prev, kanjis };
-      });
-    },
-    updateKanji(kanji, data) {
-      _set((prev) => {
-        const kanjis = [...(prev.kanjis ?? [])];
-        const found = kanjis.find((k) => k.kanji === kanji);
-        if (found) {
-          found.lvl = data.lvl ?? found.lvl;
-          found.status = data.status ?? found.status;
-          found.type = data.type ?? found.type;
-        }
-        return { ...prev, kanjis };
-      });
-    },
-    addKanji(kanji) {
-      _set((prev) => {
-        if ((prev.kanjis ?? []).find((k) => k.kanji === kanji.kanji))
-          return prev;
-        const kanjis = [...(prev.kanjis ?? []), kanji];
-        return { ...prev, kanjis };
-      });
-    },
+const alphabet = `あいうえおかきくけこがぎぐげごさしすせそざじずぜぞたちつてとだぢづでどなにぬねのはひふへほばびぶべぼぱぴぷぺぽまみむめもやゆよゃゅょらりるれろわをん`;
 
-    removeKanji(kanji) {
-      _set((prev) => {
-        const newStore = {
-          ...prev,
-          kanjis: [...(prev.kanjis ?? []).filter((k) => k.kanji !== kanji)],
+export const compareReadings = (
+  a: QuizWord,
+  b: QuizWord,
+  comp: (a: number, b: number) => number = (a, b) => a - b,
+): number => {
+  const aWord = a.word
+    .split("")
+    .map((k, i) => `${k}${a.readings[i]}`)
+    .join("");
+  const bWord = b.word
+    .split("")
+    .map((k, i) => `${k}${b.readings[i]}`)
+    .join("");
+
+  const aAlpha = aWord.split("").filter((q) => alphabet.includes(q));
+  const bAlpha = bWord.split("").filter((q) => alphabet.includes(q));
+
+  if (bAlpha.length === 0) {
+    log`FailedWord ${bWord}`;
+    return 1;
+  }
+  if (aAlpha.length === 0) {
+    log`FailedWord ${aWord}`;
+    return -1;
+  }
+
+  for (let i = 0; i < Math.min(aAlpha.length, bAlpha.length); i++) {
+    if (aAlpha[i] === bAlpha[i]) continue;
+    const aLetter = aAlpha[i];
+    const bLetter = bAlpha[i];
+    if (!aLetter) return comp(1, 0);
+    if (!bLetter) return comp(0, 1);
+    return comp(alphabet.indexOf(aLetter), alphabet.indexOf(bLetter));
+  }
+  return 0;
+};
+
+const foldWords = (w: QuizWord[]): MultiQW[] => {
+  return w.reduce<MultiQW[]>((p, n) => {
+    const areReadingsTheSame = (a: QuizWord, b: QuizWord) =>
+      a.readings.join("_") === b.readings.join("_");
+    const areTagsTheSame = (a: QuizWord, b: QuizWord) =>
+      a.tags?.sort().join("_") === b.tags?.sort().join("_");
+
+    const prevInArr = p.find(
+      (z) =>
+        z.word === n.word && areReadingsTheSame(z, n) && areTagsTheSame(z, n),
+    );
+
+    if (prevInArr) {
+      const newMS = [
+        ...(prevInArr.multiSpecial ?? [prevInArr.special]),
+        n.special,
+      ];
+      return [
+        ...p.filter(
+          (x) =>
+            !(
+              areTagsTheSame(x, prevInArr) &&
+              areReadingsTheSame(x, prevInArr) &&
+              x.word === prevInArr.word
+            ),
+        ),
+        {
+          ...prevInArr,
+          multiSpecial: newMS,
+        } as MultiQW,
+      ];
+    }
+    return [...p, { ...n, multiSpecial: [n.special] }];
+  }, []);
+};
+
+export const useAppStore = create(
+  subscribeWithSelector<Store>((_set, _get) => {
+    return {
+      kanji: [],
+      words: [],
+      foldedWords: [],
+      shouldUpdateKanjiList: false,
+      tagColors: null,
+      settings: DEFAULT_SETTINGS,
+      idb: null,
+      firstWordLoad: false,
+      setIDB(idb) {
+        _set(() => ({ idb }));
+      },
+      async addWords(qw) {
+        const idb = _get().getIDB();
+        await dbPutMultiple(idb, "wordbank", qw);
+        _set((prev) => ({ words: prev.words.concat(qw) }));
+      },
+      async removeWords(qw) {
+        const idb = _get().getIDB();
+        for (const w of qw) {
+          await idb.delete("wordbank", [w.word, w.special, w.readings]);
+        }
+        _set((prev) => ({
+          words: prev.words.filter(
+            (pw) => !qw.some((w) => areWordsTheSame(pw, w)),
+          ),
+        }));
+      },
+      async updateWord(qw, data) {
+        const idb = _get().getIDB();
+        if (
+          ("word" in data && qw.word !== data.word) ||
+          ("readings" in data &&
+            qw.readings.join(",") !== data.readings?.join(",")) ||
+          ("special" in data && qw.special !== data.special)
+        ) {
+          await idb.delete("wordbank", [
+            data.word ?? qw.word,
+            data.special ?? qw.special,
+            data?.readings ?? qw.readings,
+          ]);
+        }
+        await idb.put("wordbank", { ...qw, ...data });
+        _set((prev) => ({
+          words: prev.words.map((pw) =>
+            areWordsTheSame(qw, pw) ? { ...qw, ...data } : pw,
+          ),
+        }));
+      },
+      async setWords(setFn) {
+        const oldW = _get().words;
+        const newW = await setFn(_get().words);
+
+        if (!_get().firstWordLoad) {
+          _set(() => ({ words: newW, firstWordLoad: true }));
+          return log`First load!`;
+        }
+
+        // save to db
+        // figure out what words changed
+        log`Saving word changes to DB`;
+        const changed = {
+          changed: [] as QuizWord[],
+          deleted: [] as QuizWord[],
+          added: [] as QuizWord[],
         };
-        return newStore;
-      });
-    },
-    setSettings(key, value) {
-      _set((prev) => ({
-        ...prev,
-        settings: { ...prev.settings, [key]: value },
-      }));
-    },
-  };
-});
+
+        const unchanged: QuizWord[] = [];
+
+        for (const w of oldW) {
+          const newVer = newW.find((nw) => areWordsTheSame(w, nw));
+          if (newVer) {
+            if (
+              newVer.kanji === w.kanji &&
+              newVer.meaning === w.meaning &&
+              newVer.tags?.join(",") === w.tags?.join(",")
+            ) {
+              unchanged.push(w);
+              continue;
+            }
+            changed.changed.push(newVer);
+          } else {
+            changed.deleted.push(w);
+          }
+        }
+
+        changed.added = newW.filter(
+          (nw) =>
+            ![...unchanged, ...changed.changed, ...changed.deleted].some((w) =>
+              areWordsTheSame(w, nw),
+            ),
+        );
+
+        const idb = _get().getIDB();
+        for (const del of changed.deleted) {
+          await idb.delete("wordbank", [del.word, del.special, del.readings]);
+        }
+        for (const word of [...changed.changed, ...changed.added]) {
+          await idb.put("wordbank", word);
+        }
+
+        _set(() => {
+          return {
+            words: newW.sort((a, b) => compareReadings(a, b)),
+          };
+        });
+      },
+      getIDB() {
+        const db = _get().idb;
+        if (!db) throw new Error("No connection to DB open!");
+        return db;
+      },
+      setTagColors(colors) {
+        _set(() => ({ tagColors: { ...colors } }));
+      },
+      setShouldUpdateKanjiList(su) {
+        _set(() => ({ shouldUpdateKanjiList: su }));
+      },
+      mutateKanjis: (mut: (k: Store["kanji"]) => Store["kanji"]) => {
+        _set((prev) => {
+          const kanjis = mut(prev.kanji);
+          return { kanji: kanjis };
+        });
+      },
+      updateKanji(kanji, data) {
+        _set((prev) => {
+          const kanjis = [...(prev.kanji ?? [])];
+          const found = kanjis.find((k) => k.kanji === kanji);
+          if (found) {
+            found.lvl = data.lvl ?? found.lvl;
+            found.status = data.status ?? found.status;
+            found.type = data.type ?? found.type;
+          }
+          return { kanji: kanjis };
+        });
+      },
+      addKanji(kanji) {
+        _set((prev) => {
+          if ((prev.kanji ?? []).find((k) => k.kanji === kanji.kanji))
+            return prev;
+          const kanjis = [...(prev.kanji ?? []), kanji];
+          return { kanji: kanjis };
+        });
+      },
+      removeKanji(kanji) {
+        _set((prev) => ({
+          kanji: [...(prev.kanji ?? []).filter((k) => k.kanji !== kanji)],
+        }));
+      },
+      setSettings(key, value) {
+        _set((prev) => ({
+          settings: { ...prev.settings, [key]: value },
+        }));
+      },
+    };
+  }),
+);
 
 if (typeof window !== "undefined") {
   // load settings from localStorage
@@ -272,18 +460,24 @@ if (typeof window !== "undefined") {
     err`No settings stored in LS!`;
   }
 
-  useAppStore.subscribe((state, prev) => {
-    if (state.settings !== prev.settings)
-      localStorage.setItem(LS_KEYS.settings, JSON.stringify(state.settings));
-    if (state.tagColors !== prev.tagColors) {
-      localStorage.setItem(LS_KEYS.tag_colors, JSON.stringify(state.tagColors));
-      if (state.tagColors != null) {
+  useAppStore.subscribe(
+    (s) => s.settings,
+    (newSettings) => {
+      localStorage.setItem(LS_KEYS.settings, JSON.stringify(newSettings));
+    },
+  );
+
+  useAppStore.subscribe(
+    (s) => s.tagColors,
+    (newTags) => {
+      localStorage.setItem(LS_KEYS.tag_colors, JSON.stringify(newTags));
+      if (newTags != null) {
         let i = 0;
         for (const [tag, colors] of Object.entries(defaultWordBank.tags)) {
-          if (!(tag in state.tagColors)) {
+          if (!(tag in newTags)) {
             useAppStore.getState().setTagColors(
               Object.fromEntries<TagInfo>(
-                Object.entries(state.tagColors).reduce<[string, TagInfo][]>(
+                Object.entries(newTags).reduce<[string, TagInfo][]>(
                   (p, v, ix) => {
                     if (i === ix) {
                       log`Force adding tag ${tag},${colors} @ ${i}`;
@@ -300,8 +494,17 @@ if (typeof window !== "undefined") {
           i++;
         }
       }
-    }
-  });
+    },
+  );
+
+  useAppStore.subscribe(
+    (s) => s.words,
+    (newW) => {
+      // on words changed
+      log`Folding`;
+      useAppStore.setState(() => ({ foldedWords: foldWords(newW) }));
+    },
+  );
 
   const fixOldDB = async (db: AppDB) => {
     // fix all word "kanji" fields!
@@ -310,9 +513,7 @@ if (typeof window !== "undefined") {
     await dbPutMultiple(
       db,
       "wordbank",
-      allKanjis.map((k) =>
-        getWordWithout(k.word, k.special, k.meaning, k.readings, k.tags),
-      ),
+      allKanjis.map((k) => getWordWithout(k)),
     );
   };
 
@@ -348,5 +549,8 @@ if (typeof window !== "undefined") {
     const lsColors =
       LS.getObject<Record<string, TagInfo>>(LS_KEYS.tag_colors) ?? {};
     useAppStore.getState().setTagColors({ ...tColors, ...lsColors });
+
+    const allWords = await db.getAll("wordbank");
+    await useAppStore.getState().setWords(async (_) => allWords, false);
   })();
 }
