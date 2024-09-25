@@ -493,7 +493,7 @@ export async function* nextWordGenerator(
     const randomKanjiIndex = randomStartWeighedInt(
       0,
       possibleKanji.length - 1,
-      20,
+      5,
     );
     const randomKanjiWithWords = possibleKanji[randomKanjiIndex];
 
