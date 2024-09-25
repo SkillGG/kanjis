@@ -9,7 +9,7 @@ import {
 import { KanjiTile } from "@/components/list/kanjiTile";
 import { usePopup } from "@/components/usePopup";
 import { type Kanji, useAppStore } from "@/appStore";
-import { log, noop } from "@/utils/utils";
+import { noop } from "@/utils/utils";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
@@ -187,8 +187,6 @@ export default function DrawSession() {
   if (!sessionData.open) {
     return <span>This session has already been closed!</span>;
   }
-
-  log`${autoComplete}`;
 
   return (
     <>
