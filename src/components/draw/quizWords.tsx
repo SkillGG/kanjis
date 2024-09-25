@@ -470,6 +470,7 @@ export async function* nextWordGenerator(
     }
 
     log`Chosen kanji: ${randomKanjiWithWords.kanji}`;
+    console.trace();
 
     if (randomKanjiWithWords.words.length === 0) {
       currentSessionData = yield getNoWordErr(

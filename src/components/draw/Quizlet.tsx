@@ -8,6 +8,7 @@ import {
 } from "./quizWords";
 import { KanjiCard, type KanjiCardSide } from "./kanjiCard";
 import { useAppStore } from "../../appStore";
+import { log } from "@/utils/utils";
 
 export const DEFAULT_POINTS_TO_COMPLETE = 100;
 
@@ -31,6 +32,7 @@ export const Quizlet = ({
 
   const nextWord = useCallback(
     async (sessionData: DrawSessionData) => {
+      log`Asking for a new word`;
       if (!wordGenerator) return;
       const nextWord = (await wordGenerator.next(sessionData)).value;
       if ("err" in nextWord) {
@@ -45,8 +47,10 @@ export const Quizlet = ({
   const idb = useAppStore((s) => s.getIDB());
 
   useEffect(() => {
+    // create a new WordGenerator
     void (async () => {
       if (!session) return;
+      if (wordGenerator) return;
       const newWG = nextWordGenerator(session, idb);
       setWordGenerator(newWG);
       const firstWord = await newWG.next();
@@ -60,7 +64,7 @@ export const Quizlet = ({
         setCurrentWord(firstWord.value);
       }
     })();
-  }, [idb, session]);
+  }, [idb, session, wordGenerator]);
 
   if (currentWord === null) {
     return <>{error ? error : "Loading..."}</>;
