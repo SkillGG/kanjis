@@ -551,6 +551,7 @@ if (typeof window !== "undefined") {
     useAppStore.getState().setTagColors({ ...tColors, ...lsColors });
 
     const allWords = await db.getAll("wordbank");
+    await new Promise((res) => setTimeout(res, 1000));
     await useAppStore.getState().setWords(async (_) => allWords, false);
   })();
 }

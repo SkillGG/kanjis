@@ -30,6 +30,8 @@ export const Quizlet = ({
 
   const [error, setError] = useState<React.ReactNode | null>(null);
 
+  const areWordsLoaded = useAppStore((s) => s.firstWordLoad);
+
   const nextWord = useCallback(
     async (sessionData: DrawSessionData) => {
       log`Asking for a new word`;
@@ -51,6 +53,7 @@ export const Quizlet = ({
     void (async () => {
       if (!session) return;
       if (wordGenerator) return;
+      if (!areWordsLoaded) return;
       const newWG = nextWordGenerator(session, idb);
       setWordGenerator(newWG);
       const firstWord = await newWG.next();
@@ -64,9 +67,9 @@ export const Quizlet = ({
         setCurrentWord(firstWord.value);
       }
     })();
-  }, [idb, session, wordGenerator]);
+  }, [areWordsLoaded, idb, session, wordGenerator]);
 
-  if (currentWord === null) {
+  if (currentWord === null || !areWordsLoaded) {
     return <>{error ? error : "Loading..."}</>;
   }
 

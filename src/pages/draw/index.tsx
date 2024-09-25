@@ -204,6 +204,8 @@ export default function Draw() {
     words,
   ]);
 
+  const areWordsLoaded = useAppStore((s) => s.firstWordLoad);
+
   useEffect(() => {
     for (const kanji of selectedKanjis) {
       if (selectedWords.filter((f) => f.kanji === kanji).length <= 0) {
@@ -317,6 +319,10 @@ export default function Draw() {
       }),
     ),
   ];
+
+  if (!areWordsLoaded) {
+    return <>Loading...</>;
+  }
 
   return (
     <>

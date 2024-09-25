@@ -49,6 +49,8 @@ export default function DrawSession() {
     (s) => s.settings.autoMarkKanjiAsCompleted,
   );
 
+  const areWordsLoaded = useAppStore((s) => s.firstWordLoad);
+
   const setAutoComplete = useCallback(
     (v: boolean) => setSettings("autoMarkAsCompleted", v),
     [setSettings],
@@ -147,7 +149,7 @@ export default function DrawSession() {
   }, [closeTheSession, sessionData, setPopup]);
 
   useEffect(() => {
-    if (sessionData) {
+    if (sessionData && areWordsLoaded) {
       // check if all results are completed
       const allCompleted = sessionData.sessionKanjis.reduce(
         (p, k) => (!p ? p : isKanjiCompleted(sessionData, k)),
@@ -164,9 +166,13 @@ export default function DrawSession() {
         setShowCanClose(false);
       }
     }
-  }, [askForEndingSession, sessionData, showCanClose]);
+  }, [areWordsLoaded, askForEndingSession, sessionData, showCanClose]);
 
   const [side, setSide] = useState<KanjiCardSide>("quiz");
+
+  if (!areWordsLoaded) {
+    return <>Loading...</>;
+  }
 
   if (!sessionData && !loadingError) {
     return <>Loading...</>;
