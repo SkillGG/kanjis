@@ -95,6 +95,7 @@ export const Quizlet = ({
             },
             kanji: {
               className: "font-ksof",
+              style: { "--color": "#f3a" },
             },
           },
           hint: {
