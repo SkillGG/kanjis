@@ -91,6 +91,7 @@ export const getReadings = (
             <React.Fragment key={`word_reading_${r}_${i}`}>
               <span
                 className={twMerge(
+                  specials?.includes(i) && kanjiCSS["special-kanji"],
                   style?.kanji?.className,
                   "relative z-[1] block bg-transparent",
                 )}
