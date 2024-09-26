@@ -399,7 +399,6 @@ export default function DrawSession() {
                     mutateKanji(() => mergedKanji.kanji);
                   }
                 }
-
                 await idb?.put("draw", sessionWithCompleted);
                 setSessionData(sessionWithCompleted);
               };

@@ -452,7 +452,7 @@ export async function* nextWordGenerator(
       const lastRes = getLastKanjiResult(currentSessionData, k);
       return {
         kanji: k,
-        words,
+        words: words.filter((f) => f.word !== lastRes?.word),
         completed: currentSessionData.sessionResults.find(
           (r) => r.kanji === k && r.completed,
         ),
