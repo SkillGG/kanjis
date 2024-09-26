@@ -200,6 +200,8 @@ export default function DrawSession() {
     return <span>This session has already been closed!</span>;
   }
 
+  log`${sessionData.sessionResults}`;
+
   return (
     <>
       <Link
@@ -278,16 +280,14 @@ export default function DrawSession() {
               sessionData.sessionWordTags,
             );
 
-            const tweakPoints = allWords.map<SessionResult>((w) =>
-              w.word === result.word
-                ? result
-                : {
-                    kanji: w.kanji,
-                    result: 1 * Math.sign(result.result),
-                    word: w.word,
-                    notAnswered: true,
-                  },
-            );
+            const tweakPoints = allWords
+              .filter((w) => w.word !== result.word)
+              .map<SessionResult>((w) => ({
+                kanji: w.kanji,
+                result: 1 * Math.sign(result.result),
+                word: w.word,
+                notAnswered: true,
+              }));
 
             if (!sessionData) throw new Error("Session Data not found!");
             const newSession: DrawSessionData = sessionData
@@ -295,6 +295,7 @@ export default function DrawSession() {
                   ...sessionData,
                   sessionResults: [
                     ...sessionData?.sessionResults,
+                    result,
                     ...tweakPoints.filter((p) => p.result !== 0),
                   ],
                 }
@@ -428,6 +429,17 @@ export default function DrawSession() {
         />
         {showSessionProgress && side === "answer" && (
           <div className="mx-auto mt-3 flex flex-wrap justify-center gap-1 text-center sm:max-w-[50%]">
+            <div>
+              {sessionData.sessionResults.map((result, i) => {
+                return (
+                  !result.notAnswered && (
+                    <div key={i}>
+                      {result.word}({result.kanji}): {result.result}
+                    </div>
+                  )
+                );
+              })}
+            </div>
             {words &&
               sessionData.sessionKanjis.map((kanji) => {
                 const points = getAllWordsWithKanjiAndTags(
