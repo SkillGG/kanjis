@@ -315,8 +315,9 @@ export default function DrawSession() {
               newSession.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE;
 
             if (
-              !isKanjiCompleted(newSession, result.kanji) &&
-              allWPoints?.reduce((p, n) => (!p ? p : n > PTC), true)
+              !isKanjiCompleted(newSession, result.kanji) && // isn't completed already
+              allWPoints?.reduce((p, n) => (!p ? p : n > PTC), true) && // has enough points
+              result.result > 0 // just guessed it correctly
             ) {
               const markAsComplete = async () => {
                 const sessionWithCompleted: DrawSessionData = {
