@@ -111,7 +111,7 @@ export default function DrawSession() {
   }, [idb, sessionData]);
 
   const askForEndingSession = useCallback(() => {
-    if (!sessionData) return;
+    if (!sessionData || !dedupedSession) return;
     setDisableAnswering(true);
     setPopup({
       modal: true,
@@ -150,7 +150,7 @@ export default function DrawSession() {
         },
       },
     });
-  }, [closeTheSession, sessionData, setPopup]);
+  }, [closeTheSession, dedupedSession, sessionData, setPopup]);
 
   useEffect(() => {
     if (areWordsLoaded && sessionData && !dedupedSession) {
@@ -193,7 +193,7 @@ export default function DrawSession() {
   }, [areWordsLoaded, dedupedSession, idb, sessionData]);
 
   useEffect(() => {
-    if (sessionData && areWordsLoaded) {
+    if (sessionData && areWordsLoaded && dedupedSession) {
       // check if all results are completed
       const allCompleted = sessionData.sessionKanjis.reduce(
         (p, k) => (!p ? p : isKanjiCompleted(sessionData, k)),
@@ -210,7 +210,7 @@ export default function DrawSession() {
         setShowCanClose(false);
       }
     }
-  }, [areWordsLoaded, askForEndingSession, sessionData, showCanClose]);
+  }, [areWordsLoaded, askForEndingSession, dedupedSession, sessionData, showCanClose]);
 
   const [side, setSide] = useState<KanjiCardSide>("quiz");
 

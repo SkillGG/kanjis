@@ -393,7 +393,9 @@ export const getAllWordsElligibleForKanji = (
 };
 
 export const getLastKanjiResult = (session: DrawSessionData, kanji: string) => {
-  return [...session.sessionResults].reverse().find((r) => r.kanji === kanji);
+  return [...session.sessionResults]
+    .reverse()
+    .find((r) => !r.notAnswered && r.kanji === kanji);
 };
 
 export const isKanjiCompleted = (
