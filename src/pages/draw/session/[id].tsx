@@ -283,7 +283,7 @@ export default function DrawSession() {
                 ? result
                 : {
                     kanji: w.kanji,
-                    result: 1,
+                    result: 1 * Math.sign(result.result),
                     word: w.word,
                     notAnswered: true,
                   },
@@ -295,7 +295,7 @@ export default function DrawSession() {
                   ...sessionData,
                   sessionResults: [
                     ...sessionData?.sessionResults,
-                    ...tweakPoints,
+                    ...tweakPoints.filter((p) => p.result !== 0),
                   ],
                 }
               : sessionData;
