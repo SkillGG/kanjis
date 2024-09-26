@@ -392,6 +392,10 @@ export const getAllWordsElligibleForKanji = (
     .sort((a, b) => a.points - b.points || b.dist - a.dist);
 };
 
+export const getLastKanjiResult = (session: DrawSessionData, kanji: string) => {
+  return [...session.sessionResults].reverse().find((r) => r.kanji === kanji);
+};
+
 export const isKanjiCompleted = (
   session: DrawSessionData,
   kanji: string,
@@ -443,13 +447,22 @@ export async function* nextWordGenerator(
         k,
       );
       // log`${k}: ${words}`;
+      const lastRes = getLastKanjiResult(currentSessionData, k);
       return {
         kanji: k,
         words,
         completed: currentSessionData.sessionResults.find(
           (r) => r.kanji === k && r.completed,
         ),
-        dist: getDistanceFromLastKanji(currentSessionData, k),
+        dist:
+          getDistanceFromLastKanji(currentSessionData, k) /
+          (lastRes
+            ? lastRes.result === 0
+              ? 2
+              : lastRes.result < 0
+                ? 4
+                : 1
+            : 1),
         points:
           words
             .slice(0, 3)
