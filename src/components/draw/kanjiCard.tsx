@@ -125,7 +125,6 @@ export const KanjiCard = ({
               style={{ ...styles.buttons }}
             >
               <button
-                ref={goodRef}
                 onClick={async () => {
                   await commit({
                     kanji: word.kanji,
