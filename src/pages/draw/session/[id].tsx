@@ -283,7 +283,7 @@ export default function DrawSession() {
                 ? result
                 : {
                     kanji: w.kanji,
-                    result: allWords.length / 10,
+                    result: 1,
                     word: w.word,
                     notAnswered: true,
                   },
