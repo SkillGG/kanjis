@@ -169,7 +169,6 @@ export default function DrawSession() {
         }, null);
         return { k: k, p: pts?.p };
       });
-      log`latterPTS: ${kUAPTS}`;
       const nRS = kUAPTS.filter((f) => f.p);
       const dedupedSessionResults = sessionData.sessionResults
         .filter((f) => !f.notAnswered)
@@ -185,10 +184,13 @@ export default function DrawSession() {
         ...sessionData,
         sessionResults: dedupedSessionResults,
       };
-      log`deduped: ${dedupedSessionResults}`;
-      void idb.delete("draw", sessionData.sessionID);
-      void idb.put("draw", dedupedSD);
-      setSessionData(dedupedSD);
+      if (dedupedSessionResults.length < sessionData.sessionResults.length) {
+        log`orig: ${sessionData}`;
+        log`deduped: ${dedupedSessionResults}`;
+        void idb.delete("draw", sessionData.sessionID);
+        void idb.put("draw", dedupedSD);
+        setSessionData(dedupedSD);
+      }
     }
   }, [areWordsLoaded, dedupedSession, idb, sessionData]);
 

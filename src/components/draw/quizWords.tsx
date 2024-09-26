@@ -448,12 +448,12 @@ export async function* nextWordGenerator(
         dbWords,
         k,
       );
-      // log`${k}: ${words}`;
+      log`${k}: ${words}`;
       const lastRes = getLastKanjiResult(currentSessionData, k);
       return {
         kanji: k,
         words: words.filter((f) => f.word !== lastRes?.word),
-        completed: currentSessionData.sessionResults.find(
+        completed: currentSessionData.sessionResults.some(
           (r) => r.kanji === k && r.completed,
         ),
         dist: Math.min(
@@ -478,10 +478,11 @@ export async function* nextWordGenerator(
 
     const completed = kanjiWithWords.filter((k) => k.completed);
     const notCompleted = kanjiWithWords.filter((k) => !k.completed);
-    const maxDIST = kanjiWithWords.reduce((p, b) => {
-      const dist = b.dist === Infinity ? 0 : b.dist;
-      return dist > p ? dist : p;
-    }, 0);
+    const maxDIST = Math.max(
+      ...kanjiWithWords
+        .filter((k) => k.words.length > 0 && !k.completed)
+        .map((k) => (k.dist === Infinity ? 0 : k.dist)),
+    );
     const randomDISTBias = randomInt(2, Math.floor(maxDIST / 2));
     const minDIST =
       completed.length === kanjiWithWords.length ? 0 : maxDIST - randomDISTBias;
@@ -503,8 +504,9 @@ export async function* nextWordGenerator(
           (a.dist === Infinity ? 0 : a.dist) -
           (b.points - (b.dist === Infinity ? 0 : b.dist)),
       ); // sorted by points acquired
+    log`MaxDIST: ${maxDIST} ${kanjiWithWords.find((k) => k.dist === maxDIST)}`;
 
-    // log`Possible kanjis (rDB: ${randomDISTBias} mD: ${minDIST}): ${possibleKanji}`;
+    log`Possible kanjis (rDB: ${randomDISTBias} mD: ${minDIST}): ${possibleKanji}`;
 
     if (!possibleKanji || possibleKanji.length === 0) {
       currentSessionData = yield getNoWordErr(
@@ -528,7 +530,7 @@ export async function* nextWordGenerator(
       continue;
     }
 
-    // log`Chosen kanji: ${randomKanjiWithWords.kanji}`;
+    log`Chosen kanji: ${randomKanjiWithWords.kanji}`;
     // console.trace();
 
     if (randomKanjiWithWords.words.length === 0) {
@@ -537,7 +539,7 @@ export async function* nextWordGenerator(
       );
       continue;
     }
-    // log`Words that can be chosen: ${randomKanjiWithWords.words}}`;
+    log`Words that can be chosen: ${randomKanjiWithWords.words}}`;
 
     const randomWordIndex = randomStartWeighedInt(
       0,
