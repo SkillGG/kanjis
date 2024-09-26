@@ -5,6 +5,7 @@ import {
   nextWordGenerator,
   generateQWReadings,
   type QuizWord,
+  areWordsTheSame,
 } from "./quizWords";
 import { KanjiCard, type KanjiCardSide } from "./kanjiCard";
 import { useAppStore } from "../../appStore";
@@ -32,7 +33,7 @@ export const Quizlet = ({
 
   const areWordsLoaded = useAppStore((s) => s.firstWordLoad);
 
-  const nextWord = useCallback(
+  const loadNextWord = useCallback(
     async (sessionData: DrawSessionData) => {
       log`Asking for a new word`;
       if (!wordGenerator) return;
@@ -40,10 +41,15 @@ export const Quizlet = ({
       if ("err" in nextWord) {
         setError(nextWord.err);
       } else {
+        if (currentWord) {
+          if (areWordsTheSame(nextWord, currentWord)) {
+            return void loadNextWord(sessionData);
+          }
+        }
         setCurrentWord(nextWord);
       }
     },
-    [wordGenerator],
+    [currentWord, wordGenerator],
   );
 
   const idb = useAppStore((s) => s.getIDB());
@@ -85,7 +91,7 @@ export const Quizlet = ({
         disableButtons={disableAnswering}
         commit={async (result) => {
           const newSession = await commitResult(result);
-          await nextWord(newSession);
+          await loadNextWord(newSession);
         }}
         word={generateQWReadings(currentWord, {
           full: {
