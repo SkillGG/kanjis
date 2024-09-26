@@ -218,6 +218,10 @@ export default function DrawSession() {
     return <>Loading...</>;
   }
 
+  if (!dedupedSession) {
+    return <>Calculating first word...</>;
+  }
+
   if (!sessionData && !loadingError) {
     return <>Loading...</>;
   }
