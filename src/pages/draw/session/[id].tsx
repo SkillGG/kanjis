@@ -252,8 +252,6 @@ export default function DrawSession() {
     return <span>This session has already been closed!</span>;
   }
 
-  log`${sessionData.sessionResults}`;
-
   return (
     <>
       <Link

@@ -448,7 +448,7 @@ export async function* nextWordGenerator(
         dbWords,
         k,
       );
-      // log`${k}: ${words}`;
+      log`${k}: ${words}`;
       const lastRes = getLastKanjiResult(currentSessionData, k);
       return {
         kanji: k,
@@ -478,15 +478,17 @@ export async function* nextWordGenerator(
 
     const completed = kanjiWithWords.filter((k) => k.completed);
     const notCompleted = kanjiWithWords.filter((k) => !k.completed);
-    const randomDISTBias = randomInt(2, Math.floor(notCompleted.length / 2));
+    const maxDIST = kanjiWithWords.reduce((p, b) => {
+      const dist = b.dist === Infinity ? 0 : b.dist;
+      return dist > p ? dist : p;
+    }, 0);
+    const randomDISTBias = randomInt(2, Math.floor(maxDIST / 2));
     const minDIST =
-      completed.length === kanjiWithWords.length
-        ? 0
-        : notCompleted.length - randomDISTBias;
+      completed.length === kanjiWithWords.length ? 0 : maxDIST - randomDISTBias;
 
     const possibleKanji = kanjiWithWords
       .filter((z, _, a) => {
-        // log`${z.kanji}: ${z.dist} > ${minDIST} && ${z.words.length} >= 1`;
+        log`${z.kanji}: ${z.dist} > ${minDIST} && ${z.words.length} >= 1`;
         return completed.length === a.length
           ? true
           : (notCompleted.some((k) => k.kanji === z.kanji) ||
