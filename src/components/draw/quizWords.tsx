@@ -308,7 +308,7 @@ export const getWordPoints = (
   kanji: string,
 ): number =>
   session.sessionResults
-    .filter((sr) => sr.word === word && sr.kanji === kanji)
+    .filter((sr) => (sr.word === word || sr.word === "") && sr.kanji === kanji)
     .reduce((p, n) => p + n.result, 0);
 
 export const getAllWordsWithKanji = (
@@ -454,15 +454,16 @@ export async function* nextWordGenerator(
         completed: currentSessionData.sessionResults.find(
           (r) => r.kanji === k && r.completed,
         ),
-        dist:
-          getDistanceFromLastKanji(currentSessionData, k) /
-          (lastRes
+        dist: Math.min(
+          getDistanceFromLastKanji(currentSessionData, k),
+          lastRes
             ? lastRes.result === 0
-              ? 2
+              ? 40
               : lastRes.result < 0
-                ? 4
-                : 1
-            : 1),
+                ? 20
+                : Infinity
+            : Infinity,
+        ),
         points:
           words
             .slice(0, 3)
@@ -492,7 +493,12 @@ export async function* nextWordGenerator(
               z.words.length >= 1 &&
               z.dist > minDIST;
       })
-      .sort((a, b) => a.points - a.dist - (b.points - b.dist)); // sorted by points acquired
+      .sort(
+        (a, b) =>
+          a.points -
+          (a.dist === Infinity ? 0 : a.dist) -
+          (b.points - (b.dist === Infinity ? 0 : b.dist)),
+      ); // sorted by points acquired
 
     log`Possible kanjis (rDB: ${randomDISTBias} mD: ${minDIST}): ${possibleKanji}`;
 

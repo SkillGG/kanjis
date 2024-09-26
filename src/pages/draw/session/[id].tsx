@@ -100,6 +100,8 @@ export default function DrawSession() {
     }
   }, [areWordsLoaded, sessionData, words]);
 
+  const [dedupedSession, setDedupedSession] = useState(false);
+
   const closeTheSession = useCallback(async () => {
     if (!sessionData) return;
     const newSession = { ...sessionData, open: false };
@@ -149,6 +151,46 @@ export default function DrawSession() {
       },
     });
   }, [closeTheSession, sessionData, setPopup]);
+
+  useEffect(() => {
+    if (areWordsLoaded && sessionData && !dedupedSession) {
+      // dedupe session data
+      setDedupedSession(true);
+      const kUAPTS = sessionData.sessionKanjis.map((k) => {
+        const kupts = sessionData.sessionResults.filter(
+          (q) => q.notAnswered && q.kanji === k,
+        );
+        const pts = kupts.reduce<{ k: string; p: number } | null>((p, n) => {
+          if (p) {
+            return { k: p.k, p: p.p + (n.word === p.k ? n.result : 0) };
+          } else {
+            return { k: n.word, p: n.result };
+          }
+        }, null);
+        return { k: k, p: pts?.p };
+      });
+      log`latterPTS: ${kUAPTS}`;
+      const nRS = kUAPTS.filter((f) => f.p);
+      const dedupedSessionResults = sessionData.sessionResults
+        .filter((f) => !f.notAnswered)
+        .concat(
+          nRS.map<SessionResult>((rs) => ({
+            kanji: rs.k,
+            result: rs.p ?? 0,
+            word: "",
+            notAnswered: true,
+          })),
+        );
+      const dedupedSD = {
+        ...sessionData,
+        sessionResults: dedupedSessionResults,
+      };
+      log`deduped: ${dedupedSessionResults}`;
+      void idb.delete("draw", sessionData.sessionID);
+      void idb.put("draw", dedupedSD);
+      setSessionData(dedupedSD);
+    }
+  }, [areWordsLoaded, dedupedSession, idb, sessionData]);
 
   useEffect(() => {
     if (sessionData && areWordsLoaded) {
@@ -280,14 +322,12 @@ export default function DrawSession() {
               sessionData.sessionWordTags,
             );
 
-            const tweakPoints = allWords
-              .filter((w) => w.word !== result.word)
-              .map<SessionResult>((w) => ({
-                kanji: w.kanji,
-                result: 1 * Math.sign(result.result),
-                word: w.word,
-                notAnswered: true,
-              }));
+            const tweakPoints: SessionResult = {
+              kanji: result.kanji,
+              result: 1 * Math.sign(result.result),
+              word: "",
+              notAnswered: true,
+            };
 
             if (!sessionData) throw new Error("Session Data not found!");
             const newSession: DrawSessionData = sessionData
@@ -296,7 +336,7 @@ export default function DrawSession() {
                   sessionResults: [
                     ...sessionData?.sessionResults,
                     result,
-                    ...tweakPoints.filter((p) => p.result !== 0),
+                    ...(tweakPoints ? [tweakPoints] : []),
                   ],
                 }
               : sessionData;
@@ -307,9 +347,7 @@ export default function DrawSession() {
               const dist = getDistanceFromLastWord(newSession, word.word);
               return dist === Infinity
                 ? 0
-                : newSession.sessionResults
-                    .filter((r) => r.word === word.word)
-                    .reduce((p, n) => p + n.result, 0);
+                : getWordPoints(sessionData, word.word, word.kanji);
             });
 
             const PTC =
@@ -428,7 +466,7 @@ export default function DrawSession() {
           }}
         />
         {showSessionProgress && side === "answer" && (
-          <div className="mx-auto mt-3 flex flex-wrap justify-center gap-1 text-center sm:max-w-[50%]">
+          <div className="flex">
             <div>
               {sessionData.sessionResults.map((result, i) => {
                 return (
@@ -440,19 +478,47 @@ export default function DrawSession() {
                 );
               })}
             </div>
-            {words &&
-              sessionData.sessionKanjis.map((kanji) => {
-                const points = getAllWordsWithKanjiAndTags(
-                  words,
-                  kanji,
-                  sessionData.sessionWordTags,
-                );
-                if (isKanjiCompleted(sessionData, kanji)) {
+            <div className="mx-auto mt-3 flex flex-wrap justify-center gap-1 text-center sm:max-w-[50%]">
+              {words &&
+                sessionData.sessionKanjis.map((kanji) => {
+                  const points = getAllWordsWithKanjiAndTags(
+                    words,
+                    kanji,
+                    sessionData.sessionWordTags,
+                  );
+                  if (isKanjiCompleted(sessionData, kanji)) {
+                    return (
+                      <div key={kanji}>
+                        <KanjiTile
+                          badges={3}
+                          style={{ border: "1px solid lime" }}
+                          kanji={{
+                            kanji,
+                            index: 0,
+                            lvl: 0,
+                            status: "new",
+                            type: "base",
+                          }}
+                          overrideTitle={`${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}`, "")}`.trim()}
+                          update={noop}
+                          disabled
+                          lvlBadge=""
+                          extraBadge=""
+                        />
+                      </div>
+                    );
+                  }
+
+                  const PTC =
+                    sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE;
+                  const wPoints =
+                    `${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}/${sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE}`, "")}`.trim();
+
                   return (
                     <div key={kanji}>
                       <KanjiTile
-                        badges={3}
-                        style={{ border: "1px solid lime" }}
+                        badges={0}
+                        className="w-fit p-[0.6rem] before:text-[0.7rem]"
                         kanji={{
                           kanji,
                           index: 0,
@@ -460,62 +526,36 @@ export default function DrawSession() {
                           status: "new",
                           type: "base",
                         }}
-                        overrideTitle={`${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}`, "")}`.trim()}
-                        update={noop}
-                        disabled
-                        lvlBadge=""
+                        overrideTitle={wPoints}
+                        update={() => {
+                          setPopup({
+                            text: (
+                              <>
+                                {wPoints.split("\n").map((q, i) => (
+                                  <React.Fragment key={i}>
+                                    {q}
+                                    <br />
+                                  </React.Fragment>
+                                ))}
+                              </>
+                            ),
+                            time: 4000,
+                          });
+                        }}
+                        lvlBadge={`${points.reduce(
+                          (p, w) =>
+                            p +
+                            (getWordPoints(sessionData, w.word, kanji) > PTC
+                              ? 1
+                              : 0),
+                          0,
+                        )}/${points.length}`}
                         extraBadge=""
                       />
                     </div>
                   );
-                }
-
-                const PTC =
-                  sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE;
-                return (
-                  <div key={kanji}>
-                    <KanjiTile
-                      badges={0}
-                      className="w-fit p-[0.6rem] before:text-[0.7rem]"
-                      kanji={{
-                        kanji,
-                        index: 0,
-                        lvl: 0,
-                        status: "new",
-                        type: "base",
-                      }}
-                      overrideTitle={`${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}/${sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE}`, "")}`.trim()}
-                      update={() => {
-                        const wPoints =
-                          `${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}/${sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE}`, "")}`.trim();
-                        log`${wPoints.split("\n")}`;
-                        setPopup({
-                          text: (
-                            <>
-                              {wPoints.split("\n").map((q, i) => (
-                                <React.Fragment key={i}>
-                                  {q}
-                                  <br />
-                                </React.Fragment>
-                              ))}
-                            </>
-                          ),
-                          time: 4000,
-                        });
-                      }}
-                      lvlBadge={`${points.reduce(
-                        (p, w) =>
-                          p +
-                          (getWordPoints(sessionData, w.word, kanji) > PTC
-                            ? 1
-                            : 0),
-                        0,
-                      )}/${points.length}`}
-                      extraBadge=""
-                    />
-                  </div>
-                );
-              })}
+                })}
+            </div>
           </div>
         )}
       </div>
