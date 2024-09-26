@@ -131,6 +131,21 @@ export const KanjiCard = ({
                     kanji: word.kanji,
                     result: 10,
                     word: word.word,
+                    completed: true,
+                  });
+                  setSide("quiz");
+                }}
+                className="min-h-20 min-w-20 border-green-500 px-4 hover:bg-green-950 hover:text-green-300 sm:min-h-10 sm:min-w-10"
+              >
+                FC
+              </button>
+              <button
+                ref={goodRef}
+                onClick={async () => {
+                  await commit({
+                    kanji: word.kanji,
+                    result: 10,
+                    word: word.word,
                   });
                   setSide("quiz");
                 }}
