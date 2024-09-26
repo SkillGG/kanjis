@@ -318,6 +318,13 @@ export default function DrawSession() {
             >
               Settings
             </button>
+            <button
+              onClick={() => {
+                void navigator.clipboard.writeText(JSON.stringify(sessionData));
+              }}
+            >
+              Copy SD
+            </button>
           </div>
         </div>
         {popup}
