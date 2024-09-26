@@ -12,7 +12,7 @@ import {
 } from "@/components/draw/quizWords";
 import { usePopup } from "@/components/usePopup";
 import { type Kanji, useAppStore } from "@/appStore";
-import { log, noop } from "@/utils/utils";
+import { err, log, noop } from "@/utils/utils";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
@@ -320,10 +320,37 @@ export default function DrawSession() {
             </button>
             <button
               onClick={() => {
-                void navigator.clipboard.writeText(JSON.stringify(sessionData));
+                const a = document.createElement("a");
+                a.download = "SessionData.json";
+                a.href = URL.createObjectURL(
+                  new Blob([JSON.stringify(sessionData)]),
+                );
+                a.click();
               }}
             >
               Copy SD
+            </button>
+            <button
+              onClick={() => {
+                const f = document.createElement("input");
+                f.type = "file";
+                f.click();
+                f.onchange = async (e) => {
+                  const SD = await f.files?.[0]?.text();
+                  if (SD) {
+                    try {
+                      const nSD = JSON.parse(SD) as DrawSessionData;
+                      void idb.put("draw", nSD);
+                      setSessionData(nSD);
+                    } catch (_e) {
+                      err`${_e}`;
+                      return;
+                    }
+                  }
+                };
+              }}
+            >
+              Write SD
             </button>
           </div>
         </div>
