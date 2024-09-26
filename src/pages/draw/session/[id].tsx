@@ -210,7 +210,13 @@ export default function DrawSession() {
         setShowCanClose(false);
       }
     }
-  }, [areWordsLoaded, askForEndingSession, dedupedSession, sessionData, showCanClose]);
+  }, [
+    areWordsLoaded,
+    askForEndingSession,
+    dedupedSession,
+    sessionData,
+    showCanClose,
+  ]);
 
   const [side, setSide] = useState<KanjiCardSide>("quiz");
 
@@ -471,7 +477,7 @@ export default function DrawSession() {
         />
         {showSessionProgress && side === "answer" && (
           <div className="flex">
-            <div>
+            <div className="flex-shrink-0 basis-[100px]">
               {sessionData.sessionResults.map((result, i) => {
                 return (
                   !result.notAnswered && (
@@ -482,7 +488,7 @@ export default function DrawSession() {
                 );
               })}
             </div>
-            <div className="mx-auto mt-3 flex flex-wrap justify-center gap-1 text-center sm:max-w-[50%]">
+            <div className="mx-auto mt-3 flex h-fit flex-wrap justify-center gap-1 self-start text-center sm:max-w-[50%]">
               {words &&
                 sessionData.sessionKanjis.map((kanji) => {
                   const points = getAllWordsWithKanjiAndTags(
