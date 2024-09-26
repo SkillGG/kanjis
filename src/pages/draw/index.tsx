@@ -3,7 +3,6 @@
 import { type DrawSessionData } from "@/components/draw/drawSession";
 import { DEFAULT_POINTS_TO_COMPLETE } from "@/components/draw/Quizlet";
 import { type QuizWord } from "@/components/draw/quizWords";
-import { KanjiTile } from "@/components/list/kanjiTile";
 import { useLocalStorage } from "@/components/localStorageProvider";
 import SettingBox from "@/components/settingBox";
 import { usePopup } from "@/components/usePopup";
@@ -13,6 +12,7 @@ import Router, { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getMergedKanjis } from "@/components/list/kanjiStorage";
 import { useWindowSize } from "@/utils/useWindowSize";
+import KanjiTile from "@/components/list/kanjiTile";
 
 const MIN_SESSION_SIZE = 5;
 const MIN_WORD_SIZE = 10;

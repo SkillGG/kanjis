@@ -10,16 +10,16 @@ import {
   getWordPoints,
   isKanjiCompleted,
 } from "@/components/draw/quizWords";
-import { KanjiTile } from "@/components/list/kanjiTile";
 import { usePopup } from "@/components/usePopup";
 import { type Kanji, useAppStore } from "@/appStore";
-import { noop } from "@/utils/utils";
+import { log, noop } from "@/utils/utils";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import SettingBox from "@/components/settingBox";
 import { getMergedKanjis } from "@/components/list/kanjiStorage";
 import { useLocalStorage } from "@/components/localStorageProvider";
+import KanjiTile from "@/components/list/kanjiTile";
 
 export default function DrawSession() {
   const router = useRouter();
@@ -472,7 +472,24 @@ export default function DrawSession() {
                         type: "base",
                       }}
                       overrideTitle={`${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}/${sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE}`, "")}`.trim()}
-                      update={noop}
+                      update={() => {
+                        const wPoints =
+                          `${points.reduce((p, n) => `${p}\n${n.word}:${getWordPoints(sessionData, n.word, kanji)}/${sessionData.pointsToComplete ?? DEFAULT_POINTS_TO_COMPLETE}`, "")}`.trim();
+                        log`${wPoints.split("\n")}`;
+                        setPopup({
+                          text: (
+                            <>
+                              {wPoints.split("\n").map((q, i) => (
+                                <React.Fragment key={i}>
+                                  {q}
+                                  <br />
+                                </React.Fragment>
+                              ))}
+                            </>
+                          ),
+                          time: 4000,
+                        });
+                      }}
                       lvlBadge={`${points.reduce(
                         (p, w) =>
                           p +

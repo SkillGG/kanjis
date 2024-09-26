@@ -1,12 +1,12 @@
 import { type Kanji, useAppStore } from "@/appStore";
 import { useMemo } from "react";
 import { usePopup } from "../usePopup";
-import { KanjiTile } from "./kanjiTile";
 import { log, noop } from "@/utils/utils";
 import { type QuizWord } from "../draw/quizWords";
 
 import listCSS from "./list.module.css";
 import { twMerge } from "tailwind-merge";
+import KanjiTile from "./kanjiTile";
 
 export default function WordbankOnlyKanjiList({
   listKanji,
@@ -43,6 +43,7 @@ export default function WordbankOnlyKanjiList({
             status: "new",
             type: "extra",
           }}
+          disabled
           update={() => {
             setPopup({
               modal: true,

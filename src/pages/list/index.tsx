@@ -19,7 +19,6 @@ import {
 import { getShareLink, doesKanjiFitFilter } from "@/components/list/kanjiUtils";
 import Head from "next/head";
 import { textColors } from "@/components/list/theme";
-import { KanjiTile } from "@/components/list/kanjiTile";
 import Link from "next/link";
 import { api } from "@/utils/api";
 import shortUUID from "short-uuid";
@@ -27,6 +26,7 @@ import { log, warn } from "@/utils/utils";
 import { usePopup } from "@/components/usePopup";
 import { type Kanji, useAppStore } from "@/appStore";
 import WordbankOnlyKanjiList from "@/components/list/wordbankOnlyKanjiList";
+import KanjiTile from "@/components/list/kanjiTile";
 
 const CHECK_DEDPUE_DELAY = 500;
 

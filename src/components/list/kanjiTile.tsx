@@ -2,8 +2,9 @@ import { twMerge } from "tailwind-merge";
 import { type Kanji } from "../../appStore";
 import kanjiCSS from "./list.module.css";
 import { hoverColors, bgColors, borderColors, extraSignColor } from "./theme";
+import React from "react";
 
-export const KanjiTile = ({
+const KanjiTile = ({
   kanji: kanjiData,
   badges,
   update,
@@ -68,3 +69,5 @@ export const KanjiTile = ({
     </button>
   );
 };
+
+export default React.memo(KanjiTile);
