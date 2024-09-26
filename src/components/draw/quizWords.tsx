@@ -448,7 +448,7 @@ export async function* nextWordGenerator(
         dbWords,
         k,
       );
-      log`${k}: ${words}`;
+      // log`${k}: ${words}`;
       const lastRes = getLastKanjiResult(currentSessionData, k);
       return {
         kanji: k,
@@ -488,7 +488,7 @@ export async function* nextWordGenerator(
 
     const possibleKanji = kanjiWithWords
       .filter((z, _, a) => {
-        log`${z.kanji}: ${z.dist} > ${minDIST} && ${z.words.length} >= 1`;
+        // log`${z.kanji}: ${z.dist} > ${minDIST} && ${z.words.length} >= 1`;
         return completed.length === a.length
           ? true
           : (notCompleted.some((k) => k.kanji === z.kanji) ||
@@ -504,7 +504,7 @@ export async function* nextWordGenerator(
           (b.points - (b.dist === Infinity ? 0 : b.dist)),
       ); // sorted by points acquired
 
-    log`Possible kanjis (rDB: ${randomDISTBias} mD: ${minDIST}): ${possibleKanji}`;
+    // log`Possible kanjis (rDB: ${randomDISTBias} mD: ${minDIST}): ${possibleKanji}`;
 
     if (!possibleKanji || possibleKanji.length === 0) {
       currentSessionData = yield getNoWordErr(
@@ -528,7 +528,7 @@ export async function* nextWordGenerator(
       continue;
     }
 
-    log`Chosen kanji: ${randomKanjiWithWords.kanji}`;
+    // log`Chosen kanji: ${randomKanjiWithWords.kanji}`;
     // console.trace();
 
     if (randomKanjiWithWords.words.length === 0) {
@@ -537,7 +537,7 @@ export async function* nextWordGenerator(
       );
       continue;
     }
-    log`Words that can be chosen: ${randomKanjiWithWords.words}}`;
+    // log`Words that can be chosen: ${randomKanjiWithWords.words}}`;
 
     const randomWordIndex = randomStartWeighedInt(
       0,

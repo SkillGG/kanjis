@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getMergedKanjis } from "@/components/list/kanjiStorage";
 import { useWindowSize } from "@/utils/useWindowSize";
 import KanjiTile from "@/components/list/kanjiTile";
+import { err } from "@/utils/utils";
 
 const MIN_SESSION_SIZE = 5;
 const MIN_WORD_SIZE = 10;
@@ -391,7 +392,7 @@ export default function Draw() {
                         style={{ gridArea: "a" }}
                         className="h-full rounded-none border-x-0 border-b-2 border-t-0 border-slate-600 hover:bg-slate-300"
                         onClick={() => {
-                          void router.replace(`/draw/session/${s.sessionID}`);
+                          void router.push(`/draw/session/${s.sessionID}`);
                         }}
                       >
                         LOAD
@@ -465,6 +466,29 @@ export default function Draw() {
               Start new session
             </button>
             <button
+              className="ml-2 cursor-pointer rounded-xl border-2 border-slate-400 bg-slate-600 p-2 text-[lime] hover:bg-slate-500"
+              onClick={() => {
+                const f = document.createElement("input");
+                f.type = "file";
+                f.click();
+                f.onchange = async () => {
+                  const SD = await f.files?.[0]?.text();
+                  if (SD) {
+                    try {
+                      const nSD = JSON.parse(SD) as DrawSessionData;
+                      await idb.put("draw", nSD);
+                      await router.push(`/draw/session/${nSD.sessionID}`);
+                    } catch (_e) {
+                      err`${_e}`;
+                      return;
+                    }
+                  }
+                };
+              }}
+            >
+              Import session
+            </button>
+            <button
               onClick={() => {
                 setPopup({
                   modal: true,
@@ -502,6 +526,7 @@ export default function Draw() {
             >
               Settings
             </button>
+
             <div className="ml-2 flex flex-col justify-center text-center">
               Row count
               <div>
