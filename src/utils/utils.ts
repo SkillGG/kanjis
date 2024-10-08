@@ -1,5 +1,4 @@
 import { env } from "@/env";
-import { useEffect, useRef } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const noop = () => {};
