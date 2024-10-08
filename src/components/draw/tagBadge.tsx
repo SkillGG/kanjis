@@ -3,8 +3,8 @@ import { twMerge } from "tailwind-merge";
 
 export default React.forwardRef<
   HTMLButtonElement,
-  {
-    tag: string;
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    tag: React.ReactNode;
     bgColor?: CSSProperties["backgroundColor"];
     color?: CSSProperties["color"];
     border?: CSSProperties["borderColor"];
@@ -13,7 +13,7 @@ export default React.forwardRef<
     onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>;
   }
 >(function TagLabel(
-  { tag, bgColor, color, border, onClick, onKeyDown, className },
+  { tag, bgColor, color, border, onClick, onKeyDown, className, ...props },
   ref,
 ) {
   return (
@@ -23,6 +23,7 @@ export default React.forwardRef<
       className={twMerge(className, `rounded-xl px-2 py-0 text-center`)}
       style={{ backgroundColor: bgColor, color, borderColor: border }}
       onClick={onClick}
+      {...props}
     >
       {tag}
     </button>

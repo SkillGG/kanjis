@@ -539,6 +539,10 @@ if (typeof window !== "undefined") {
 
     useAppStore.getState().setIDB(db);
 
+    const allWords = await db.getAll("wordbank");
+    await new Promise((res) => setTimeout(res, 1000));
+    await useAppStore.getState().setWords(async (_) => allWords, false);
+
     const LS = createLSStore(false);
 
     const mergedKanjis = await getMergedKanjis(LS, db, [], "a");
@@ -549,9 +553,5 @@ if (typeof window !== "undefined") {
     const lsColors =
       LS.getObject<Record<string, TagInfo>>(LS_KEYS.tag_colors) ?? {};
     useAppStore.getState().setTagColors({ ...tColors, ...lsColors });
-
-    const allWords = await db.getAll("wordbank");
-    await new Promise((res) => setTimeout(res, 1000));
-    await useAppStore.getState().setWords(async (_) => allWords, false);
   })();
 }

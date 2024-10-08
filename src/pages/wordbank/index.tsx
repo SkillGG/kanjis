@@ -27,8 +27,11 @@ import { TagEditor } from "@/components/wordbank/tagEditor";
 import SettingBox from "@/components/settingBox";
 import { compareReadings, useAppStore } from "@/appStore";
 import { OCDB } from "@/components/wordbank/ocdButton";
+import { AddTagButton } from "@/components/wordbank/addTag";
+import { LoadingIcon } from "@/components/wordbank/loadingIcon";
+import { RestoreBankToDefault } from "@/components/wordbank/restoreBankToDefaultButton";
 
-const keyboradEventToNumber = (e: React.KeyboardEvent<HTMLElement>) => {
+export const keyboradEventToNumber = (e: React.KeyboardEvent<HTMLElement>) => {
   const clickedDigit = /digit([1-5])/i.exec(e.code);
 
   if (!clickedDigit) return -1;
@@ -48,19 +51,15 @@ const keyboradEventToNumber = (e: React.KeyboardEvent<HTMLElement>) => {
 export default function KanjiCardCreator() {
   const LS = useLocalStorage();
 
-  const [tagColors, setTagColors] = useAppStore((s) => [
-    s.tagColors,
-    s.setTagColors,
-  ]);
+  const tagColors = useAppStore((s) => s.tagColors);
+  const setTagColors = useAppStore((s) => s.setTagColors);
 
   const idb = useAppStore((s) => s.getIDB());
 
   const { setPopup, popup } = usePopup();
 
   const foldedWords = useAppStore((s) => s.foldedWords);
-
   const _words = useAppStore((s) => s.words);
-
   const _setWords = useAppStore((s) => s.setWords);
   const _removeWords = useAppStore((s) => s.removeWords);
   const _addWords = useAppStore((s) => s.addWords);
@@ -97,20 +96,35 @@ export default function KanjiCardCreator() {
   const mainInput = useRef<HTMLInputElement>(null);
   const meaningInput = useRef<HTMLInputElement>(null);
 
-  const shownWords = useMemo(() => {
+  const sortedWords = useMemo(() => {
+    return foldedWords?.sort((a, b) => compareReadings(a, b));
+  }, [foldedWords]);
+
+  const filteredWords = useMemo(() => {
     // filter all the words
-    const sortedWords = foldedWords?.sort((a, b) => compareReadings(a, b));
-    return [...(sortedWords ?? [])]?.filter((q) =>
-      autoFilter
-        ? (q.word.includes(wordVal) || q.meaning.includes(wordVal)) &&
-          (addWithTags.length === 0
-            ? true
-            : !!q.tags?.some((t) => addWithTags.includes(t)) ||
-              (addWithTags.includes("UNTAGGED") &&
-                (!q.tags || q.tags.length == 0)))
-        : true,
+    return [...(sortedWords ?? [])]?.filter((q) => {
+      if (!autoFilter) return false;
+      if (!(q.word.includes(wordVal) || q.meaning.includes(wordVal)))
+        return false;
+      if (addWithTags.length === 0) {
+        return true;
+      }
+      if (q.tags?.some((t) => addWithTags.includes(t))) {
+        return true;
+      }
+      if (addWithTags.includes("UNTAGGED") && (!q.tags || q.tags.length == 0)) {
+        return true;
+      }
+      return true;
+    });
+  }, [addWithTags, autoFilter, sortedWords, wordVal]);
+
+  const shownWords = useMemo(() => {
+    return filteredWords.slice(
+      showLimit > filteredWords.length ? 0 : page * showLimit,
+      Math.min((page + 1) * showLimit, filteredWords.length),
     );
-  }, [addWithTags, autoFilter, foldedWords, wordVal]);
+  }, [filteredWords, page, showLimit]);
 
   useEffect(() => {
     // check if there is a bank update
@@ -193,7 +207,7 @@ export default function KanjiCardCreator() {
 
   const [openTagEditor, setOpenTagEditor] = useState(false);
 
-  const shownWordCount = shownWords.length;
+  const shownWordCount = filteredWords.length;
 
   const allWordCount = new Set(
     _words?.map(
@@ -259,41 +273,7 @@ export default function KanjiCardCreator() {
               "COPY BANK"
             )}
           </button>
-          <button
-            onClick={async () => {
-              setPopup({
-                text: (close) => (
-                  <div className="text-center">
-                    Are you sure you want to restore the wordbank to default (v
-                    {defaultWordBank.version})?
-                    <br />
-                    <button
-                      className="text-[red]"
-                      onClick={async () => {
-                        if (!idb) return;
-                        log`Restoring...`;
-                        await _setWords(async () => defaultWordBank.words);
-                        close();
-                      }}
-                    >
-                      YES
-                    </button>
-                    <button
-                      onClick={() => {
-                        close();
-                      }}
-                    >
-                      NO
-                    </button>
-                  </div>
-                ),
-                time: "user",
-                borderColor: "red",
-              });
-            }}
-          >
-            RESTORE TO DEFAULT
-          </button>
+          <RestoreBankToDefault defaultWordBank={defaultWordBank} />
           {canUpdateBank && (
             <button
               className="ml-2 p-3"
@@ -742,177 +722,108 @@ export default function KanjiCardCreator() {
           )}
         </div>
         <div className="mx-auto flex max-w-[90vw] flex-wrap justify-center gap-1">
-          {shownWords.length === 0 ? (
+          {filteredWords.length === 0 ? (
             <>No words found</>
           ) : (
-            shownWords
-              .slice(
-                showLimit > shownWordCount ? 0 : page * showLimit,
-                Math.min((page + 1) * showLimit, shownWordCount),
-              )
-              .map((q) => {
-                const editTags = async (tags: string[]) => {
-                  log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
+            shownWords.map((q) => {
+              const editTags = async (tags: string[]) => {
+                log`Changing tags for word ${q} from ${q.tags} to ${tags}`;
 
-                  const nWords = unfoldQW(q).map((s) => ({ ...s, tags }));
+                const nWords = unfoldQW(q).map((s) => ({ ...s, tags }));
 
-                  await _setWords(async (prev) =>
-                    prev.map(
-                      (pw) =>
-                        nWords.find((nw) => areWordsTheSame(pw, nw)) ?? pw,
-                    ),
-                  );
-                };
-                return (
-                  <div
-                    key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
-                    className="relative w-fit flex-grow"
+                await _setWords(async (prev) =>
+                  prev.map(
+                    (pw) => nWords.find((nw) => areWordsTheSame(pw, nw)) ?? pw,
+                  ),
+                );
+              };
+              return (
+                <div
+                  key={`kc_${q.word}_${q.special}_${q.readings.join("_")}`}
+                  className="relative w-fit flex-grow"
+                >
+                  <button
+                    className="absolute left-2 top-1 border-none text-[red]"
+                    onClick={async () => {
+                      setWordVal(q.word);
+                      setReadings(q.readings);
+                      setMeaning(q.meaning);
+                      setSpecial(q.multiSpecial ?? [q.special]);
+                      setAddWithTags(q.tags ?? []);
+                      setEditing(q);
+                    }}
                   >
-                    <button
-                      className="absolute left-2 top-1 border-none text-[red]"
-                      onClick={async () => {
-                        setWordVal(q.word);
-                        setReadings(q.readings);
-                        setMeaning(q.meaning);
-                        setSpecial(q.multiSpecial ?? [q.special]);
-                        setAddWithTags(q.tags ?? []);
-                        setEditing(q);
-                      }}
-                    >
-                      Edit
-                    </button>
-                    <OCDB
-                      className="absolute right-2 top-1 border-none p-0 text-[red]"
-                      swappedChildren={
-                        <div className="absolute right-[-2px] top-[3px] h-[12px] w-[12px] animate-spin rounded-[50%] border-[2px] border-x-[#666c] border-b-[#666c] border-t-[red]"></div>
-                      }
-                      onClick={(_, end) => {
-                        setTimeout(() => {
-                          void (async () => {
-                            await _removeWords(unfoldQW(q));
-                            end();
-                          })();
-                        }, 0);
-                      }}
-                    >
-                      X
-                    </OCDB>
-                    <KanjiCard
-                      key={`${q.word}_${q.special}_${q.readings.join("_")}_ans`}
-                      classNames={{
-                        border: "w-full border-[blue] border-[1px]",
-                        text: "text-xl",
-                      }}
-                      tagOverride={
-                        <div className="flex flex-wrap gap-2">
-                          {q.tags?.map((t) => {
-                            return (
-                              <div key={t}>
-                                <TagLabel
-                                  tag={t}
-                                  color={tagColors?.[t]?.color}
-                                  bgColor={tagColors?.[t]?.bg}
-                                  border={tagColors?.[t]?.border}
-                                  onClick={async () => {
-                                    await editTags(
-                                      q.tags?.filter((f) => f !== t) ?? [],
-                                    );
-                                  }}
-                                />
-                              </div>
-                            );
-                          })}
-                          {(!tagColors ||
-                            !Object.keys(tagColors).reduce(
-                              (p, n) =>
-                                !p ? p : (q.tags?.includes(n) ?? false),
-                              true,
-                            )) && (
-                            <div>
+                    Edit
+                  </button>
+                  <OCDB
+                    className="absolute right-2 top-1 border-none p-0 text-[red]"
+                    swappedChildren={
+                      <LoadingIcon
+                        className="absolute right-[-2px] top-[3px]"
+                        size={12}
+                        spinner="#666c"
+                        accent="red"
+                      />
+                    }
+                    onClick={(_, end) => {
+                      setTimeout(() => {
+                        void (async () => {
+                          await _removeWords(unfoldQW(q));
+                          end();
+                        })();
+                      }, 0);
+                    }}
+                  >
+                    X
+                  </OCDB>
+                  <KanjiCard
+                    key={`${q.word}_${q.special}_${q.readings.join("_")}_ans`}
+                    classNames={{
+                      border: "w-full border-[blue] border-[1px]",
+                      text: "text-xl",
+                    }}
+                    tagOverride={
+                      <div className="flex flex-wrap gap-2">
+                        {q.tags?.map((t) => {
+                          return (
+                            <div key={t}>
                               <TagLabel
-                                tag={"Add tag"}
-                                onClick={() => {
-                                  setPopup({
-                                    modal: true,
-                                    modalStyle: {
-                                      styles: { "--backdrop": "#fff6" },
-                                    },
-                                    onOpen(d) {
-                                      d?.focus();
-                                    },
-                                    onKeyDown(e, d) {
-                                      const num = keyboradEventToNumber(e);
-                                      if (num === -1) return;
-                                      const buttons =
-                                        d?.querySelectorAll("button");
-                                      if (!buttons) return;
-                                      if (!tagColors) return;
-                                      const btn = [...buttons].find(
-                                        (b) =>
-                                          Object.keys(tagColors).indexOf(
-                                            b.innerText.trim(),
-                                          ) ===
-                                          num - 1,
-                                      );
-                                      if (document.activeElement === btn) {
-                                        btn?.click();
-                                      } else {
-                                        btn?.focus();
-                                      }
-                                    },
-                                    text(close) {
-                                      if (!tagColors) {
-                                        close(true);
-                                        return <></>;
-                                      }
-                                      return (
-                                        <>
-                                          <div className="text-xl">
-                                            Choose a tag
-                                          </div>
-                                          <div className="flex flex-col items-center gap-2">
-                                            {Object.entries(tagColors)
-                                              .filter(
-                                                ([t]) => !q.tags?.includes(t),
-                                              )
-                                              .map((tc) => (
-                                                <div key={tc[0]}>
-                                                  <TagLabel
-                                                    tag={tc[0]}
-                                                    bgColor={tc[1].bg}
-                                                    border={tc[1].border}
-                                                    color={tc[1].color}
-                                                    onClick={async () => {
-                                                      close();
-                                                      await editTags([
-                                                        ...(q.tags ?? []),
-                                                        tc[0],
-                                                      ]);
-                                                    }}
-                                                  />
-                                                </div>
-                                              ))}
-                                          </div>
-                                        </>
-                                      );
-                                    },
-                                    time: "user",
-                                  });
+                                tag={t}
+                                color={tagColors?.[t]?.color}
+                                bgColor={tagColors?.[t]?.bg}
+                                border={tagColors?.[t]?.border}
+                                onClick={async () => {
+                                  await editTags(
+                                    q.tags?.filter((f) => f !== t) ?? [],
+                                  );
                                 }}
                               />
                             </div>
-                          )}
-                        </div>
-                      }
-                      styles={{ text: { "--color": "lime" } }}
-                      commit={asyncNoop}
-                      word={generateQWReadings(q, undefined, q.multiSpecial)}
-                      disableButtons
-                      sideOverride="answer"
-                    />
-                  </div>
-                );
-              })
+                          );
+                        })}
+                        {(!tagColors ||
+                          !Object.keys(tagColors).reduce(
+                            (p, n) => (!p ? p : (q.tags?.includes(n) ?? false)),
+                            true,
+                          )) && (
+                          <AddTagButton
+                            word={q}
+                            onAdded={async (t) => {
+                              await editTags([...(q.tags ?? []), t]);
+                            }}
+                          />
+                        )}
+                      </div>
+                    }
+                    styles={{ text: { "--color": "lime" } }}
+                    commit={asyncNoop}
+                    word={generateQWReadings(q, undefined, q.multiSpecial)}
+                    disableButtons
+                    sideOverride="answer"
+                  />
+                </div>
+              );
+            })
           )}
         </div>
       </>
