@@ -1,7 +1,7 @@
 import { log } from "@/utils/utils";
 import { type Kanji } from "../../appStore";
 
-export const DEFAULT_KANJI_VERSION = "0.2.2";
+export const DEFAULT_KANJI_VERSION = "0.2.4";
 
 const dedupe = (s: string) => {
   return [...new Set(s)].join("");
@@ -49,7 +49,7 @@ const l1Extras = dedupe(
 券`, // TODO page 165+
 );
 
-const l2Extras = dedupe(``);
+const l2Extras = dedupe(`神`);
 
 const l2Kanji = dedupe(`
 映画写真音楽料組思色白黒赤

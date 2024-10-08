@@ -10,6 +10,7 @@ import { LocalStorageProvider } from "@/components/localStorageProvider";
 import { useAppStore } from "@/appStore";
 
 import localFont from "next/font/local";
+import { LoadingIcon } from "@/components/wordbank/loadingIcon";
 
 export const strokeOrderFont = localFont({
   src: "./KSOF.ttf",
@@ -29,7 +30,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           </div>
         </LocalStorageProvider>
       ) : (
-        <>Connecting to local DB...</>
+        <div className="mt-2 flex content-center justify-center">
+          Connecting to local DB
+          <LoadingIcon
+            width={3}
+            className="ml-3 inline-block"
+            accent="lime"
+            spinner="transparent"
+            size={20}
+          />
+        </div>
       )}
     </>
   );

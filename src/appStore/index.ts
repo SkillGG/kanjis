@@ -516,9 +516,9 @@ if (typeof window !== "undefined") {
       allKanjis.map((k) => getWordWithout(k)),
     );
   };
-
+  let db: IDBPDatabase<AppDBSchema> | null = null;
   void (async () => {
-    const db = await openDB<AppDBSchema>(
+    db = await openDB<AppDBSchema>(
       defaultDBSchema.name,
       defaultDBSchema.version,
       {
@@ -537,8 +537,6 @@ if (typeof window !== "undefined") {
 
     defaultDBSchema.seed(db);
 
-    useAppStore.getState().setIDB(db);
-
     const allWords = await db.getAll("wordbank");
     await new Promise((res) => setTimeout(res, 1000));
     await useAppStore.getState().setWords(async (_) => allWords, false);
@@ -553,5 +551,7 @@ if (typeof window !== "undefined") {
     const lsColors =
       LS.getObject<Record<string, TagInfo>>(LS_KEYS.tag_colors) ?? {};
     useAppStore.getState().setTagColors({ ...tColors, ...lsColors });
-  })();
+  })().then(() => {
+    if (db) useAppStore.getState().setIDB(db);
+  });
 }

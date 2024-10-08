@@ -473,14 +473,18 @@ function App() {
         {popup}
         {shouldUpdate && (
           <div
-            className={kanjiCSS.popup + " z-20 text-center text-[1.3rem]"}
+            className={popupCSS.popup + " " + popupCSS.popupModal}
             style={{
-              "--borderColor": "red",
+              "--borderColor": "green",
+              "--backdrop": "#fff3",
               "--textColor": "white",
             }}
-            data-open={"open"}
+            data-open={shouldUpdate ? "open" : "closed"}
+            onClick={() => {
+              setShouldUpdate(false);
+            }}
           >
-            <div>
+            <div className="p-5 text-center text-xl">
               There was an update to the kanji list!
               <br />({LS.getString(LS_KEYS.kanji_ver) ?? "0.0.1"} =&gt;{" "}
               {DEFAULT_KANJI_VERSION})

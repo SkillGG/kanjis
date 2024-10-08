@@ -14,6 +14,7 @@ import { getMergedKanjis } from "@/components/list/kanjiStorage";
 import { useWindowSize } from "@/utils/useWindowSize";
 import { err } from "@/utils/utils";
 import { KanjiSelector } from "@/components/draw/kanjiList";
+import WordbankOnlyKanjiList from "@/components/list/wordbankOnlyKanjiList";
 
 const MIN_SESSION_SIZE = 5;
 const MIN_WORD_SIZE = 10;
@@ -215,111 +216,142 @@ export default function Draw() {
     }
   }, [selectedKanjis, selectedWordTags, selectedWords]);
 
+  const bankWordFilter = useCallback(
+    (w: QuizWord) => {
+      return !!w.tags?.some((t) => selectedWordTags.includes(t));
+    },
+    [selectedWordTags],
+  );
+
+  const wordSortings: WordSorting[] = useMemo(
+    () => [
+      ...[
+        "UNTAGGED",
+        ...[
+          ...new Set<string>(words.map<string[]>((w) => w.tags ?? []).flat()),
+        ].sort(),
+      ].map<WordSorting>((tag) => ({
+        name: tag.toUpperCase(),
+        check(_w, selected) {
+          return selected.includes(tag);
+        },
+        deselect(_w, s) {
+          return s.filter((q) => q !== tag);
+        },
+        select(_w, s) {
+          return [...s, tag];
+        },
+      })),
+      {
+        name: "TOGGLE ALL",
+        check() {
+          return false;
+        },
+        deselect(_w, s) {
+          return s;
+        },
+        select() {
+          if (allWordTags.some((wt) => !selectedWordTags.includes(wt))) {
+            return allWordTags;
+          } else {
+            return [];
+          }
+        },
+      },
+    ],
+    [allWordTags, selectedWordTags, words],
+  );
+
+  const selectableKanji: Kanji[] = useMemo(
+    () => kanjis.filter((k) => selectedWords.some((w) => w.kanji === k.kanji)),
+    [kanjis, selectedWords],
+  );
+
+  const kanjiSortings: KanjiSorting[] = useMemo(
+    () => [
+      {
+        name: "ALL",
+        check(kanjis, selected) {
+          return kanjis.every((k) => selected.includes(k.kanji));
+        },
+        deselect() {
+          return [];
+        },
+        select(k) {
+          return k.map((k) => k.kanji);
+        },
+      },
+      ...[...new Set<string>(kanjis.map((k) => k.status))]
+        .sort()
+        .map<KanjiSorting>((status) => ({
+          name: status.toUpperCase(),
+          check(kanjis, selected) {
+            return kanjis.reduce(
+              (p, n) =>
+                !p || n.status !== status ? p : selected.includes(n.kanji),
+              true,
+            );
+          },
+          deselect(k, s) {
+            return s.filter(
+              (q) => k.find((x) => x.kanji === q)?.status !== status,
+            );
+          },
+          select(kanjis, selected) {
+            return [
+              ...selected,
+              ...kanjis.filter((k) => k.status === status).map((k) => k.kanji),
+            ];
+          },
+        })),
+      ...[...new Set<string>(kanjis.map((k) => k.type))]
+        .sort()
+        .map<KanjiSorting>((type) => ({
+          name: type.toUpperCase(),
+          check(kanjis, selected) {
+            return kanjis.reduce(
+              (p, n) =>
+                !p || n.type !== type ? p : selected.includes(n.kanji),
+              true,
+            );
+          },
+          deselect(k, s) {
+            return s.filter((q) => k.find((x) => x.kanji === q)?.type !== type);
+          },
+          select(kanjis, selected) {
+            return [
+              ...selected,
+              ...kanjis.filter((k) => k.type === type).map((k) => k.kanji),
+            ];
+          },
+        })),
+      ...[...new Set<number>(kanjis.map((k) => k.lvl))].map<KanjiSorting>(
+        (lvl) => ({
+          name: `LVL${lvl}`,
+          check(kanjis, selected) {
+            return kanjis.reduce(
+              (p, n) => (!p || n.lvl !== lvl ? p : selected.includes(n.kanji)),
+              true,
+            );
+          },
+          deselect(k, s) {
+            return s.filter((q) => k.find((x) => x.kanji === q)?.lvl !== lvl);
+          },
+          select(kanjis, selected) {
+            return [
+              ...selected,
+              ...kanjis.filter((k) => k.lvl === lvl).map((k) => k.kanji),
+            ];
+          },
+        }),
+      ),
+    ],
+    [kanjis],
+  );
+
   if (!kanjis || rowCount === null) {
     return <>Loading</>;
   }
-
-  const wordSortings: WordSorting[] = [
-    ...[
-      "UNTAGGED",
-      ...[
-        ...new Set<string>(words.map<string[]>((w) => w.tags ?? []).flat()),
-      ].sort(),
-    ].map<WordSorting>((tag) => ({
-      name: tag.toUpperCase(),
-      check(_w, selected) {
-        return selected.includes(tag);
-      },
-      deselect(_w, s) {
-        return s.filter((q) => q !== tag);
-      },
-      select(_w, s) {
-        return [...s, tag];
-      },
-    })),
-  ];
-
-  const selectableKanji: Kanji[] = kanjis.filter((k) =>
-    selectedWords.some((w) => w.kanji === k.kanji),
-  );
-
-  const kanjiSortings: KanjiSorting[] = [
-    {
-      name: "ALL",
-      check(kanjis, selected) {
-        return kanjis.every((k) => selected.includes(k.kanji));
-      },
-      deselect() {
-        return [];
-      },
-      select(k) {
-        return k.map((k) => k.kanji);
-      },
-    },
-    ...[...new Set<string>(kanjis.map((k) => k.status))]
-      .sort()
-      .map<KanjiSorting>((status) => ({
-        name: status.toUpperCase(),
-        check(kanjis, selected) {
-          return kanjis.reduce(
-            (p, n) =>
-              !p || n.status !== status ? p : selected.includes(n.kanji),
-            true,
-          );
-        },
-        deselect(k, s) {
-          return s.filter(
-            (q) => k.find((x) => x.kanji === q)?.status !== status,
-          );
-        },
-        select(kanjis, selected) {
-          return [
-            ...selected,
-            ...kanjis.filter((k) => k.status === status).map((k) => k.kanji),
-          ];
-        },
-      })),
-    ...[...new Set<string>(kanjis.map((k) => k.type))]
-      .sort()
-      .map<KanjiSorting>((type) => ({
-        name: type.toUpperCase(),
-        check(kanjis, selected) {
-          return kanjis.reduce(
-            (p, n) => (!p || n.type !== type ? p : selected.includes(n.kanji)),
-            true,
-          );
-        },
-        deselect(k, s) {
-          return s.filter((q) => k.find((x) => x.kanji === q)?.type !== type);
-        },
-        select(kanjis, selected) {
-          return [
-            ...selected,
-            ...kanjis.filter((k) => k.type === type).map((k) => k.kanji),
-          ];
-        },
-      })),
-    ...[...new Set<number>(kanjis.map((k) => k.lvl))].map<KanjiSorting>(
-      (lvl) => ({
-        name: `LVL${lvl}`,
-        check(kanjis, selected) {
-          return kanjis.reduce(
-            (p, n) => (!p || n.lvl !== lvl ? p : selected.includes(n.kanji)),
-            true,
-          );
-        },
-        deselect(k, s) {
-          return s.filter((q) => k.find((x) => x.kanji === q)?.lvl !== lvl);
-        },
-        select(kanjis, selected) {
-          return [
-            ...selected,
-            ...kanjis.filter((k) => k.lvl === lvl).map((k) => k.kanji),
-          ];
-        },
-      }),
-    ),
-  ];
 
   if (!areWordsLoaded) {
     return <>Loading...</>;
@@ -526,7 +558,11 @@ export default function Draw() {
             >
               Settings
             </button>
-
+            <WordbankOnlyKanjiList
+              className="mx-2"
+              listKanji={kanjis}
+              bankFilter={bankWordFilter}
+            />
             <div className="ml-2 flex flex-col justify-center text-center">
               Row count
               <div>
@@ -673,6 +709,7 @@ export default function Draw() {
                 </div>
               </div>
               <KanjiSelector
+                search={showFilter}
                 selectedKanjis={selectedKanjis}
                 setSelectedKanjis={setSelectedKanjis}
                 selectedWords={selectedWords}

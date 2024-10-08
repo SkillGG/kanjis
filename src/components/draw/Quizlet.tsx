@@ -11,7 +11,7 @@ import { KanjiCard, type KanjiCardSide } from "./kanjiCard";
 import { useAppStore } from "../../appStore";
 import { log } from "@/utils/utils";
 
-export const DEFAULT_POINTS_TO_COMPLETE = 100;
+export const DEFAULT_POINTS_TO_COMPLETE = 10;
 
 export const Quizlet = ({
   session,

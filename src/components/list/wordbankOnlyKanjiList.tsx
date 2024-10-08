@@ -1,7 +1,7 @@
 import { type Kanji, useAppStore } from "@/appStore";
 import { useMemo } from "react";
 import { usePopup } from "../usePopup";
-import { log, noop } from "@/utils/utils";
+import { noop } from "@/utils/utils";
 import { type QuizWord } from "../draw/quizWords";
 
 import listCSS from "./list.module.css";
@@ -10,28 +10,33 @@ import KanjiTile from "./kanjiTile";
 
 export default function WordbankOnlyKanjiList({
   listKanji,
+  bankFilter = () => true,
+  className,
 }: {
   listKanji: Kanji[];
+  bankFilter?: (w: QuizWord) => boolean;
+  className?: string;
 }) {
   const words = useAppStore((s) => s.words);
 
   const foreignKanji = useMemo(() => {
     const fK: QuizWord[] = [];
-    for (const word of words) {
+    for (const word of words.filter(bankFilter)) {
       if (!listKanji.some((k) => word.kanji === k.kanji)) {
         if (!fK.some((k) => k.kanji === word.kanji)) {
-          log`Foreign: ${word.word}: ${word.kanji}`;
           fK.push(word);
         }
       }
     }
     return [...fK];
-  }, [listKanji, words]);
+  }, [bankFilter, listKanji, words]);
 
   const { popup, setPopup } = usePopup();
 
   return (
-    <div className={twMerge(`${listCSS["setting-menu"]} self-center`)}>
+    <div
+      className={twMerge(className, `${listCSS["setting-menu"]} self-center`)}
+    >
       {popup}
       {foreignKanji.length > 0 && (
         <KanjiTile
